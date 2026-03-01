@@ -21,7 +21,12 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from datetime import datetime, timezone
 from openai import OpenAI   
-from vosk import Model, KaldiRecognizer
+try:
+    from vosk import Model, KaldiRecognizer
+    VOSK_AVAILABLE = True
+except ImportError:
+    VOSK_AVAILABLE = False
+    print("⚠️ VOSK not available - voice features disabled")
 import wave
 import json
 import os
@@ -147,7 +152,14 @@ def groq_call_failsafe(prompt):
         return "general"
 
 
-vosk_model = Model("vosk-model-small-en-us-0.15")
+if VOSK_AVAILABLE:
+    try:
+        vosk_model = Model("vosk-model-small-en-us-0.15")
+    except Exception as e:
+        print(f"⚠️ Failed to load VOSK model: {e}")
+        VOSK_AVAILABLE = False
+else:
+    vosk_model = None
 
 SYSTEM_PROMPT = """
 You are Green-Buy's helpful plant assistant. When helping customers:
@@ -175,7 +187,9 @@ You are Green-Buy's helpful plant assistant. When helping customers:
 Always use plant IDs from the database in your responses.
 """
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://neondb_owner:npg_KBStXxq52HPZ@ep-gentle-grass-adnpzd0p-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+# Database Configuration
+default_db_uri = "postgresql://neondb_owner:npg_KBStXxq52HPZ@ep-gentle-grass-adnpzd0p-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", default_db_uri)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -1284,7 +1298,7 @@ def process_message(user_message, location="", user_id=None):
                 "plant_name": r[2],  # variety name
                 "description": r[1],
                 "price": float(r[3]),
-                "image_url": f"http://127.0.0.1:5001/static/{r[4]}"
+                "image_url": f"{request.host_url}static/{r[4].lstrip('/')}"
             })
 
             reply = f"🌸 Found {len(varieties)} {plant_name.title()} varieties"
@@ -1681,7 +1695,7 @@ def get_plant_image_url(plant):
 
     if plant.image_path:
         path = plant.image_path.lstrip("/")
-        return f"http://localhost:5001/static/{path}"
+        return f"{request.host_url}static/{path}"
 
     return None
 
@@ -2543,6 +2557,9 @@ def voice_vosk():
             }), 400)
 
         # ✅ Process with VOSK
+        if not VOSK_AVAILABLE:
+            return jsonify({'status': 'error', 'message': 'Voice recognition is not available on this server'}), 503
+
         print(f"🎤 Processing with VOSK...")
         rec = KaldiRecognizer(vosk_model, 16000)
         rec.SetWords(["plant", "plants", "indoor", "outdoor", "hello", "show", "image", "picture"])
@@ -2981,5 +2998,6 @@ if __name__ == "__main__":
     except Exception as e:
         print("⚠️ DB not reachable, skipping create_all:", e)
 
-    app.run(debug=True, port=5001)
+    port = int(os.getenv("PORT", 5001))
+    app.run(host='0.0.0.0', port=port)
 
