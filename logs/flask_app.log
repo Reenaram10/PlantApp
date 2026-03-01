@@ -1,0 +1,30 @@
+2025-10-05 17:40:57,711 - INFO - Initializing server...
+2025-10-05 17:40:57,841 - INFO - Database URL: postgresql://postgres:****@localhost:5432/newplantdb
+2025-10-05 17:59:40,630 - INFO - Initializing server...
+2025-10-05 17:59:40,691 - INFO - Database connected and tables created
+2025-10-05 17:59:40,691 - INFO - Database URL: postgresql://postgres:****@localhost:5432/newplantdb
+2025-10-05 17:59:40,692 - INFO - Server starting at http://127.0.0.1:5001
+2025-10-05 17:59:40,693 - INFO - CORS enabled for origins: ['http://127.0.0.1:5500', 'http://localhost:5500', 'null']
+2025-10-05 17:59:45,846 - INFO - Initializing server...
+2025-10-05 17:59:45,914 - INFO - Database connected and tables created
+2025-10-05 17:59:45,914 - INFO - Database URL: postgresql://postgres:****@localhost:5432/newplantdb
+2025-10-05 17:59:45,921 - INFO - Server starting at http://127.0.0.1:5001
+2025-10-05 17:59:45,922 - INFO - CORS enabled for origins: ['http://127.0.0.1:5500', 'http://localhost:5500', 'null']
+2025-10-05 18:00:05,300 - INFO - Request: OPTIONS /health from 127.0.0.1
+2025-10-05 18:00:05,301 - INFO - Response: 204 NO CONTENT
+2025-10-05 18:00:05,306 - INFO - Request: GET /health from 127.0.0.1
+2025-10-05 18:00:05,310 - INFO - Response: 200 OK
+2025-10-05 18:00:05,658 - INFO - Request: OPTIONS /plants from 127.0.0.1
+2025-10-05 18:00:05,660 - INFO - Response: 204 NO CONTENT
+2025-10-05 18:00:05,663 - INFO - Request: OPTIONS /api/cart from 127.0.0.1
+2025-10-05 18:00:05,665 - INFO - Response: 204 NO CONTENT
+2025-10-05 18:00:05,680 - INFO - Request: GET /plants from 127.0.0.1
+2025-10-05 18:00:05,714 - INFO - Request: GET /api/cart from 127.0.0.1
+2025-10-05 18:00:05,724 - INFO - Response: 200 OK
+2025-10-05 18:00:05,808 - INFO - Response: 200 OK
+2025-10-05 18:05:41,461 - INFO - Request: GET /health from 127.0.0.1
+2025-10-05 18:05:41,463 - INFO - Response: 200 OK
+2025-10-05 18:05:41,501 - INFO - Request: GET /plants from 127.0.0.1
+2025-10-05 18:05:41,510 - INFO - Response: 200 OK
+2025-10-05 18:05:41,516 - INFO - Request: GET /api/cart from 127.0.0.1
+2025-10-05 18:05:41,521 - INFO - Response: 200 OK

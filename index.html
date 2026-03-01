@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>GREEN-BUY-website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/fontawesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .chatbot-section {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background: #f1f1f1;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            z-index: 999;
+        }
+        #chatbot-header {
+            background: #006400;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        #chatbot-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background: #cde9c7;
+            align-self: flex-end;
+        }
+        .bot-message {
+            background: #e2f0d9;
+            align-self: flex-start;
+        }
+        #chatbot-controls {
+            display: flex;
+            padding: 5px;
+            background: #ddd;
+            gap: 5px;
+        }
+        #chatbot-controls input {
+            flex: 2;
+            padding: 6px;
+            border-radius: 8px;
+            border: 1px solid #aaa;
+            outline: none;
+        }
+        #chatbot-controls button {
+            flex: 1;
+            padding: 6px;
+            border: none;
+            background: #006400;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #chatbot-controls button:hover {
+            background: #004d00;
+        }
+        
+        .chat-image {
+            width: 85%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 7px;
+            margin: 8px 0;
+            display: block;
+        }
+
+        .image-container {
+            margin-top: 5px;
+            text-align: center;
+            background: #fff;
+            padding: 10px;
+            border-radius:12clspx;
+        }
+
+        .image-credit {
+            font-size: 5px;
+            color: #666;
+            margin-top: 0.5px;
+        }
+    #plant-preview-section {
+    width: 100%;
+    padding: 40px 20px;
+    background: #f5f9f4;
+    text-align: center;
+    display: none; /* hidden until image comes */
+}
+
+#plant-preview-section h2 {
+    font-size: 26px;
+    color: #064420;
+    margin-bottom: 20px;
+}
+
+#plant-preview-section h2 {
+    text-align: center;
+}
+
+
+#plant-preview-card {
+    max-width: 450px;
+    margin: auto;
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+#plant-preview-image {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+#plant-preview-text {
+    font-size: 15px;
+    color: #222;
+    margin-bottom: 5px;
+}
+
+#plant-preview-credit {
+    font-size: 11px;
+    color: #666;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <section class="header">
+        <nav>
+            <a href="index.html"><img src="static/images/23797272.jpg"></a>
+            <div class="nav-links" id="navLinks">
+                <ul>
+                    <li><a href="auth.html">LOGIN</a></li>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="about.html">ABOUT</a></li>
+                    <li><a href="seeds.html">SEEDS</a></li>
+                    <li><a href="contact.html">CONTACT</a></li>
+                    <li><a href="#" onclick="logoutUser()">LOGOUT</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="text-box">
+            <h1>GREEN-BUY</h1>
+            <p>Rooted in nature. Delivered to your door.</p>
+            <a href="shop.html" class="hero-btn">Shop now</a>
+        </div>
+    </section>
+
+    <!-- Best Selling Plants -->
+    <section class="plants">
+        <h1>Our Best Selling Plants</h1>
+        <div class="row">
+            <div class="plants-col">
+                <img src="static/images/indoor.jpg">
+                <div class="layer"><h3>Indoor Plants</h3></div>
+            </div>
+            <div class="plants-col">
+                <img src="static/images/fruits.jpg">
+                <div class="layer"><h3>Fruit Tree Saplings</h3></div>
+            </div>
+            <div class="plants-col">
+                <img src="static/images/orchids.jpg">
+                <div class="layer"><h3>Flowering Plants</h3></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools -->
+    <section class="tools">
+        <h1>Gardening Tools</h1>
+        <p>We sell the best gardening tools at the cheapest price</p>
+        <div class="row">
+            <div class="tools-col"><img src="static/images/shovel.jpg"><h3>Shovel</h3></div>
+            <div class="tools-col"><img src="static/images/pliers.jpg"><h3>Pliers</h3></div>
+            <div class="tools-col"><img src="static/images/gloves.jpg"><h3>Gloves</h3></div>
+        </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="reviews">
+        <h1>What our customers say</h1>
+        <div class="row">
+            <div class="reviews-col"><p>Excellent plant packaging and includes care guides.</p></div>
+            <div class="reviews-col"><p>Vast selection, free shipping, and plant-care app.</p></div>
+            <div class="reviews-col"><p>Often better prices and helpful seller reviews.</p></div>
+            <div class="reviews-col"><p>Specializes in rare, exotic, and urban-friendly plants.</p></div>
+        </div>
+    </section>
+
+    <section class="cart">
+    <h1>🛒 Your Cart</h1>
+    <div id="cart-list"></div>
+</section>
+
+    <!-- Footer -->
+    <section class="footer">
+        <h4>About Us</h4>
+        <p>
+            At GREEN-BUY, we bring fresh, healthy plants to your doorstep.<br>
+            From low-maintenance indoor plants to flowering beauties, we carefully select and pack each plant with love.<br>
+            🌱 Green living starts here.
+        </p>
+    </section>
+
+    <!-- Chatbot Section -->
+   <section class="chatbot-section">
+    <div id="chatbot-header">
+        <h3>🌿Green - Buy Assistant</h3>
+    </div>
+    <div id="chatbot-content">
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-controls">
+            <input type="text" id="chatbot-input" placeholder="Ask about plants...">
+            <button id="send-btn" onclick="sendText()">📤</button>
+            <button id="record-btn">🎤</button>
+            <button id="mute-btn" onclick="toggleMute()">🔊</button>
+        </div>
+    </div>
+</section>
+<button onclick="loadHistory()">📜 View History</button>
+<div id="historyBox"></div>
+
+
+
+<!-- 🌱 Plant Preview Section -->
+<section id="plant-preview" style="display:none; margin:20px auto; text-align:center;">
+    <h2 style="text-align:center;">🌱 Plant Preview</h2>
+
+    <img id="plant-preview-img"
+         src=""
+         alt="Plant Image"
+         style="max-width:350px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+
+    <p id="plant-preview-text" style="margin-top:10px; font-size:14px;"></p>
+</section>
+
+
+<script>
+    const API_BASE_URL = "http://127.0.0.1:5001";
+
+const chatBox = document.getElementById("chatbot-messages");
+const recordButton = document.getElementById("record-btn");
+const muteButton = document.getElementById("mute-btn");
+let mediaRecorder;
+let audioChunks = [];
+let isRecording = false;
+let isMuted = false;
+let audioContext;
+function initAudioContext() {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioContext.sampleRate = 16000;
+}
+
+// Toggle mute function
+function toggleMute() {
+    isMuted = !isMuted;
+    muteButton.textContent = isMuted ? "🔇" : "🔊";
+}
+
+// Append message
+// Message handling
+function appendMessage(sender, data, isError = false) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message ${sender === "user" ? "user-message" : "bot-message"}`;
+    
+    if (isError) {
+        messageDiv.style.color = "red";
+        messageDiv.textContent = data;
+    } else if (typeof data === 'string') {
+        messageDiv.textContent = data;
+    } else if (data.type === "image") {
+    // Chat shows text only
+    messageDiv.textContent = data.reply;
+
+    // Show image in preview section
+    showPlantPreview(data);
+} else {
+        messageDiv.textContent = data.reply || data;
+    }
+    
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Voice recording
+recordButton.addEventListener("click", async () => {
+    if (!audioContext) initAudioContext();
+    
+    if (isRecording) {
+        stopRecording();
+    } else {
+        startRecording();
+    }
+});
+
+async function startRecording() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            audio: {
+                channelCount: 1,
+                sampleRate: 16000,
+                echoCancellation: true,
+                noiseSuppression: true
+            } 
+        });
+        
+        mediaRecorder = new MediaRecorder(stream, {
+            mimeType: 'audio/webm;codecs=opus'
+        });
+        
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstart = () => {
+    isRecording = true;
+    recordButton.textContent = "⏹️";
+    recordButton.classList.add('recording');
+    // Don't add message here - let the response handle it
+};
+// Replace the mediaRecorder.onstop function with this:
+
+mediaRecorder.onstop = async () => {
+    isRecording = false;
+    recordButton.textContent = "🎤";
+    recordButton.classList.remove('recording');
+
+    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'recording.webm');
+
+    // Show processing message
+    const processingMsg = document.createElement("div");
+    processingMsg.className = "message bot-message";
+    processingMsg.id = "processing-message";
+    processingMsg.textContent = "⏳ Processing your voice...";
+    chatBox.appendChild(processingMsg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/voice_vosk`, {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        console.log("VOICE API RESPONSE:", data);
+
+        // Remove processing message
+        const processingElement = document.getElementById("processing-message");
+        if (processingElement) processingElement.remove();
+
+        // ✅ Handle errors gracefully WITHOUT reloading
+        if (!response.ok || data.error || data.status === 'error') {
+            const errorMsg = data.error || data.message || `Server error: ${response.status}`;
+            console.error("Backend error:", errorMsg);
+            appendMessage("bot", `⚠️ ${errorMsg}`, true);
+            return;  // ✅ STOP HERE - don't continue
+        }
+
+        // ✅ Validate response structure
+        if (!data || !data.transcribed_text) {
+            appendMessage("bot", "⚠️ No transcription received. Please try again.", true);
+            return;
+        }
+
+        // Check if transcription was successful
+        if (data.transcribed_text.trim() === "") {
+            appendMessage("bot", "⚠️ Couldn't understand your voice clearly. Please try again.", true);
+            return;
+        }
+
+        // Show user's transcribed text
+        appendMessage("user", "🗣️ " + data.transcribed_text);
+
+        // ✅ Validate chat_response exists
+        const botReply = data.chat_response;
+        if (!botReply) {
+            appendMessage("bot", "⚠️ No response from assistant.", true);
+            return;
+        }
+
+        // Handle different response types
+        if (botReply.type === "image") {
+            showPlantPreview(botReply);
+            appendMessage("bot", botReply.reply);
+        } else if (botReply.plants && botReply.plants.length > 0) {
+            appendMessage("bot", botReply.reply);
+            displayPlantsGrid(botReply.plants, botReply.reply);
+        } else {
+            appendMessage("bot", botReply.reply || "No reply from assistant.");
+        }
+
+        // Play audio response
+        if (botReply.audio && !isMuted) {
+            playAudioResponse(botReply.audio);
+        }
+
+    } catch (err) {
+        console.error("Voice processing error:", err);
+        
+        // Remove processing message on error
+        const processingElement = document.getElementById("processing-message");
+        if (processingElement) processingElement.remove();
+        
+        // ✅ Show error but DON'T reload
+        appendMessage("bot", `❌ Error: ${err.message}. Please try again.`, true);
+    }
+};
+
+mediaRecorder.start();
+        setTimeout(() => {
+            if (isRecording) stopRecording();
+        }, 7000); // Stop after 7 seconds
+
+    } catch (err) {
+        console.error('Microphone access error:', err);
+        appendMessage("bot", "⚠️ Microphone access denied. Please enable microphone permission.", true);
+    }
+}
+
+function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+    }
+}
+
+// Audio playback
+function playAudioResponse(base64Audio) {
+    if (isMuted) return;
+    
+    const audio = new Audio(`data:audio/mp3;base64,${base64Audio}`);
+    audio.play().catch(error => {
+        console.error('Audio playback error:', error);
+    });
+}
+
+// Text chat handling
+// Replace EVERYTHING from "// Text chat handling" onwards with this:
+
+// ✅ SINGLE, CLEAN sendText() FUNCTION
+let isSending = false;
+
+document.getElementById("chatbot-input").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();  // ✅ STOP page reload
+        sendText();
+    }
+});
+
+async function sendText() {
+    if (isSending) return;  // ✅ Block concurrent requests
+    
+    const input = document.getElementById("chatbot-input");
+    const text = input.value.trim();
+    if (!text) return;
+
+    isSending = true;
+    const userId = localStorage.getItem("user_id") || "anonymous";
+
+    appendMessage("user", text);
+    input.value = "";
+    
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                message: text,
+                location: "",
+                user_id: userId
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("Chat response:", data);
+
+        if (data.error) {
+            appendMessage("bot", "❌ " + data.error, true);
+        } else if (data.type === "image") {
+            showPlantPreview(data);
+            appendMessage("bot", data.reply);
+        } else if (data.plants && data.plants.length > 0) {
+            appendMessage("bot", data.reply);
+            displayPlantsGrid(data.plants, data.reply);
+
+            if (data.audio && !isMuted) {
+                playAudioResponse(data.audio);
+            }
+        } else {
+            appendMessage("bot", data.reply || "No reply from assistant.");
+
+            if (data.audio && !isMuted) {
+                playAudioResponse(data.audio);
+            }
+        }
+    } catch (err) {
+        console.error("Chat error:", err);
+        appendMessage("bot", "❌ Could not connect to server. Make sure Flask is running on http://127.0.0.1:5001", true);
+    } finally {
+        isSending = false;  // ✅ Allow next request
+    }
+}
+
+function showPlantPreview(data) {
+    const section = document.getElementById("plant-preview");
+    
+    if (data.type === "image") {
+        section.innerHTML = `
+            <h2>🌱 Plant Preview</h2>
+            <div id="plant-preview-card">
+                <img id="plant-preview-image" src="${data.image_url}" alt="${data.reply}">
+                <p id="plant-preview-text">${data.reply}</p>
+                ${data.image_credit ? `<p id="plant-preview-credit">Photo by ${data.image_credit.name}</p>` : ''}
+            </div>
+        `;
+        section.style.display = "block";
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+}
+
+function displayPlantsGrid(plants, title) {
+    // Remove existing plants section if any
+    let existingSection = document.getElementById("plants-results-section");
+    if (existingSection) {
+        existingSection.remove();
+    }
+    
+    // Create new plants section
+    const plantsSection = document.createElement("section");
+    plantsSection.id = "plants-results-section";
+    plantsSection.className = "plants-display-section";
+    plantsSection.style.cssText = `
+        width: 90%;
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 30px 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    `;
+    
+    // Add title
+    const titleEl = document.createElement("h3");
+    titleEl.textContent = `🌱 ${title}`;
+    titleEl.style.cssText = `
+        text-align: center;
+        color: #006400;
+        font-size: 24px;
+        margin-bottom: 30px;
+    `;
+    plantsSection.appendChild(titleEl);
+    
+    // Create grid
+    const plantsList = document.createElement("div");
+    plantsList.className = "plants-suggestions";
+    plantsList.style.cssText = `
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+        width: 100%;
+    `;
+    
+    plants.forEach((plant) => {
+        const plantCard = document.createElement("div");
+        plantCard.className = "plant-suggestion-card";
+        plantCard.style.cssText = `
+            background: white;
+            border: 2px solid #006400;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,100,0,0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        `;
+        
+        let imageHTML = '';
+        if (plant.image_url) {
+            imageHTML = `
+                <div class="plant-image-wrapper" style="width: 100%; height: 200px; overflow: hidden; background: #f0f7f0;">
+                    <img src="${plant.image_url}" alt="${plant.plant_name}" class="plant-card-image" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                </div>
+            `;
+        } else {
+            imageHTML = `
+                <div class="plant-image-wrapper" style="width: 100%; height: 200px; background: linear-gradient(135deg, #006400, #008000); display: flex; align-items: center; justify-content: center;">
+                    <span style="color: white; font-size: 48px;">🌱</span>
+                </div>
+            `;
+        }
+        
+        plantCard.innerHTML = `
+            ${imageHTML}
+            <div class="plant-card-content" style="padding: 15px; flex: 1; display: flex; flex-direction: column;">
+                <h4 style="margin: 0 0 8px 0; color: #006400; font-size: 18px; font-weight: 600;">${plant.plant_name}</h4>
+                <p style="margin: 0 0 10px 0; color: #666; font-size: 13px; line-height: 1.4; flex: 1;">${plant.description || "Premium quality plant"}</p>
+                <span class="price" style="display: block; color: #d4af37; font-weight: bold; font-size: 16px; margin-bottom: 12px;">₹${plant.price}</span>
+                <button onclick="addToCart('${plant.plant_name.replace(/'/g, "\\'")}', ${plant.plant_id})" style="width: 100%; padding: 12px; background: #006400; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s ease;">🛒 Add to Cart</button>
+            </div>
+            ${plant.image_credit ? `<small class="image-credit" style="font-size: 11px; color: #999; padding: 5px; text-align: center;">Photo by ${plant.image_credit.name}</small>` : ''}
+        `;
+        
+        // Hover effect
+        plantCard.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 8px 20px rgba(0,100,0,0.2)';
+            this.style.transform = 'translateY(-6px)';
+        });
+        plantCard.addEventListener('mouseleave', function() {
+            this.style.boxShadow = '0 2px 8px rgba(0,100,0,0.1)';
+            this.style.transform = 'translateY(0)';
+        });
+        
+        plantsList.appendChild(plantCard);
+    });
+    
+    plantsSection.appendChild(plantsList);
+    
+    // Insert before footer
+    const footer = document.querySelector(".footer");
+    if (footer) {
+        footer.parentNode.insertBefore(plantsSection, footer);
+    } else {
+        document.body.appendChild(plantsSection);
+    }
+    
+    // Smooth scroll
+    plantsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function addToCart(plantName, plantId) {
+    const userId = localStorage.getItem("user_id") || "anonymous";
+    
+    fetch(`${API_BASE_URL}/api/cart`, {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId, plant_id: plantId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            appendMessage("bot", `✅ ${plantName} added to cart!`);
+        } else {
+            appendMessage("bot", `⚠️ ${data.message || 'Failed to add to cart'}`, true);
+        }
+    })
+    .catch(err => {
+        console.error('Cart error:', err);
+        appendMessage("bot", "❌ Could not add to cart", true);
+    });
+}
+
+async function loadCart() {
+    const userId = localStorage.getItem("user_id") || "anonymous";
+
+    const res = await fetch(`${API_BASE_URL}/api/cart?user_id=${userId}`);
+    const data = await res.json();
+
+    const cartBox = document.getElementById("cart-list");
+    cartBox.innerHTML = "";
+
+    if (!data.cart || data.cart.length === 0) {
+        cartBox.innerHTML = "<p>🛒 Cart is empty</p>";
+        return;
+    }
+
+    data.cart.forEach(item => {
+        cartBox.innerHTML += `
+            <div style="background:white;padding:12px;border-radius:10px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <b>${item.plant_name}</b> - ₹${item.price}<br>
+                <small>${item.description || ""}</small><br><br>
+
+                <button onclick="removeCartItem(${item.plant_id})"
+                    style="background:#c0392b;color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;">
+                    ❌ Remove
+                </button>
+            </div>
+        `;
+    });
+}
+
+async function removeCartItem(plantId) {
+    const userId = localStorage.getItem("user_id") || "anonymous";
+
+    const res = await fetch(`${API_BASE_URL}/api/cart/remove`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            user_id: userId,
+            plant_id: plantId
+        })
+    });
+
+    const data = await res.json();
+
+    if (data.status === "success") {
+        appendMessage("bot", "✅ Removed from cart");
+        loadCart();
+    } else {
+        appendMessage("bot", "⚠️ " + (data.message || "Remove failed"), true);
+    }
+}
+
+function logoutUser(){
+  localStorage.removeItem("user_id");
+  localStorage.removeItem("email");
+  localStorage.removeItem("username");
+  alert("✅ Logged out successfully");
+  window.location.href = "auth.html";
+}
+
+async function loadUserHistory() {
+  const userId = localStorage.getItem("user_id") || "anonymous";
+  const res = await fetch(`${API_BASE_URL}/api/user_queries/${userId}`);
+  const data = await res.json();
+  console.log("History:", data);
+}
+
+// ... rest of initialization code ...
+let userId = localStorage.getItem("user_id");
+if (!userId) {
+  userId = "guest_" + Date.now();
+  localStorage.setItem("user_id", userId);
+}
+async function loadSuggestions() {
+  const userId = localStorage.getItem("user_id");
+  if (!userId) return;
+
+  const res = await fetch(`${API_BASE_URL}/api/suggest_plants/${userId}`);
+  const data = await res.json();
+
+  console.log("Suggested plants:", data);
+
+  if (data.status === "success") {
+    displayPlantsGrid(data.suggestions, "Recommended for you 💚");
+
+  }
+}
+
+// Frontend code (JavaScript)
+async function sendVoiceToBackend(audioBlob, userId = 'anonymous') {
+    try {
+        const formData = new FormData();
+        formData.append('audio', audioBlob, 'recording.webm');
+        formData.append('user_id', userId);
+
+        console.log('🎤 Sending audio to backend...');
+        
+        const response = await fetch('http://127.0.0.1:5001/api/voice_vosk', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        console.log('📤 Response status:', response.status);
+        
+        const data = await response.json();
+        console.log('✅ Response received:', data);
+        
+        if (data.status === 'success') {
+            console.log('🗣️ Transcribed:', data.transcribed_text);
+            console.log('💬 Chat response:', data.chat_response);
+            
+            // Display in chatbot
+            displayChatResponse(data.chat_response);
+            
+            // Play audio if available
+            if (data.chat_response.audio) {
+                playAudio(data.chat_response.audio);
+            }
+        } else {
+            console.error('❌ Error:', data.message);
+        }
+        
+        return data;
+    } catch (error) {
+        console.error('❌ Fetch error:', error);
+    }
+}
+
+// Play audio response
+function playAudio(base64Audio) {
+    const audio = new Audio(`data:audio/mp3;base64,${base64Audio}`);
+    audio.play();
+}
+
+// Initialize chatbot
+document.addEventListener('DOMContentLoaded', () => {
+  const username = localStorage.getItem("username");
+
+  if(username){
+    appendMessage("bot", `👋 Welcome back ${username}! 🌱`);
+  } else {
+    appendMessage("bot", "👋 Hello! Continue as guest or login 😊");
+  }
+  loadCart();
+   loadSuggestions();
+});
+
+</script>
+
+<script src="plants.js"></script>
+</body>
+</html>

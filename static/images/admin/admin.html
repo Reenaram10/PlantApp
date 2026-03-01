@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Admin - Management Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* ===== TABS STYLING ===== */
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .tab-btn:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== FORM STYLING ===== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f9f9ff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .input-group-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        /* ===== INFO BOXES ===== */
+        .plant-info {
+            background: #f9f9ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .plant-info.show {
+            display: block;
+        }
+
+        .plant-info h3 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .plant-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 13px;
+        }
+
+        .info-item {
+            color: #666;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* ===== VARIETIES SECTION ===== */
+        .varieties-section {
+            display: none;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .varieties-section.show {
+            display: block;
+        }
+
+        .varieties-section h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .variety-item {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .variety-item:hover {
+            background: #efefef;
+            transform: translateX(5px);
+        }
+
+        .variety-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            margin-right: 12px;
+        }
+
+        .variety-name {
+            flex: 1;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* ===== INVENTORY TABLE ===== */
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .inventory-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .inventory-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .inventory-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .inventory-table tbody tr:hover {
+            background: #f9f9ff;
+        }
+
+        .stock-low {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .stock-critical {
+            color: #721c24;
+            font-weight: 600;
+            background: #f8d7da;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert.alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert.alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .alert.alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        /* ===== LOADING ===== */
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e0e0e0;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal.show {
+            display: block;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        /* ===== SEARCH ===== */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🌿 Plant Admin Dashboard</h1>
+            <p class="subtitle">Manage plants, varieties, and inventory</p>
+
+            <!-- Alert Messages -->
+            <div id="alertBox" class="alert"></div>
+
+            <!-- TABS -->
+            <div class="tabs-container">
+                <button class="tab-btn active" onclick="switchTab('varieties')">
+                    📦 Add Varieties
+                </button>
+                <button class="tab-btn" onclick="switchTab('inventory')">
+                    📊 Inventory
+                </button>
+                <button class="tab-btn" onclick="switchTab('restock')">
+                    📈 Restock
+                </button>
+                <button class="tab-btn" onclick="switchTab('update')">
+                    ✏️ Update Plant
+                </button>
+            </div>
+
+            <!-- ========== TAB 1: ADD VARIETIES ========== -->
+            <div id="varieties" class="tab-content active">
+                <h2 class="section-title">Step 1: Enter Plant Details</h2>
+
+                <div class="form-group">
+                    <label>Plant Name *</label>
+                    <input
+                        type="text"
+                        id="plantName"
+                        placeholder="e.g., Monstera Deliciosa, Pothos, Aloe Vera"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label>Stock Count</label>
+                        <input
+                            type="number"
+                            id="stockCount"
+                            placeholder="0"
+                            min="0"
+                            value="0"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Price ($)</label>
+                        <input
+                            type="number"
+                            id="price"
+                            placeholder="199.99"
+                            min="0"
+                            step="0.01"
+                            value="199.99"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary" onclick="searchPlant()">
+                            🔍 Search Plant
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea
+                        id="description"
+                        placeholder="Enter plant description..."
+                    ></textarea>
+                </div>
+
+                <!-- Plant Info Display -->
+                <div id="plantInfo" class="plant-info">
+                    <h3>✅ Plant Information</h3>
+                    <div class="plant-info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Plant ID:</span>
+                            <span id="plantId">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Name:</span>
+                            <span id="displayPlantName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Stock:</span>
+                            <span id="displayStock">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Price:</span>
+                            <span id="displayPrice">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span id="displayStatus">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loading" class="loading">
+                    <div class="spinner"></div> Processing...
+                </div>
+
+                <!-- Varieties Selection -->
+                <div id="varietiesSection" class="varieties-section">
+                    <h2 class="section-title">Step 2: Select Varieties</h2>
+                    <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
+                        Suggested varieties based on the plant. Check the ones you want to add.
+                    </p>
+
+                    <div id="varietiesList"></div>
+
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                        <button class="btn btn-primary" onclick="addSelectedVarieties()" style="flex: 1;">
+                            ✅ Add Selected Varieties
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetForm()">
+                            🔄 Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== TAB 2: INVENTORY ========== -->
+            <div id="inventory" class="tab-content">
+                <h2 class="section-title">Inventory Management</h2>
+
+                <!-- Stats -->
+                <div class="stats-grid" id="statsGrid"></div>
+
+                <!-- Search -->
+                <div class="search-box">
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="🔍 Search plants by name..."
+                        onkeyup="searchInventory()"
+                    >
+                </div>
+
+                <!-- Inventory Table -->
+                <div id="loading2" class="loading">
+                    <div class="spinner"></div> Loading inventory...
+                </div>
+
+                <table class="inventory-table" id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Plant Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ========== TAB 3: RESTOCK ========== -->
+            <div id="restock" class="tab-content">
+                <h2 class="section-title">Restock Plants</h2>
+
+                <div class="form-group">
+                    <label>Search Plant *</label>
+                    <input
+                        type="text"
+                        id="restockPlantSearch"
+                        placeholder="🔍 Type plant name..."
+                        onkeyup="searchRestockPlants()"
+                    >
+                </div>
+
+                <div id="searchResultsRestock" style="display: none; margin-bottom: 20px;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 10px;">
+                        Search Results:
+                    </div>
+                    <div id="restockSearchList" style="max-height: 200px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 8px;"></div>
+                </div>
+
+                <div id="restockSelectedPlant" style="display: none; background: #f0f7ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+                    <div style="color: #666; font-size: 12px; margin-bottom: 5px;">
+                        Selected Plant:
+                    </div>
+                    <div style="font-weight: 600; color: #333; margin-bottom: 10px;" id="selectedPlantNameRestock">
+                        -
+                    </div>
+                    <input type="hidden" id="selectedPlantIdRestock">
+                </div>
+
+                <div class="input-group-2">
+                    <div class="form-group">
+                        <label>Current Stock</label>
+                        <input
+                            type="number"
+                            id="currentStock"
+                            readonly
+                            style="background: #f0f0f0; cursor: not-allowed;"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Add Quantity *</label>
+                        <input
+                            type="number"
+                            id="quantityToAdd"
+                            placeholder="Enter quantity to add"
+                            min="1"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>New Stock Total</label>
+                    <input
+                        type="number"
+                        id="newStockTotal"
+                        readonly
+                        style="background: #f0f0f0; cursor: not-allowed;"
+                    >
+                </div>
+
+                <button class="btn btn-primary" onclick="restockPlant()">
+                    📈 Confirm Restock
+                </button>
+
+                <div id="restockInfo" class="plant-info" style="margin-top: 20px;">
+                    <h3>Last Restock Summary</h3>
+                    <p id="restockSummary">No recent restock</p>
+                </div>
+            </div>
+
+            <!-- ========== TAB 4: UPDATE PLANT ========== -->
+            <div id="update" class="tab-content">
+                <h2 class="section-title">Update Plant Details</h2>
+
+                <div class="form-group">
+                    <label>Search Plant *</label>
+                    <input
+                        type="text"
+                        id="updatePlantSearch"
+                        placeholder="🔍 Type plant name..."
+                        onkeyup="searchUpdatePlants()"
+                    >
+                </div>
+
+                <div id="searchResultsUpdate" style="display: none; margin-bottom: 20px;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 10px;">
+                        Search Results:
+                    </div>
+                    <div id="updateSearchList" style="max-height: 200px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 8px;"></div>
+                </div>
+
+                <div id="updateSelectedPlant" style="display: none; background: #f0f7ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+                    <div style="color: #666; font-size: 12px; margin-bottom: 5px;">
+                        Selected Plant:
+                    </div>
+                    <div style="font-weight: 600; color: #333; margin-bottom: 10px;" id="selectedPlantNameUpdate">
+                        -
+                    </div>
+                    <input type="hidden" id="selectedPlantIdUpdate">
+                </div>
+
+                <div id="updateForm" style="display: none;">
+                    <div class="form-group">
+                        <label>Plant Name</label>
+                        <input
+                            type="text"
+                            id="updatePlantName"
+                            placeholder="Plant name"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea
+                            id="updateDescription"
+                            placeholder="Update plant description..."
+                        ></textarea>
+                    </div>
+
+                    <div class="input-group-2">
+                        <div class="form-group">
+                            <label>Price ($)</label>
+                            <input
+                                type="number"
+                                id="updatePrice"
+                                placeholder="199.99"
+                                min="0"
+                                step="0.01"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>Stock</label>
+                            <input
+                                type="number"
+                                id="updateStock"
+                                placeholder="0"
+                                min="0"
+                            >
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="updatePlant()" style="flex: 1;">
+                            💾 Save Changes
+                        </button>
+                        <button class="btn btn-danger" onclick="deletePlant()">
+                            🗑️ Delete Plant
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FOR RESTOCK CONFIRMATION -->
+    <div id="restockModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeRestockModal()">&times;</span>
+            <div class="modal-header">Confirm Restock</div>
+            <div class="modal-body">
+                <p id="restockConfirmText"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeRestockModal()">Cancel</button>
+                <button class="btn btn-success" onclick="confirmRestock()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = "http://localhost:5001";
+        let allPlants = [];
+        let currentRestockData = {};
+        let allPlantsForRestock = [];
+        let allPlantsForUpdate = [];
+
+        // ========== INITIALIZE ON PAGE LOAD ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Page loaded, initializing data...");
+            loadRestockPlants();
+            loadUpdatePlants();
+        });
+
+        // ========== TAB SWITCHING ==========
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Mark correct button as active
+            document.querySelectorAll('.tab-btn').forEach((btn, index) => {
+                const tabs = ['varieties', 'inventory', 'restock', 'update'];
+                if (tabs[index] === tabName) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Load data for specific tabs
+            if (tabName === 'inventory') {
+                loadInventory();
+            } else if (tabName === 'restock') {
+                loadRestockPlants();
+            } else if (tabName === 'update') {
+                loadUpdatePlants();
+            }
+        }
+
+        // ========== ALERTS ==========
+        function showAlert(message, type = "info") {
+            const alertBox = document.getElementById("alertBox");
+            alertBox.textContent = message;
+            alertBox.className = "alert show alert-" + type;
+
+            if (type !== "error") {
+                setTimeout(() => alertBox.classList.remove("show"), 4000);
+            }
+        }
+
+        function showLoading(show = true, elementId = "loading") {
+            const el = document.getElementById(elementId);
+            if (el) el.classList.toggle("show", show);
+        }
+
+        // ========== TAB 1: VARIETIES ==========
+        async function searchPlant() {
+            const plantName = document.getElementById("plantName").value.trim();
+            const stockCount = document.getElementById("stockCount").value;
+            const price = document.getElementById("price").value;
+            const description = document.getElementById("description").value.trim();
+
+            if (!plantName) {
+                showAlert("Please enter a plant name", "error");
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const response = await fetch(API_BASE + "/api/admin/suggest-varieties", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        plant_name: plantName,
+                        stock_count: stockCount || 0,
+                        price: price || 199.99,
+                        description: description
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showAlert(data.message || "Error", "error");
+                    showLoading(false);
+                    return;
+                }
+
+                displayPlantInfo(data);
+                displayVarieties(data.varieties);
+
+                showAlert(
+                    data.existed
+                        ? "✅ Plant found! ID: " + data.plant_id
+                        : "✨ New plant created! ID: " + data.plant_id,
+                    "success"
+                );
+
+                document.getElementById("varietiesSection").classList.add("show");
+
+            } catch (error) {
+                showAlert("Error: " + error.message, "error");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displayPlantInfo(data) {
+            document.getElementById("plantId").textContent = data.plant_id;
+            document.getElementById("displayPlantName").textContent = data.plant_name;
+            document.getElementById("displayStock").textContent = data.current_stock;
+            document.getElementById("displayPrice").textContent = "$" + (data.price || 199.99);
+            document.getElementById("displayStatus").textContent =
+                data.existed ? "🔄 Existing" : "✨ New";
+
+            document.getElementById("plantInfo").classList.add("show");
+        }
+
+        function displayVarieties(varieties) {
+            const list = document.getElementById("varietiesList");
+            list.innerHTML = "";
+
+            if (!varieties || varieties.length === 0) {
+                list.innerHTML = '<p style="color: #999;">No varieties suggested</p>';
+                return;
+            }
+
+            varieties.forEach((variety) => {
+                const item = document.createElement("div");
+                item.className = "variety-item";
+                item.innerHTML =
+                    '<input type="checkbox" value="' + variety + '" class="variety-checkbox">' +
+                    '<span class="variety-name">' + variety + '</span>';
+                list.appendChild(item);
+            });
+        }
+
+        async function addSelectedVarieties() {
+            const plantId = document.getElementById("plantId").textContent;
+            const plantName = document.getElementById("displayPlantName").textContent;
+
+            const selected = Array.from(document.querySelectorAll(".variety-checkbox:checked"))
+                .map(cb => cb.value);
+
+            if (selected.length === 0) {
+                showAlert("Please select at least one variety", "error");
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const response = await fetch(API_BASE + "/api/admin/add-varieties", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        plant_id: parseInt(plantId),
+                        plant_name: plantName,
+                        selected_varieties: selected
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showAlert(data.message || "Error", "error");
+                    return;
+                }
+
+                showAlert(
+                    "✅ Added " + data.added + " varieties! (" + data.duplicates + " duplicates skipped)",
+                    "success"
+                );
+
+                setTimeout(() => resetForm(), 2000);
+
+            } catch (error) {
+                showAlert("Error: " + error.message, "error");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function resetForm() {
+            document.getElementById("plantName").value = "";
+            document.getElementById("stockCount").value = "0";
+            document.getElementById("price").value = "199.99";
+            document.getElementById("description").value = "";
+            document.getElementById("plantInfo").classList.remove("show");
+            document.getElementById("varietiesSection").classList.remove("show");
+            document.getElementById("alertBox").classList.remove("show");
+            document.getElementById("varietiesList").innerHTML = "";
+        }
+
+        document.getElementById("plantName")?.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") searchPlant();
+        });
+
+        // ========== TAB 2: INVENTORY ==========
+        async function loadInventory() {
+            showLoading(true, "loading2");
+
+            try {
+                const response = await fetch(API_BASE + "/api/admin/inventory");
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    allPlants = data.plants;
+                    displayInventory(allPlants);
+                    displayStats(data);
+                } else {
+                    showAlert("Failed to load inventory", "error");
+                }
+            } catch (error) {
+                showAlert("Error: " + error.message, "error");
+            } finally {
+                showLoading(false, "loading2");
+            }
+        }
+
+        function displayStats(data) {
+            const statsGrid = document.getElementById("statsGrid");
+            statsGrid.innerHTML =
+                '<div class="stat-card">' +
+                '    <div class="stat-number">' + data.total_plants + '</div>' +
+                '    <div class="stat-label">Total Plants</div>' +
+                '</div>' +
+                '<div class="stat-card">' +
+                '    <div class="stat-number">' + data.total_stock + '</div>' +
+                '    <div class="stat-label">Total Stock</div>' +
+                '</div>';
+        }
+
+        function displayInventory(plants) {
+            const tbody = document.getElementById("inventoryBody");
+            tbody.innerHTML = "";
+
+            plants.forEach(plant => {
+                const stockClass = plant.stock === 0 ? 'stock-critical' : plant.stock < 5 ? 'stock-low' : '';
+                const row = document.createElement("tr");
+                const desc = plant.description ? plant.description.substring(0, 50) + '...' : 'N/A';
+                row.innerHTML =
+                    '<td>' + plant.plant_id + '</td>' +
+                    '<td><strong>' + plant.plant_name + '</strong></td>' +
+                    '<td>' + desc + '</td>' +
+                    '<td>$' + plant.price + '</td>' +
+                    '<td class="' + stockClass + '">' + plant.stock + '</td>' +
+                    '<td class="action-buttons">' +
+                    '    <button class="btn btn-success" onclick="alert(\'View details for plant ' + plant.plant_id + '\')">📈</button>' +
+                    '    <button class="btn btn-secondary" onclick="alert(\'View plant ' + plant.plant_name + '\')">👁️</button>' +
+                    '</td>';
+                tbody.appendChild(row);
+            });
+        }
+
+        function searchInventory() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = allPlants.filter(p =>
+                p.plant_name.toLowerCase().includes(query) ||
+                (p.description && p.description.toLowerCase().includes(query))
+            );
+            displayInventory(filtered);
+        }
+
+        // ========== TAB 3: RESTOCK ==========
+        async function loadRestockPlants() {
+            try {
+                console.log("Fetching restock plants from:", API_BASE + "/api/admin/inventory");
+                const response = await fetch(API_BASE + "/api/admin/inventory");
+
+                if (!response.ok) {
+                    throw new Error("HTTP error! status: " + response.status);
+                }
+
+                const data = await response.json();
+                console.log("Restock API response:", data);
+
+                if (Array.isArray(data)) {
+                    allPlantsForRestock = data;
+                    console.log("✅ Loaded restock plants:", allPlantsForRestock.length, "plants");
+                } else if (data.status === "success" && data.plants) {
+                    allPlantsForRestock = data.plants;
+                    console.log("✅ Loaded restock plants:", allPlantsForRestock.length, "plants");
+                } else {
+                    console.error("Failed - unexpected response format");
+                    showAlert("No plants available", "warning");
+                }
+            } catch (error) {
+                console.error("Error loading restock plants:", error);
+                showAlert("Error: " + error.message, "error");
+            }
+        }
+
+        function searchRestockPlants() {
+            const query = document.getElementById("restockPlantSearch").value.toLowerCase();
+
+            if (query.length === 0) {
+                document.getElementById("searchResultsRestock").style.display = "none";
+                return;
+            }
+
+            const filtered = allPlantsForRestock.filter(p =>
+                (p.plant_name && p.plant_name.toLowerCase().includes(query)) ||
+                (p.name && p.name.toLowerCase().includes(query))
+            );
+
+            const resultsList = document.getElementById("restockSearchList");
+            resultsList.innerHTML = "";
+
+            if (filtered.length === 0) {
+                resultsList.innerHTML = '<div style="padding: 10px; color: #999;">No plants found</div>';
+                document.getElementById("searchResultsRestock").style.display = "block";
+                return;
+            }
+
+            filtered.forEach(plant => {
+                const plantName = plant.plant_name || plant.name || "Unknown";
+                const item = document.createElement("div");
+                item.style.cssText =
+                    "padding: 10px; border-bottom: 1px solid #e0e0e0; cursor: pointer; " +
+                    "display: flex; justify-content: space-between; align-items: center; transition: background 0.2s;";
+                item.innerHTML =
+                    '<div>' +
+                    '    <div style="font-weight: 600; color: #333;">' + plantName + '</div>' +
+                    '    <div style="font-size: 12px; color: #999;">Stock: ' + (plant.stock || 0) + '</div>' +
+                    '</div>';
+                item.onmouseover = () => item.style.background = "#f0f0f0";
+                item.onmouseout = () => item.style.background = "transparent";
+                item.onclick = () => selectRestockPlant(plant.plant_id, plantName, plant.stock || 0);
+                resultsList.appendChild(item);
+            });
+
+            document.getElementById("searchResultsRestock").style.display = "block";
+        }
+
+        async function restockPlant() {
+            const plantIdElement = document.getElementById("selectedPlantIdRestock");
+            const plantId = plantIdElement.value || plantIdElement.getAttribute("data-plant-id");
+            const quantity = parseInt(document.getElementById("quantityToAdd").value);
+
+            console.log("Plant ID:", plantId, "Quantity:", quantity);
+
+            if (!plantId || plantId === "") {
+                showAlert("Please select a plant first", "error");
+                return;
+            }
+
+            if (!quantity || quantity <= 0) {
+                showAlert("Please enter a valid quantity", "error");
+                return;
+            }
+
+            const plant = allPlantsForRestock.find(p => p.plant_id == plantId);
+
+            if (!plant) {
+                showAlert("Plant not found. Please reload and try again.", "error");
+                console.error("Plant not found with ID:", plantId);
+                console.log("Available plants:", allPlantsForRestock);
+                return;
+            }
+
+            currentRestockData = {
+                plantId,
+                plantName: plant.plant_name || plant.name || "Unknown Plant",
+                quantity,
+                oldStock: plant.stock || 0,
+                newStock: (plant.stock || 0) + quantity
+            };
+
+            document.getElementById("restockConfirmText").textContent =
+                "Add " + quantity + " units to \"" + currentRestockData.plantName + "\"?\n" +
+                "Current: " + currentRestockData.oldStock + " → New: " + currentRestockData.newStock;
+
+            document.getElementById("restockModal").classList.add("show");
+        }
+
+        function closeRestockModal() {
+            document.getElementById("restockModal").classList.remove("show");
+        }
+
+        async function confirmRestock() {
+            closeRestockModal();
+            showLoading(true);
+
+            try {
+                const response = await fetch(
+                    API_BASE + "/api/admin/restock/" + currentRestockData.plantId,
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            quantity: currentRestockData.quantity
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert(
+                        "✅ " + currentRestockData.plantName + " restocked!\n" +
+                        currentRestockData.oldStock + " → " + currentRestockData.newStock,
+                        "success"
+                    );
+                    document.getElementById("restockSummary").textContent =
+                        "+" + currentRestockData.quantity + " units added to " + currentRestockData.plantName;
+                    document.getElementById("restockInfo").classList.add("show");
+
+                    setTimeout(() => {
+                        document.getElementById("restockPlantSearch").value = "";
+                        document.getElementById("selectedPlantNameRestock").textContent = "-";
+                        document.getElementById("selectedPlantIdRestock").value = "";
+                        document.getElementById("restockSelectedPlant").style.display = "none";
+                        document.getElementById("currentStock").value = "";
+                        document.getElementById("quantityToAdd").value = "";
+                        document.getElementById("newStockTotal").value = "";
+                        loadRestockPlants();
+                    }, 2000);
+                } else {
+                    showAlert(data.message || "Restock failed", "error");
+                }
+            } catch (error) {
+                showAlert("Error: " + error.message, "error");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ========== TAB 4: UPDATE PLANT ==========
+        async function loadUpdatePlants() {
+            try {
+                console.log("Fetching update plants from:", API_BASE + "/api/admin/inventory");
+                const response = await fetch(API_BASE + "/api/admin/inventory");
+
+                if (!response.ok) {
+                    throw new Error("HTTP error! status: " + response.status);
+                }
+
+                const data = await response.json();
+                console.log("Update API response:", data);
+
+                if (Array.isArray(data)) {
+                    allPlantsForUpdate = data;
+                    console.log("✅ Loaded update plants:", allPlantsForUpdate.length, "plants");
+                } else if (data.status === "success" && data.plants) {
+                    allPlantsForUpdate = data.plants;
+                    console.log("✅ Loaded update plants:", allPlantsForUpdate.length, "plants");
+                } else {
+                    console.error("Failed - unexpected response format");
+                    showAlert("No plants available", "warning");
+                }
+            } catch (error) {
+                console.error("Error loading update plants:", error);
+                showAlert("Error: " + error.message, "error");
+            }
+        }
+
+        function searchUpdatePlants() {
+            const query = document.getElementById("updatePlantSearch").value.toLowerCase();
+
+            if (query.length === 0) {
+                document.getElementById("searchResultsUpdate").style.display = "none";
+                return;
+            }
+
+            const filtered = allPlantsForUpdate.filter(p =>
+                (p.plant_name && p.plant_name.toLowerCase().includes(query)) ||
+                (p.name && p.name.toLowerCase().includes(query))
+            );
+
+            const resultsList = document.getElementById("updateSearchList");
+            resultsList.innerHTML = "";
+
+            if (filtered.length === 0) {
+                resultsList.innerHTML = '<div style="padding: 10px; color: #999;">No plants found</div>';
+                document.getElementById("searchResultsUpdate").style.display = "block";
+                return;
+            }
+
+            filtered.forEach(plant => {
+                const plantName = plant.plant_name || plant.name || "Unknown";
+                const item = document.createElement("div");
+                item.style.cssText =
+                    "padding: 10px; border-bottom: 1px solid #e0e0e0; cursor: pointer; " +
+                    "display: flex; justify-content: space-between; align-items: center; transition: background 0.2s;";
+                item.innerHTML =
+                    '<div>' +
+                    '    <div style="font-weight: 600; color: #333;">' + plantName + '</div>' +
+                    '    <div style="font-size: 12px; color: #999;">Price: $' + (plant.price || 0) + ' | Stock: ' + (plant.stock || 0) + '</div>' +
+                    '</div>';
+                item.onmouseover = () => item.style.background = "#f0f0f0";
+                item.onmouseout = () => item.style.background = "transparent";
+                item.onclick = () => selectUpdatePlant(plant.plant_id, plantName);
+                resultsList.appendChild(item);
+            });
+
+            document.getElementById("searchResultsUpdate").style.display = "block";
+        }
+
+        async function loadPlantDetails(plantId) {
+            if (!plantId) {
+                document.getElementById("updateForm").style.display = "none";
+                return;
+            }
+
+            try {
+                const response = await fetch(API_BASE + "/api/admin/get-plant/" + plantId);
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    const plant = data.plant;
+                    document.getElementById("updatePlantName").value = plant.plant_name;
+                    document.getElementById("updateDescription").value = plant.description || "";
+                    document.getElementById("updatePrice").value = plant.price;
+                    document.getElementById("updateStock").value = plant.stock;
+                    document.getElementById("updateForm").style.display = "block";
+                } else {
+                    showAlert("Failed to load plant details", "error");
+                }
+            } catch (error) {
+                showAlert("Error: " + error.message, "error");
+            }
+        }
+
+        function selectRestockPlant(plantId, plantName, stock) {
+            document.getElementById("selectedPlantIdRestock").value = plantId;
+            document.getElementById("selectedPlantNameRestock").textContent = plantName;
+            document.getElementById("restockSelectedPlant").style.display = "block";
+            document.getElementById("currentStock").value = stock;
+            document.getElementById("searchResultsRestock").style.display = "none";
+            document.getElementById("restockPlantSearch").value = plantName;
+
+            const quantityInput = document.getElementById("quantityToAdd");
+            quantityInput.value = "";
+            document.getElementById("newStockTotal").value = "";
+
+            const newQuantityInput = quantityInput.cloneNode(true);
+            quantityInput.parentNode.replaceChild(newQuantityInput, quantityInput);
+
+            newQuantityInput.addEventListener("input", function() {
+                const addedQty = parseInt(this.value) || 0;
+                const newTotal = stock + addedQty;
+                document.getElementById("newStockTotal").value = newTotal;
+            });
+        }
+
+        function selectUpdatePlant(plantId, plantName) {
+            document.getElementById("selectedPlantIdUpdate").value = plantId;
+            document.getElementById("selectedPlantNameUpdate").textContent = plantName;
+            document.getElementById("updateSelectedPlant").style.display = "block";
+            document.getElementById("searchResultsUpdate").style.display = "none";
+            document.getElementById("updatePlantSearch").value = plantName;
+
+            loadPlantDetails(plantId);
+        }
+
+        async function updatePlant() {
+            const plantId = document.getElementById("selectedPlantIdUpdate").value;
+            const plantName = document.getElementById("updatePlantName").value.trim();
+            const description = document.getElementById("updateDescription").value.trim();
+            const price = document.getElementById("updatePrice").value;
+            const stock = document.getElementById("updateStock").value;
+
+            if (!plantName) {
+                showAlert("Plant name cannot be empty", "error");
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const response = await fetch(API_BASE + "/api/admin/update-plant/" + plantId, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        plant_name: plantName,
+                        description: description,
+                        price: parseFloat(price),
+                        stock: parseInt(stock)
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert("✅ " + plantName + " updated successfully!", "success");
+                    setTimeout(() => {
+                        document.getElementById("updatePlantSearch").value = "";
+                        document.getElementById("selectedPlantNameUpdate").textContent = "-";
+                        document.getElementById("selectedPlantIdUpdate").value = "";
+                        document.getElementById("updateSelectedPlant").style.display = "none";
+                        document.getElementById("updateForm").style.display = "none";
+                        loadUpdatePlants();
+                    }, 1500);
+                } else {
+                    showAlert(data.message || "Update failed", "error");
+                }
+            } catch (error) {
+                showAlert("Error: " + error.message, "error");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function deletePlant() {
+            if (!confirm("⚠️ Are you sure you want to delete this plant? This action cannot be undone!")) {
+                return;
+            }
+
+            const plantId = document.getElementById("selectedPlantIdUpdate").value;
+            const plantName = document.getElementById("updatePlantName").value;
+
+            showLoading(true);
+
+            try {
+                const response = await fetch(API_BASE + "/api/admin/delete-plant/" + plantId, {
+                    method: "DELETE"
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert("✅ " + plantName + " deleted successfully!", "success");
+                    setTimeout(() => {
+                        document.getElementById("updatePlantSearch").value = "";
+                        document.getElementById("selectedPlantNameUpdate").textContent = "-";
+                        document.getElementById("selectedPlantIdUpdate").value = "";
+                        document.getElementById("updateSelectedPlant").style.display = "none";
+                        document.getElementById("updateForm").style.display = "none";
+                        loadUpdatePlants();
+                    }, 1500);
+                } else {
+                    showAlert(data.message || "Deletion failed", "error");
+                }
+            } catch (error) {
+                showAlert("Error: " + error.message, "error");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById("restockModal");
+            if (event.target == modal) {
+                modal.classList.remove("show");
+            }
+        }
+    </script>
+</body>
+</html>
