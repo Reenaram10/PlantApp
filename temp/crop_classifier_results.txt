@@ -1,0 +1,33 @@
+--- POTATO FLOWER IMAGES ---
+Image: images (1).jpg       | Prediction: Tomato     | Confidence: 99.99%
+Image: images (10).jpg      | Prediction: Tomato     | Confidence: 100.00%
+Image: images (11).jpg      | Prediction: Tomato     | Confidence: 99.98%
+Image: images (12).jpg      | Prediction: Tomato     | Confidence: 99.97%
+Image: images (14).jpg      | Prediction: Tomato     | Confidence: 99.96%
+Image: images (2).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (3).jpg       | Prediction: Tomato     | Confidence: 99.99%
+Image: images (4).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (5).jpg       | Prediction: Tomato     | Confidence: 99.99%
+Image: images (6).jpg       | Prediction: Tomato     | Confidence: 99.98%
+Image: images (7).jpg       | Prediction: Tomato     | Confidence: 99.99%
+Image: images (8).jpg       | Prediction: Tomato     | Confidence: 99.99%
+Image: images (9).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images.jpg           | Prediction: Tomato     | Confidence: 99.98%
+Potato Flower Accuracy: 0/14 (0.0%)
+
+--- TOMATO FLOWER IMAGES ---
+Image: images (1).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (10).jpg      | Prediction: Tomato     | Confidence: 100.00%
+Image: images (11).jpg      | Prediction: Tomato     | Confidence: 100.00%
+Image: images (12).jpg      | Prediction: Tomato     | Confidence: 100.00%
+Image: images (13).jpg      | Prediction: Tomato     | Confidence: 100.00%
+Image: images (2).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (3).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (4).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (5).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (6).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (7).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (8).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images (9).jpg       | Prediction: Tomato     | Confidence: 100.00%
+Image: images.jpg           | Prediction: Tomato     | Confidence: 100.00%
+Tomato Flower Accuracy: 14/14 (100.0%)

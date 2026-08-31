@@ -1,0 +1,14 @@
+=== POTATO FRUIT MODEL PREDICTION VERIFICATION ===
+File: images (1).jpg            | Prediction: Potato___Fruit       | Conf: 97.16% | Status: [OK]
+File: images (10).jpg           | Prediction: Potato___Fruit       | Conf: 97.36% | Status: [OK]
+File: images (2).jpg            | Prediction: Potato___Fruit       | Conf: 98.61% | Status: [OK]
+File: images (3).jpg            | Prediction: Potato___Fruit       | Conf: 95.50% | Status: [OK]
+File: images (4).jpg            | Prediction: Potato___Fruit       | Conf: 92.35% | Status: [OK]
+File: images (5).jpg            | Prediction: Potato___Fruit       | Conf: 95.55% | Status: [OK]
+File: images (6).jpg            | Prediction: Potato___Fruit       | Conf: 96.55% | Status: [OK]
+File: images (7).jpg            | Prediction: Potato___Fruit       | Conf: 95.75% | Status: [OK]
+File: images (8).jpg            | Prediction: Potato___Fruit       | Conf: 95.80% | Status: [OK]
+File: images (9).jpg            | Prediction: Potato___Fruit       | Conf: 96.78% | Status: [OK]
+File: images.jpg                | Prediction: Potato___Fruit       | Conf: 98.75% | Status: [OK]
+
+Potato Fruit Classification Accuracy: 11/11 (100.0%)

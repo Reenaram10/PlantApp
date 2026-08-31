@@ -1,0 +1,33 @@
+=== POTATO FLOWER IDENTIFY PIPELINE VERIFICATION ===
+File: images (1).jpg     | Plant: Potato     | Diag: Potato Plant    | Conf: 99.89% | Status: [OK]
+File: images (10).jpg    | Plant: Potato     | Diag: Potato Plant    | Conf: 99.59% | Status: [OK]
+File: images (11).jpg    | Plant: Potato     | Diag: Potato Plant    | Conf: 99.97% | Status: [OK]
+File: images (12).jpg    | Plant: Potato     | Diag: Potato Plant    | Conf: 99.96% | Status: [OK]
+File: images (14).jpg    | Plant: Potato     | Diag: Potato Plant    | Conf: 99.99% | Status: [OK]
+File: images (2).jpg     | Plant: Potato     | Diag: Potato Plant    | Conf: 99.83% | Status: [OK]
+File: images (3).jpg     | Plant: Potato     | Diag: Potato Plant    | Conf: 99.83% | Status: [OK]
+File: images (4).jpg     | Plant: Potato     | Diag: Potato Plant    | Conf: 99.95% | Status: [OK]
+File: images (5).jpg     | Plant: Potato     | Diag: Potato Plant    | Conf: 99.91% | Status: [OK]
+File: images (6).jpg     | Plant: Potato     | Diag: Potato Plant    | Conf: 99.97% | Status: [OK]
+File: images (7).jpg     | Plant: Potato     | Diag: Potato Plant    | Conf: 99.96% | Status: [OK]
+File: images (8).jpg     | Plant: Potato     | Diag: Potato Plant    | Conf: 99.98% | Status: [OK]
+File: images (9).jpg     | Plant: Potato     | Diag: Potato Plant    | Conf: 99.96% | Status: [OK]
+File: images.jpg         | Plant: Potato     | Diag: Potato Plant    | Conf: 100.0% | Status: [OK]
+Potato Flower Identification Accuracy: 14/14 (100.0%)
+
+=== TOMATO FLOWER IDENTIFY PIPELINE VERIFICATION ===
+File: images (1).jpg     | Plant: Tomato     | Diag: Tomato Plant    | Conf: 99.98% | Status: [OK]
+File: images (10).jpg    | Plant: Tomato     | Diag: Tomato Plant    | Conf: 100.0% | Status: [OK]
+File: images (11).jpg    | Plant: Tomato     | Diag: Tomato Plant    | Conf: 100.0% | Status: [OK]
+File: images (12).jpg    | Plant: Tomato     | Diag: Tomato Plant    | Conf: 99.96% | Status: [OK]
+File: images (13).jpg    | Plant: Tomato     | Diag: Tomato Plant    | Conf: 100.0% | Status: [OK]
+File: images (2).jpg     | Plant: Tomato     | Diag: Tomato Plant    | Conf: 100.0% | Status: [OK]
+File: images (3).jpg     | Plant: Tomato     | Diag: Tomato Plant    | Conf: 99.98% | Status: [OK]
+File: images (4).jpg     | Plant: Tomato     | Diag: Tomato Plant    | Conf: 99.99% | Status: [OK]
+File: images (5).jpg     | Plant: Tomato     | Diag: Tomato Plant    | Conf: 99.99% | Status: [OK]
+File: images (6).jpg     | Plant: Tomato     | Diag: Tomato Plant    | Conf: 100.0% | Status: [OK]
+File: images (7).jpg     | Plant: Tomato     | Diag: Tomato Plant    | Conf: 99.85% | Status: [OK]
+File: images (8).jpg     | Plant: Tomato     | Diag: Tomato Plant    | Conf: 99.98% | Status: [OK]
+File: images (9).jpg     | Plant: Tomato     | Diag: Tomato Plant    | Conf: 99.98% | Status: [OK]
+File: images.jpg         | Plant: Tomato     | Diag: Tomato Plant    | Conf: 100.0% | Status: [OK]
+Tomato Flower Identification Accuracy: 14/14 (100.0%)

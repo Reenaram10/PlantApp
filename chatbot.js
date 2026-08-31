@@ -1,8 +1,41 @@
-const API_BASE_URL = 'http://127.0.0.1:5001';
+const API_BASE_URL = "http://127.0.0.1:8082";
+
+const fixImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `${API_BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
+};
 
 // Initialize chatbot when document loads
 document.addEventListener('DOMContentLoaded', () => {
     const chatbotHTML = `
+        <style>
+            #chatbot-stt {
+                background-color: #2e7d32;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                padding: 8px 12px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: all 0.3s ease;
+                margin: 0 4px;
+            }
+            #chatbot-stt:disabled {
+                background-color: #cccccc;
+                cursor: not-allowed;
+            }
+            #chatbot-stt.stt-recording {
+                background-color: #d32f2f !important;
+                color: white !important;
+                animation: pulse-red 1.2s infinite;
+            }
+            @keyframes pulse-red {
+                0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7); }
+                70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(211, 47, 47, 0); }
+                100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+            }
+        </style>
         <div id="chatbot-container">
             <div id="chatbot-header">
                 <h3>Plant Assistant</h3>
@@ -12,7 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <div id="chatbot-messages"></div>
             <div id="chatbot-input-area">
                 <input type="text" id="chatbot-input" placeholder="Ask about plants..." disabled>
+                <button id="chatbot-stt" title="Voice Input (Speech to Text)" disabled onclick="toggleSTT()">🎤 STT</button>
                 <button id="chatbot-send" disabled>Send</button>
+                <button id="chatbot-rebuild" onclick="handleRebuildIndex()" title="Rebuild CSV RAG Index">🔄 Rebuild Index</button>
             </div>
         </div>
         <div id="orders-section">
@@ -77,24 +112,27 @@ async function initializeChatbot() {
     const location = getUserLocation();
     const inputField = document.getElementById('chatbot-input');
     const sendButton = document.getElementById('chatbot-send');
+    const sttButton = document.getElementById('chatbot-stt');
     const userStatus = document.getElementById('user-status');
     const logoutBtn = document.getElementById('logout-btn');
 
     if (user && user.id) {
         inputField.disabled = false;
         sendButton.disabled = false;
+        if (sttButton) sttButton.disabled = false;
         logoutBtn.style.display = 'block';
         userStatus.innerHTML = `<span class="logged-in">Logged in as: ${user.username}</span>`;
-        
+
         if (!location) {
             await requestAndStoreLocation();
         }
-        
+
         addMessage('Bot', `Welcome back, ${user.username}! How can I help you with plants today?`);
         loadUserOrders();
     } else {
         inputField.disabled = true;
         sendButton.disabled = true;
+        if (sttButton) sttButton.disabled = true;
         logoutBtn.style.display = 'none';
         userStatus.innerHTML = '<span class="logged-out">Please login to chat</span>';
         addMessage('Bot', 'Please login to start the conversation.');
@@ -104,6 +142,82 @@ async function initializeChatbot() {
     inputField.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleSend();
     });
+}
+
+// ---------- SPEECH-TO-TEXT (STT) ----------
+let _sttRecognition = null;
+let _isSTTListening = false;
+
+function toggleSTT() {
+    const sttBtn = document.getElementById('chatbot-stt');
+    const inputField = document.getElementById('chatbot-input');
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        addMessage('Bot', '⚠️ Speech-to-Text (STT) is not supported in this browser. Please try Google Chrome, Edge, or Safari.');
+        return;
+    }
+
+    if (_isSTTListening) {
+        if (_sttRecognition) _sttRecognition.stop();
+        return;
+    }
+
+    try {
+        _sttRecognition = new SpeechRecognition();
+        _sttRecognition.continuous = false;
+        _sttRecognition.interimResults = true;
+        _sttRecognition.lang = 'en-US';
+
+        _sttRecognition.onstart = () => {
+            _isSTTListening = true;
+            if (sttBtn) {
+                sttBtn.classList.add('stt-recording');
+                sttBtn.textContent = '🎙️ Listening...';
+            }
+            inputField.placeholder = 'Listening to your voice...';
+        };
+
+        _sttRecognition.onresult = (event) => {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            inputField.value = transcript;
+        };
+
+        _sttRecognition.onerror = (event) => {
+            console.error('STT Error:', event.error);
+            stopSTTUI();
+            if (event.error !== 'no-speech' && event.error !== 'aborted') {
+                addMessage('Bot', `⚠️ Speech recognition error: ${event.error}`);
+            }
+        };
+
+        _sttRecognition.onend = () => {
+            stopSTTUI();
+            inputField.focus();
+        };
+
+        _sttRecognition.start();
+    } catch (err) {
+        console.error('Failed to start STT:', err);
+        stopSTTUI();
+    }
+}
+
+function stopSTTUI() {
+    _isSTTListening = false;
+    const sttBtn = document.getElementById('chatbot-stt');
+    const inputField = document.getElementById('chatbot-input');
+    if (sttBtn) {
+        sttBtn.classList.remove('stt-recording');
+        sttBtn.textContent = '🎤 STT';
+    }
+    if (inputField) {
+        inputField.placeholder = 'Ask about plants...';
+    }
 }
 
 // ---------- SEND & PROCESS MESSAGES ----------
@@ -117,7 +231,7 @@ async function handleSend() {
     const input = document.getElementById('chatbot-input');
     const msg = input.value.trim();
     if (!msg) return;
-    
+
     addMessage('You', msg);
     input.value = '';
 
@@ -130,10 +244,35 @@ async function handleSend() {
     }
 }
 
+// ---------- REBUILD CSV INDEX ----------
+async function handleRebuildIndex() {
+    const rebuildBtn = document.getElementById('chatbot-rebuild');
+    if (rebuildBtn) rebuildBtn.disabled = true;
+    addMessage('Bot', '🔄 Rebuilding FAISS vector index from CSV files... Please wait.');
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/rebuild-index`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+        if (res.ok && data.status === 'success') {
+            addMessage('Bot', `✅ ${data.message}`);
+        } else {
+            addMessage('Bot', `❌ Error rebuilding index: ${data.message || 'Unknown error'}`);
+        }
+    } catch (error) {
+        console.error('Rebuild error:', error);
+        addMessage('Bot', `❌ Error connecting to server: ${error.message}`);
+    } finally {
+        if (rebuildBtn) rebuildBtn.disabled = false;
+    }
+}
+
 // ---------- SEND TO BOT ----------
 async function sendToBot(msg, location, userId) {
     addMessage('Bot', '*Thinking...*');
-    
+
     try {
         const res = await fetch(`${API_BASE_URL}/api/chat`, {
             method: 'POST',
@@ -189,9 +328,46 @@ function addMessage(sender, text) {
     const messages = document.getElementById('chatbot-messages');
     const div = document.createElement('div');
     div.className = `message ${sender.toLowerCase()}-message`;
-    div.innerHTML = sender === 'Bot' ? `<strong>${sender}:</strong> ${marked.parse(text)}` : `<strong>${sender}:</strong> ${text}`;
+
+    if (sender === 'Bot') {
+        const contentHTML = marked.parse(text);
+        // Strip markdown/HTML tags to get plain text for TTS
+        const plainText = text.replace(/[#>*_~`\[\]()!]/g, '').replace(/<[^>]+>/g, '').trim();
+
+        const btnId = 'tts-btn-' + Date.now();
+        div.innerHTML = `<strong>${sender}:</strong> ${contentHTML}
+            <div class="tts-row">
+                <button id="${btnId}" class="tts-btn" title="Listen" onclick="toggleTTS(this, ${JSON.stringify(plainText)})">
+                    🔊
+                </button>
+            </div>`;
+    } else {
+        div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    }
+
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
+}
+
+// ---------- TTS HELPERS ----------
+let _ttsUtterance = null;
+
+function toggleTTS(btn, text) {
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        // Reset all TTS buttons
+        document.querySelectorAll('.tts-btn').forEach(b => { b.textContent = '🔊'; b.classList.remove('tts-active'); });
+        if (btn.dataset.playing === 'true') { btn.dataset.playing = 'false'; return; }
+    }
+    btn.dataset.playing = 'true';
+    btn.textContent = '⏹';
+    btn.classList.add('tts-active');
+    _ttsUtterance = new SpeechSynthesisUtterance(text);
+    _ttsUtterance.lang = 'en-US';
+    _ttsUtterance.rate = 1.0;
+    _ttsUtterance.onend = () => { btn.textContent = '🔊'; btn.classList.remove('tts-active'); btn.dataset.playing = 'false'; };
+    _ttsUtterance.onerror = () => { btn.textContent = '🔊'; btn.classList.remove('tts-active'); btn.dataset.playing = 'false'; };
+    window.speechSynthesis.speak(_ttsUtterance);
 }
 
 // ---------- ADD MESSAGE (IMAGE) ----------
@@ -199,15 +375,15 @@ function addMessageWithImage(sender, data) {
     const messages = document.getElementById('chatbot-messages');
     const div = document.createElement('div');
     div.className = `message ${sender.toLowerCase()}-message`;
-    
+
     div.innerHTML = `
         <strong>${sender}:</strong> ${data.reply}
         <div class="image-container">
-            <img src="${data.image_url}" alt="Plant image" class="chat-image">
-            <div class="image-credit">${data.image_credit}</div>
+            <img src="${fixImageUrl(data.image_url)}" alt="Plant image" class="chat-image">
+            <div class="image-credit">${data.image_credit || ''}</div>
         </div>
     `;
-    
+
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
 }
@@ -266,7 +442,7 @@ async function loadUserOrders() {
     try {
         const res = await fetch(`${API_BASE_URL}/api/orders/${user.id}`);
         const data = await res.json();
-        
+
         const ordersList = document.getElementById('orders-list');
         if (data.status === 'success' && data.orders.length > 0) {
             ordersList.innerHTML = data.orders.map(order => `

@@ -1,0 +1,92 @@
+
+    ========================================
+    PATIENT: John Smith
+    MRN: 00-12-34-56
+    Age: 68
+    ========================================
+    
+    ADMISSION (March 15, 2026):
+    ----------------------------------------
+    CHIEF COMPLAINT: Shortness of breath for 3 days, fever, productive cough
+    
+    ADMISSION DIAGNOSIS: Community-Acquired Pneumonia, Right Lower Lobe
+    
+    VITALS: BP 145/88, HR 102, Temp 101.5°F (38.6°C), O2 sat 88% on room air
+    
+    PAST MEDICAL HISTORY: Hypertension, Type 2 Diabetes, Hyperlipidemia
+    
+    MEDICATIONS ON ADMISSION: Lisinopril 20mg daily, Metformin 1000mg twice daily, Atorvastatin 40mg daily
+    
+    ALLERGIES: Penicillin (hives and rash), Codeine (nausea)
+    
+    PHYSICAL EXAM: Crackles at right base, decreased breath sounds, egophony positive
+    
+    ========================================
+    HOSPITAL COURSE
+    ========================================
+    
+    DAY 2 (March 16, 2026):
+    Patient feeling better. Shortness of breath improved.
+    Vitals: BP 138/84, HR 96, Temp 100.5°F, O2 sat 94% on 2L NC
+    Labs: WBC 11.8 (improving from 15.2), CRP 8.2
+    Plan: Continue antibiotics, wean oxygen
+    
+    DAY 3 (March 17, 2026):
+    Patient feeling almost normal. Mild dry cough only.
+    Vitals: BP 125/78, HR 76, Temp 98.6°F, O2 sat 97% on room air
+    Lungs: Clear to auscultation
+    Labs: WBC 9.2 (normal), CRP 2.1
+    Plan: Transition to oral antibiotics
+    
+    DAY 4 (March 18, 2026):
+    Ready for discharge. No respiratory symptoms.
+    Vitals: BP 122/76, HR 72, Temp 98.2°F, O2 sat 98% room air
+    Plan: Discharge tomorrow
+    
+    ========================================
+    LABORATORY RESULTS
+    ========================================
+    
+    Admission Labs (March 15):
+    - WBC: 15.2 (H)
+    - CRP: 18.4 (H)
+    - Procalcitonin: 2.5 (H)
+    - Glucose: 165 (H)
+    - Creatinine: 1.2
+    
+    Sputum Culture: Streptococcus pneumoniae
+    Sensitivity: Susceptible to Ceftriaxone, Levofloxacin
+    
+    Day 2 Labs:
+    - WBC: 11.8
+    - CRP: 8.2
+    
+    Day 3 Labs:
+    - WBC: 9.2
+    - CRP: 2.1
+    
+    ========================================
+    DISCHARGE SUMMARY (March 19, 2026)
+    ========================================
+    
+    DISCHARGE DIAGNOSIS: Community-Acquired Pneumonia - Resolved
+    
+    DISCHARGE MEDICATIONS:
+    1. Levofloxacin 750mg PO daily x 5 days (complete full course)
+    2. Lisinopril 20mg PO daily (resume home dose)
+    3. Metformin 1000mg PO twice daily (resume)
+    4. Atorvastatin 40mg PO daily (resume)
+    
+    DISCHARGE INSTRUCTIONS:
+    - Complete full course of Levofloxacin (5 days total)
+    - Follow up with PCP Dr. James Wilson within 7 days
+    - Repeat chest X-ray in 4-6 weeks
+    - Return to ED if: fever returns, worsening cough, shortness of breath
+    - Resume all home medications
+    
+    FOLLOW-UP APPOINTMENTS:
+    - Primary Care: March 26, 2026
+    - Pulmonary Clinic: April 15, 2026 (if symptoms persist)
+    
+    ALLERGIES: Penicillin (hives, rash) - AVOID
+    

@@ -1,0 +1,27 @@
+=== TOMATO FRUIT /API/IDENTIFY VERIFICATION ===
+File: images (1).jpg                                | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: images (2).jpg                                | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: images (3).jpg                                | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: images (4).jpg                                | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: images (5).jpg                                | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: images (6).jpg                                | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: images (7).jpg                                | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: images (8).jpg                                | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: images (9).jpg                                | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: images.jpg                                    | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+File: Scientific-name-for-Tomatoes-1767962795824.jpg | Plant: Tomato     | Detected: Tomato     | Status: [OK]
+Tomato Fruit Endpoint Accuracy: 11/11 (100.0%)
+
+=== POTATO FRUIT /API/IDENTIFY VERIFICATION ===
+File: images (1).jpg            | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images (10).jpg           | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images (2).jpg            | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images (3).jpg            | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images (4).jpg            | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images (5).jpg            | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images (6).jpg            | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images (7).jpg            | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images (8).jpg            | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images (9).jpg            | Plant: Potato     | Detected: Potato     | Status: [OK]
+File: images.jpg                | Plant: Potato     | Detected: Potato     | Status: [OK]
+Potato Fruit Endpoint Accuracy: 11/11 (100.0%)

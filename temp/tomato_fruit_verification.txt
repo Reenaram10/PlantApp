@@ -1,0 +1,14 @@
+=== TOMATO FRUIT MODEL PREDICTION VERIFICATION ===
+File: images (1).jpg                                | Prediction: Tomato___Fruit       | Conf: 70.94% | Status: [OK]
+File: images (2).jpg                                | Prediction: Tomato___Fruit       | Conf: 94.28% | Status: [OK]
+File: images (3).jpg                                | Prediction: Tomato___Fruit       | Conf: 96.40% | Status: [OK]
+File: images (4).jpg                                | Prediction: Tomato___Fruit       | Conf: 92.53% | Status: [OK]
+File: images (5).jpg                                | Prediction: Tomato___Fruit       | Conf: 89.92% | Status: [OK]
+File: images (6).jpg                                | Prediction: Tomato___Fruit       | Conf: 85.41% | Status: [OK]
+File: images (7).jpg                                | Prediction: Tomato___Fruit       | Conf: 88.87% | Status: [OK]
+File: images (8).jpg                                | Prediction: Tomato___Fruit       | Conf: 94.56% | Status: [OK]
+File: images (9).jpg                                | Prediction: Tomato___Fruit       | Conf: 98.60% | Status: [OK]
+File: images.jpg                                    | Prediction: Tomato___Fruit       | Conf: 90.73% | Status: [OK]
+File: Scientific-name-for-Tomatoes-1767962795824.jpg | Prediction: Tomato___Fruit       | Conf: 98.13% | Status: [OK]
+
+Tomato Fruit Classification Accuracy: 11/11 (100.0%)

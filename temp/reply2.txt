@@ -1,0 +1,15 @@
+🌱 **Plant Profile: Tomato Plant**
+
+| Parameter | Value |
+|-----------|-------|
+| 🔬 Scientific Name | Solanum lycopersicum |
+| 💧 Soil Moisture | 60-80% |
+| 🌡️ Temperature | 21-32°C |
+| 💦 Humidity | 60-70% |
+| ☀️ Sunlight | Full Sun |
+| 🌾 Soil Type | Well-drained loamy soil |
+| 🟢 Nitrogen | High |
+| 🟡 Phosphorus | Medium |
+| 🟣 Potassium | High |
+| 🚿 Watering Frequency | 2-3 times per week |
+| ⏳ Growth Duration | 90-120 days |

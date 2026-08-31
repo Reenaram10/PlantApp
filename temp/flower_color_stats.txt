@@ -1,0 +1,31 @@
+=== POTATO FLOWERS ===
+File: images (1).jpg     | Yellow %:  6.24% | White/Pale %: 20.51%
+File: images (10).jpg    | Yellow %:  5.20% | White/Pale %:  8.21%
+File: images (11).jpg    | Yellow %:  5.37% | White/Pale %: 26.62%
+File: images (12).jpg    | Yellow %:  0.78% | White/Pale %:  5.44%
+File: images (14).jpg    | Yellow %:  3.03% | White/Pale %: 17.04%
+File: images (2).jpg     | Yellow %: 14.28% | White/Pale %: 18.24%
+File: images (3).jpg     | Yellow %: 11.30% | White/Pale %: 16.19%
+File: images (4).jpg     | Yellow %:  0.69% | White/Pale %:  6.44%
+File: images (5).jpg     | Yellow %: 20.97% | White/Pale %: 20.12%
+File: images (6).jpg     | Yellow %:  2.17% | White/Pale %:  4.89%
+File: images (7).jpg     | Yellow %:  7.58% | White/Pale %: 17.13%
+File: images (8).jpg     | Yellow %:  6.77% | White/Pale %: 13.68%
+File: images (9).jpg     | Yellow %:  2.21% | White/Pale %:  5.04%
+File: images.jpg         | Yellow %:  5.07% | White/Pale %: 59.39%
+
+=== TOMATO FLOWERS ===
+File: images (1).jpg     | Yellow %:  0.51% | White/Pale %:  2.35%
+File: images (10).jpg    | Yellow %: 50.84% | White/Pale %:  7.95%
+File: images (11).jpg    | Yellow %:  4.77% | White/Pale %: 27.52%
+File: images (12).jpg    | Yellow %: 64.98% | White/Pale %:  0.00%
+File: images (13).jpg    | Yellow %:  3.01% | White/Pale %:  3.74%
+File: images (2).jpg     | Yellow %:  9.92% | White/Pale %:  7.30%
+File: images (3).jpg     | Yellow %:  5.15% | White/Pale %: 11.41%
+File: images (4).jpg     | Yellow %: 36.50% | White/Pale %: 23.12%
+File: images (5).jpg     | Yellow %:  1.21% | White/Pale %:  4.36%
+File: images (6).jpg     | Yellow %: 12.37% | White/Pale %: 12.34%
+File: images (7).jpg     | Yellow %: 21.82% | White/Pale %: 12.95%
+File: images (8).jpg     | Yellow %:  8.60% | White/Pale %:  3.85%
+File: images (9).jpg     | Yellow %: 11.01% | White/Pale %: 41.06%
+File: images.jpg         | Yellow %:  5.02% | White/Pale %:  4.04%

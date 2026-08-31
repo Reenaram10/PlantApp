@@ -1,0 +1,42 @@
+[
+    {
+        "id": "tomato_temperature",
+        "category": "Temperature",
+        "content": "Tomatoes are warm-season crops. They thrive in daytime temperatures between 18\u00b0C and 27\u00b0C (64\u00b0F\u201381\u00b0F). Night temperatures should stay above 13\u00b0C (55\u00b0F). Soil temperatures should be at least 13\u00b0C before planting. Extreme heat above 34\u00b0C can stress the plant and affect fruit set."
+    },
+    {
+        "id": "tomato_humidity",
+        "category": "Humidity",
+        "content": "Tomatoes prefer moderate humidity levels. Proper humidity is crucial for nutrient and water uptake. In greenhouses, maintaining balanced humidity prevents stress. High humidity can encourage fungal diseases like Septoria leaf spot or Early Blight, while very low humidity can dry out the plant."
+    },
+    {
+        "id": "tomato_moisture",
+        "category": "Moisture",
+        "content": "Tomatoes require consistent soil moisture. The ideal soil pH is 5.5 to 6.5. Ensure soil is well-drained to avoid waterlogging, which causes root rot. Mulching around the base helps retain soil moisture and prevents water splash that can spread soil-borne diseases."
+    },
+    {
+        "id": "tomato_water",
+        "category": "Watering",
+        "content": "Watering requirements peak during early fruit development. Provide deep, consistent watering at the base of the plant to avoid wetting the leaves. Moderate water stress (slightly less water) during the final ripening stage can improve fruit taste and sugar content. Avoid overhead irrigation to prevent leaf diseases."
+    },
+    {
+        "id": "tomato_nutrients",
+        "category": "Nutrients",
+        "content": "Tomato nutrient needs shift as the plant matures. Seedlings need high phosphorus for root development. Vegetative plants need Nitrogen for lush foliage. During flowering and fruit set, increase Phosphorus and Potassium. Calcium is essential to prevent blossom end rot, a common disorder caused by calcium deficiency."
+    },
+    {
+        "id": "tomato_fertilizer",
+        "category": "Fertilizer",
+        "content": "Use a balanced NPK (Nitrogen-Phosphorus-Potassium) fertilizer. Initially, use a starter fertilizer high in phosphorus. Once flowers appear, switch to a fertilizer higher in potassium to support fruit quality and flavor. Avoid excessive nitrogen late in the season as it may favor leaf growth over fruit production."
+    },
+    {
+        "id": "tomato_pesticide",
+        "category": "Pest Control",
+        "content": "Common pests include tomato hornworms, aphids, and spider mites. Hand-picking large insects is effective for small gardens. Organic controls like neem oil or introducing predatory mites can manage smaller pests. Ensure proper spacing for airflow to reduce disease and pest pressure. Hybrid varieties often have VFNT resistance markings (Verticillium, Fusarium, Nematodes, Tobacco mosaic virus)."
+    },
+    {
+        "id": "tomato_general_profile",
+        "category": "General Profiling",
+        "content": "Tomato (Solanum lycopersicum) profiling involves managing temperature (18-27\u00b0C), consistent watering (at base), shifted nutrient intake (Nitrogen -> Phosphorus -> Potassium), and balanced soil pH (5.5-6.5). Sunlight requirement is Full Sun (at least 6-8 hours a day)."
+    }
+]

@@ -1,4 +1,10 @@
-const API_BASE_URL = "http://127.0.0.1:5001";
+const API_BASE_URL = "http://127.0.0.1:8082";
+
+const fixImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `${API_BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
+};
 
 // ------------------ Bot Message Helper ------------------
 function addMessage(sender, text) {
@@ -160,7 +166,7 @@ async function sendUserText(userMessage) {
         const res = await fetch(`${API_BASE_URL}/api/chat`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: userMessage, user_id: user.username })
+            body: JSON.stringify({ message: userMessage, user_id: user.id || user.username })
         });
 
         const data = await res.json();
@@ -193,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     formData.append("audio", audioBlob, "voice.wav");
 
                     try {
-                        const res = await fetch(`${API_BASE_URL}/api/voice`, { method: "POST", body: formData });
+                        const res = await fetch(`${API_BASE_URL}/api/voice_vosk`, { method: "POST", body: formData });
                         const data = await res.json();
 
                         if (data.error) addMessage("Bot", `❌ ${data.error}`);

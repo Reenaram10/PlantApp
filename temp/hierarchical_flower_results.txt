@@ -1,0 +1,33 @@
+=== POTATO FLOWERS ===
+File: images (1).jpg     | Classified: Potato___Flower      | P_Conf: 98.5% | T_Conf: 96.7%
+File: images (10).jpg    | Classified: Tomato___Flower      | P_Conf: 97.9% | T_Conf: 99.5%
+File: images (11).jpg    | Classified: Potato___Flower      | P_Conf: 98.2% | T_Conf: 91.2%
+File: images (12).jpg    | Classified: Tomato___Flower      | P_Conf: 65.1% | T_Conf: 94.2%
+File: images (14).jpg    | Classified: Potato___Flower      | P_Conf: 96.8% | T_Conf: 95.1%
+File: images (2).jpg     | Classified: Potato___Flower      | P_Conf: 99.3% | T_Conf: 98.6%
+File: images (3).jpg     | Classified: Potato___Flower      | P_Conf: 98.0% | T_Conf: 96.2%
+File: images (4).jpg     | Classified: Tomato___Flower      | P_Conf: 96.4% | T_Conf: 99.8%
+File: images (5).jpg     | Classified: Tomato___Flower      | P_Conf: 96.0% | T_Conf: 99.4%
+File: images (6).jpg     | Classified: Tomato___Flower      | P_Conf: 95.3% | T_Conf: 97.2%
+File: images (7).jpg     | Classified: Potato___Flower      | P_Conf: 90.5% | T_Conf: 79.1%
+File: images (8).jpg     | Classified: Potato___Flower      | P_Conf: 98.3% | T_Conf: 97.5%
+File: images (9).jpg     | Classified: Tomato___Flower      | P_Conf: 89.3% | T_Conf: 93.3%
+File: images.jpg         | Classified: Potato___Flower      | P_Conf: 98.6% | T_Conf: 97.1%
+Potato Flower Accuracy: 8/14 (57.1%)
+
+=== TOMATO FLOWERS ===
+File: images (1).jpg     | Classified: Tomato___Flower      | P_Conf: 96.4% | T_Conf: 99.9%
+File: images (10).jpg    | Classified: Tomato___Flower      | P_Conf: 99.0% | T_Conf: 100.0%
+File: images (11).jpg    | Classified: Tomato___Flower      | P_Conf: 98.8% | T_Conf: 99.9%
+File: images (12).jpg    | Classified: Tomato___Flower      | P_Conf: 99.5% | T_Conf: 99.9%
+File: images (13).jpg    | Classified: Tomato___Flower      | P_Conf: 97.9% | T_Conf: 100.0%
+File: images (2).jpg     | Classified: Tomato___Flower      | P_Conf: 94.5% | T_Conf: 100.0%
+File: images (3).jpg     | Classified: Tomato___Flower      | P_Conf: 93.3% | T_Conf: 99.9%
+File: images (4).jpg     | Classified: Tomato___Flower      | P_Conf: 99.7% | T_Conf: 99.9%
+File: images (5).jpg     | Classified: Tomato___Flower      | P_Conf: 97.5% | T_Conf: 100.0%
+File: images (6).jpg     | Classified: Tomato___Flower      | P_Conf: 96.0% | T_Conf: 100.0%
+File: images (7).jpg     | Classified: Tomato___Flower      | P_Conf: 98.4% | T_Conf: 99.5%
+File: images (8).jpg     | Classified: Tomato___Flower      | P_Conf: 99.0% | T_Conf: 100.0%
+File: images (9).jpg     | Classified: Tomato___Flower      | P_Conf: 87.2% | T_Conf: 99.9%
+File: images.jpg         | Classified: Tomato___Flower      | P_Conf: 90.7% | T_Conf: 100.0%
+Tomato Flower Accuracy: 14/14 (100.0%)

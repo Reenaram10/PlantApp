@@ -1,0 +1,100 @@
+plant_name,scientific_name,moisture,temperature,humidity,sunlight,soil_type,nitrogen,phosphorus,potassium,watering_frequency,growth_duration
+Mango,Mangifera indica,50-70%,24-35°C,50-60%,Full Sun,Well-drained alluvial/loamy soil,High,Medium,High,2-3 times per week,5-8 years (fruiting)
+Lichi,Litchi chinensis,60-70%,20-35°C,70-80%,Full Sun,Well-drained sandy loam,Medium,Medium,High,2-3 times per week,4-7 years (fruiting)
+Strawberry,Fragaria × ananassa,60-80%,15-25°C,60-75%,Full Sun,Well-drained sandy loam,Medium,High,High,Daily (shallow roots),90-110 days
+Acanthocereus,Acanthocereus tetragonus,20-30%,22-38°C,30-50%,Full Sun,"Sandy, well-drained cactus mix",Low,Low,Low,Once every 2 weeks,3-5 years (maturity)
+Orange,Citrus sinensis,50-70%,22-32°C,55-65%,Full Sun,Well-drained sandy loam,High,Medium,High,2-3 times per week,3-5 years (fruiting)
+Spring Onion Plant,Allium fistulosum,60-75%,13-24°C,50-70%,Full Sun,Well-drained loamy soil,Medium,Medium,Medium,3-4 times per week,60-90 days
+Radish Plant,Raphanus sativus,60-80%,10-18°C,50-65%,Full Sun,"Loose, well-drained sandy loam",Low,Medium,Medium,3-4 times per week,25-35 days
+Lemon,Citrus limon,50-70%,20-30°C,50-65%,Full Sun,Well-drained loamy or sandy loam,High,Medium,High,2-3 times per week,2-3 years (fruiting)
+Dahlia,Dahlia pinnata,60-75%,15-28°C,50-70%,Full Sun,Well-drained rich loamy soil,Medium,High,High,2-3 times per week,90-120 days
+Tuberose,Polianthes tuberosa,50-70%,20-35°C,60-70%,Full Sun,Well-drained sandy loam,Medium,High,Medium,2-3 times per week,120-150 days
+Bougainvillea,Bougainvillea spectabilis,40-60%,22-35°C,40-60%,Full Sun,Well-drained loamy or sandy soil,Low,Medium,Medium,Once per week,1-2 years (flowering)
+Oleander,Nerium oleander,30-50%,18-35°C,30-60%,Full Sun,Well-drained loamy or sandy soil,Low,Low,Medium,Once per week,1-2 years (maturity)
+Ashoka Tree,Saraca asoca,60-80%,20-35°C,60-80%,Partial to Full Sun,Well-drained alluvial loamy soil,Medium,Medium,Medium,2-3 times per week,5-7 years (maturity)
+Bottle Palm,Hyophorbe lagenicaulis,40-60%,22-35°C,50-70%,Full Sun,Well-drained sandy loam,Low,Low,Medium,Once per week,5-10 years (maturity)
+Gulmohar,Delonix regia,40-60%,25-38°C,40-60%,Full Sun,Well-drained sandy loam,Low,Medium,Low,Once per week,3-5 years (flowering)
+Mexican Sunflower,Tithonia rotundifolia,40-60%,20-35°C,40-65%,Full Sun,Well-drained loamy soil,Low,Medium,Medium,2 times per week,60-90 days
+Jatropha,Jatropha curcas,30-50%,20-35°C,30-60%,Full Sun,Well-drained sandy or loamy soil,Low,Low,Low,Once per week,2-3 years (fruiting)
+Plumeria,Plumeria rubra,40-60%,22-35°C,40-60%,Full Sun,Well-drained sandy loam,Low,Medium,Medium,Once per week,2-3 years (flowering)
+Ixora,Ixora coccinea,50-70%,20-32°C,60-75%,Full Sun,Acidic well-drained loamy soil,Medium,Medium,Medium,2-3 times per week,1-2 years (flowering)
+Lantana,Lantana camara,40-60%,18-35°C,40-65%,Full Sun,Well-drained sandy or loamy soil,Low,Low,Low,Once per week,60-90 days (flowering)
+Tulsi,Ocimum tenuiflorum,50-70%,20-35°C,50-70%,Full Sun,Well-drained loamy soil,Medium,Medium,Medium,"Daily (summer), alternate days (winter)",60-90 days
+Brahmi,Bacopa monnieri,80-90%,15-30°C,70-90%,Partial Shade to Full Sun,Moist marshy loamy soil,Medium,Low,Medium,Daily,90-120 days
+Moon Cactus,Gymnocalycium mihanovichii,20-30%,18-30°C,20-40%,Indirect Bright Light,Sandy well-drained cactus mix,Low,Low,Low,Once every 2-3 weeks,1-2 years (maturity)
+Opuntia Prickly Pear,Opuntia ficus-indica,20-40%,20-38°C,20-50%,Full Sun,"Sandy, well-drained gravelly soil",Low,Low,Low,Once every 2 weeks,3-4 years (fruiting)
+Papaya,Carica papaya,60-80%,22-35°C,60-70%,Full Sun,Well-drained sandy loam,High,Medium,High,3-4 times per week,9-12 months (fruiting)
+Gymnocalycium,Gymnocalycium baldianum,20-30%,18-28°C,20-40%,Partial Shade,Sandy well-drained cactus mix,Low,Low,Low,Once every 2-3 weeks,2-3 years (flowering)
+Tomato Plant,Solanum lycopersicum,60-80%,21-32°C,60-70%,Full Sun,Well-drained loamy soil,High,Medium,High,2-3 times per week,90-120 days
+Chili Plant,Capsicum annuum,60-75%,20-32°C,50-70%,Full Sun,Well-drained sandy loam,Medium,Medium,High,2-3 times per week,90-120 days
+Spinach Plant,Spinacia oleracea,65-80%,10-20°C,60-70%,Full Sun to Partial Shade,Well-drained nitrogen-rich loamy soil,High,Medium,Medium,3-4 times per week,40-50 days
+Coriander Plant,Coriandrum sativum,60-75%,15-25°C,50-65%,Full Sun,Well-drained loamy soil,Medium,Medium,Low,3-4 times per week,45-60 days
+Mint Plant,Mentha spicata,70-80%,18-28°C,60-75%,Partial Shade to Full Sun,Moist well-drained loamy soil,Medium,Low,Medium,Daily,90 days
+Fenugreek Plant,Trigonella foenum-graecum,60-70%,15-27°C,50-65%,Full Sun,Well-drained loamy soil,Low,Medium,Medium,2-3 times per week,90-120 days
+Apple,Malus domestica,50-70%,10-24°C,50-65%,Full Sun,Well-drained deep loamy soil,Medium,Medium,High,2-3 times per week,4-5 years (fruiting)
+Aloe Vera,Aloe barbadensis miller,20-40%,20-35°C,30-50%,Full Sun to Partial Shade,Sandy well-drained soil,Low,Low,Low,Once every 2 weeks,3-4 years (maturity)
+Peace Lily,Spathiphyllum wallisii,60-75%,18-27°C,50-70%,Low to Indirect Light,Well-drained peat-rich potting mix,Medium,Medium,Low,Once per week,1-2 years (maturity)
+Snake Plant,Dracaena trifasciata,20-40%,18-32°C,30-50%,Low to Indirect Light,Well-drained sandy potting mix,Low,Low,Low,Once every 2-3 weeks,2-3 years (maturity)
+Red Aglaonema,Aglaonema commutatum,50-65%,18-28°C,50-70%,Low to Indirect Light,Well-drained peat-based potting mix,Low,Low,Low,Once per week,1-2 years (maturity)
+Golden Pothos,Epipremnum aureum,50-70%,18-30°C,50-70%,Low to Indirect Light,Well-drained potting mix,Low,Low,Low,Once per week,6-12 months (maturity)
+Agave,Agave americana,20-35%,20-38°C,20-40%,Full Sun,Sandy or gravelly well-drained soil,Low,Low,Low,Once every 2-3 weeks,10-25 years (maturity)
+Anthurium,Anthurium andraeanum,60-70%,18-28°C,60-80%,Indirect Bright Light,Well-drained peat and perlite mix,Medium,Low,Medium,Once per week,2-3 years (flowering)
+Carnation,Dianthus caryophyllus,50-65%,13-21°C,50-60%,Full Sun,Well-drained slightly alkaline loamy soil,Medium,High,Medium,2 times per week,90-150 days
+ZZ Plant,Zamioculcas zamiifolia,25-40%,18-30°C,30-50%,Low to Indirect Light,Well-drained potting mix,Low,Low,Low,Once every 2-3 weeks,2-3 years (maturity)
+Pothos,Epipremnum aureum,50-70%,18-30°C,50-70%,Low to Indirect Light,Well-drained potting mix,Low,Low,Low,Once per week,6-12 months (maturity)
+Spider Plant,Chlorophytum comosum,50-65%,15-28°C,40-65%,Indirect Bright Light,Well-drained potting mix,Low,Low,Low,Once per week,6-12 months (maturity)
+Money Plant,Epipremnum aureum,50-70%,18-30°C,50-70%,Low to Indirect Light,Well-drained potting mix,Low,Low,Low,Once per week,6-12 months (maturity)
+Areca Palm,Dypsis lutescens,60-75%,18-32°C,60-80%,Indirect Bright Light,Well-drained sandy loam,Medium,Low,Medium,2-3 times per week,5-7 years (maturity)
+Syngonium,Syngonium podophyllum,60-70%,18-28°C,55-70%,Low to Indirect Light,Well-drained peat-based potting mix,Low,Low,Low,Once per week,1-2 years (maturity)
+Dieffenbachia,Dieffenbachia seguine,60-70%,18-30°C,60-75%,Low to Indirect Light,Well-drained peat-based potting mix,Low,Low,Low,Once per week,1-2 years (maturity)
+Rubber Plant,Ficus elastica,50-65%,18-30°C,50-65%,Indirect Bright Light,Well-drained potting mix with perlite,Medium,Low,Low,Once per week,2-3 years (maturity)
+Bamboo Palm,Chamaedorea seifrizii,60-75%,18-27°C,60-80%,Indirect Bright Light,Well-drained peat-based mix,Low,Low,Medium,2 times per week,3-5 years (maturity)
+Jasmine,Jasminum sambac,50-70%,20-35°C,60-75%,Full Sun,Well-drained loamy soil,Medium,Medium,Medium,2-3 times per week,1-2 years (flowering)
+Sunflower,Helianthus annuus,50-70%,18-30°C,45-65%,Full Sun,Well-drained loamy soil,Medium,Medium,High,2 times per week,70-100 days
+Orchid,Phalaenopsis spp.,50-65%,18-27°C,60-80%,Indirect Bright Light,Bark-based orchid mix,Low,Medium,Low,Once per week,1-2 years (flowering)
+Marigold,Tagetes erecta,50-65%,18-30°C,40-65%,Full Sun,Well-drained loamy soil,Low,Medium,Medium,2-3 times per week,45-60 days
+Hydrangea,Hydrangea macrophylla,65-80%,13-25°C,60-80%,Partial Shade,Moist well-drained acidic soil,Medium,Medium,Medium,3-4 times per week,2-3 years (flowering)
+Neem,Azadirachta indica,40-60%,22-38°C,40-65%,Full Sun,Well-drained loamy or sandy soil,Low,Low,Low,Once per week,3-5 years (maturity)
+Curry Leaves,Murraya koenigii,50-70%,20-35°C,50-70%,Full Sun,Well-drained loamy soil,Medium,Medium,Medium,2-3 times per week,1-2 years (maturity)
+Mint,Mentha piperita,70-80%,18-28°C,60-75%,Partial Shade to Full Sun,Moist well-drained loamy soil,Medium,Low,Medium,Daily,90 days
+Thyme,Thymus vulgaris,30-50%,15-28°C,30-50%,Full Sun,Well-drained sandy loam,Low,Low,Medium,Once per week,75-90 days
+Ferocactus,Ferocactus wislizeni,15-25%,22-40°C,15-35%,Full Sun,Sandy gravelly well-drained soil,Low,Low,Low,Once every 3-4 weeks,5-10 years (maturity)
+Rosette Blossom,Aeonium arboreum,30-50%,15-25°C,30-55%,Full Sun to Partial Shade,Well-drained succulent mix,Low,Low,Low,Once every 2 weeks,2-3 years (maturity)
+Velvet Petunia,Petunia × hybrida,55-70%,15-28°C,50-65%,Full Sun,Well-drained loamy soil,Medium,High,Medium,2-3 times per week,60-90 days
+Haworthia,Haworthiopsis attenuata,20-35%,18-28°C,20-40%,Indirect Bright Light,Sandy well-drained succulent mix,Low,Low,Low,Once every 2-3 weeks,2-5 years (maturity)
+Euphorbia Cactus,Euphorbia trigona,15-30%,18-35°C,20-40%,Full Sun to Partial Shade,Sandy well-drained cactus mix,Low,Low,Low,Once every 2-3 weeks,3-5 years (maturity)
+English Ivy,Hedera helix,55-70%,10-25°C,50-70%,Partial Shade to Indirect Light,Well-drained loamy potting mix,Low,Low,Low,Once per week,1-2 years (maturity)
+Lavender,Lavandula angustifolia,30-50%,15-25°C,30-50%,Full Sun,Well-drained slightly alkaline sandy soil,Low,Low,Medium,Once per week,90-120 days (flowering)
+Poppy,Papaver rhoeas,45-65%,10-20°C,40-60%,Full Sun,Well-drained loamy soil,Low,Medium,Medium,Once per week,70-90 days
+Ipomoea,Ipomoea purpurea,50-70%,18-32°C,50-70%,Full Sun,Well-drained loamy soil,Low,Low,Medium,2 times per week,60-80 days
+Ivy,Hedera helix,55-70%,10-25°C,50-70%,Partial Shade,Well-drained loamy potting mix,Low,Low,Low,Once per week,1-2 years (maturity)
+Monstera Deliciosa,Monstera deliciosa,60-75%,18-30°C,60-80%,Indirect Bright Light,Well-drained peat and perlite mix,Medium,Low,Medium,Once per week,2-3 years (maturity)
+Philodendron Brasil,Philodendron hederaceum,60-70%,18-30°C,60-80%,Indirect Bright Light,Well-drained peat-based potting mix,Medium,Low,Low,Once per week,1-2 years (maturity)
+Begonia,Begonia × semperflorens,60-75%,15-26°C,55-70%,Partial Shade,Well-drained peat-based mix,Medium,High,Medium,2-3 times per week,60-90 days (flowering)
+Blushing Bells (Impatiens),Impatiens walleriana,65-80%,15-27°C,60-75%,Partial Shade,Moist well-drained loamy soil,Medium,Medium,Medium,"Daily (summer), 3x/week (other seasons)",60-75 days
+Insulin Plant,Costus igneus,65-80%,22-35°C,65-80%,Partial Shade to Full Sun,Moist well-drained loamy soil,Medium,Medium,Medium,Daily,6-12 months (maturity)
+Oregano,Origanum vulgare,30-50%,18-30°C,40-60%,Full Sun,Well-drained sandy loam,Low,Low,Medium,Once per week,90 days
+Calotropis,Calotropis gigantea,20-40%,25-40°C,30-50%,Full Sun,Sandy well-drained dry soil,Low,Low,Low,Once every 2 weeks,2-3 years (maturity)
+Cactus,Cactaceae spp.,15-25%,20-38°C,20-40%,Full Sun,Sandy gravelly well-drained cactus mix,Low,Low,Low,Once every 2-4 weeks,3-10 years (maturity)
+Golden Barrel Cactus,Echinocactus grusonii,15-25%,20-38°C,20-40%,Full Sun,Sandy gravelly well-drained soil,Low,Low,Low,Once every 3-4 weeks,10-15 years (maturity)
+Sunset Glow,Gaillardia × grandiflora,40-55%,20-35°C,35-55%,Full Sun,Well-drained sandy loam,Low,Medium,Medium,Once per week,70-90 days
+Dates,Phoenix dactylifera,30-50%,25-45°C,30-50%,Full Sun,Well-drained sandy loam,Medium,Medium,High,Once per week,4-8 years (fruiting)
+Tulip,Tulipa gesneriana,50-65%,5-15°C,50-65%,Full Sun,Well-drained sandy loam,Low,High,High,Once per week,90-120 days
+Camellia,Camellia japonica,60-75%,13-22°C,60-75%,Partial Shade,Acidic well-drained loamy soil,Medium,Medium,Medium,2-3 times per week,2-3 years (flowering)
+Hibiscus,Hibiscus rosa-sinensis,55-70%,22-35°C,55-70%,Full Sun,Well-drained loamy soil,Medium,Medium,High,"Daily (summer), 3x/week (other seasons)",1-2 years (flowering)
+Cyclamen,Cyclamen persicum,55-70%,10-18°C,50-70%,Indirect Bright Light,Well-drained peat-based mix,Low,Medium,Medium,2-3 times per week,90-120 days (flowering)
+Red Cactus,Gymnocalycium mihanovichii var. friedrichii,15-25%,18-30°C,20-40%,Indirect Bright Light,Sandy well-drained cactus mix,Low,Low,Low,Once every 2-3 weeks,1-2 years (maturity)
+Purple Basil,Ocimum basilicum var. purpurascens,60-75%,18-30°C,50-65%,Full Sun,Well-drained rich loamy soil,Medium,Medium,Medium,"Daily (summer), 3x/week (other seasons)",60-90 days
+Blue Forget-Me-Not,Myosotis sylvatica,60-75%,10-22°C,55-70%,Partial Shade,Moist well-drained loamy soil,Low,Medium,Low,2-3 times per week,60-90 days
+Rose Mallow,Hibiscus moscheutos,60-75%,18-32°C,55-70%,Full Sun,Well-drained loamy soil,Medium,Medium,High,3-4 times per week,75-90 days
+Rose Campion,Silene coronaria,40-60%,15-25°C,40-60%,Full Sun,Well-drained loamy to sandy soil,Low,Low,Low,Once per week,60-90 days (flowering)
+Rose Geranium,Pelargonium graveolens,40-60%,15-27°C,40-60%,Full Sun,Well-drained loamy soil,Low,Medium,Medium,Once per week,60-90 days (flowering)
+Rose,Rosa × hybrida,55-70%,15-28°C,55-70%,Full Sun,Well-drained loamy soil rich in organic matter,Medium,High,High,3-4 times per week,2-3 years (maturity)
+Boston Fern,Nephrolepis exaltata,70-80%,15-25°C,70-90%,Indirect Bright Light,Moist peat-based potting mix,Medium,Low,Medium,Daily (misting) + 2x/week watering,1-2 years (maturity)
+Petunia,Petunia × hybrida,55-70%,15-28°C,50-65%,Full Sun,Well-drained loamy soil,Medium,High,Medium,2-3 times per week,60-90 days
+Wisteria,Wisteria sinensis,55-70%,15-28°C,50-70%,Full Sun,Well-drained loamy soil,Low,Medium,Medium,2-3 times per week,3-5 years (flowering)
+Iris,Iris germanica,50-65%,13-25°C,45-65%,Full Sun,Well-drained slightly alkaline loamy soil,Low,Medium,High,Once per week,90-120 days (flowering)
+Lavender Mist (Lavandula),Lavandula stoechas,30-50%,15-28°C,30-55%,Full Sun,Well-drained sandy alkaline soil,Low,Low,Medium,Once per week,90-120 days (flowering)
+
+Tomato,Solanum lycopersicum,Moderate,18-24°C,60-80%,Full sun,Well-draining,Medium,High,Medium,Regular,60-90 days
+Strawberry,Fragaria x ananassa,Moderate,Cool to Warm,High,Full Sun,Well-draining,Medium,High,Medium,Regular,Spring to Fall

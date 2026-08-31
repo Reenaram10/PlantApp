@@ -1,0 +1,721 @@
+[
+    {
+        "id": "plant_95",
+        "category": "General Plant Info",
+        "content": "Plant Name: Mango\nDescription: New plant: Mango",
+        "plant_id": 95,
+        "plant_name": "Mango"
+    },
+    {
+        "id": "plant_93",
+        "category": "General Plant Info",
+        "content": "Plant Name: Lichi\nDescription: New plant: Lichi",
+        "plant_id": 93,
+        "plant_name": "Lichi"
+    },
+    {
+        "id": "plant_97",
+        "category": "General Plant Info",
+        "content": "Plant Name: Test Plant 466b5889\nDescription: Integration Test Plant",
+        "plant_id": 97,
+        "plant_name": "Test Plant 466b5889"
+    },
+    {
+        "id": "plant_92",
+        "category": "General Plant Info",
+        "content": "Plant Name: strawberry\nDescription: Fruit plant",
+        "plant_id": 92,
+        "plant_name": "strawberry"
+    },
+    {
+        "id": "plant_76",
+        "category": "General Plant Info",
+        "content": "Plant Name: Acanthocereus\nDescription: Twisted column cactus",
+        "plant_id": 76,
+        "plant_name": "Acanthocereus"
+    },
+    {
+        "id": "plant_91",
+        "category": "General Plant Info",
+        "content": "Plant Name: orange\nDescription: New plant: orange",
+        "plant_id": 91,
+        "plant_name": "orange"
+    },
+    {
+        "id": "plant_87",
+        "category": "General Plant Info",
+        "content": "Plant Name: Spring Onion Plant\nDescription: Mild-flavored onion plant grown for green stalks, suitable for container gardening.",
+        "plant_id": 87,
+        "plant_name": "Spring Onion Plant"
+    },
+    {
+        "id": "plant_88",
+        "category": "General Plant Info",
+        "content": "Plant Name: Radish Plant\nDescription: Quick-growing root vegetable plant that thrives in loose soil and moderate sunlight.",
+        "plant_id": 88,
+        "plant_name": "Radish Plant"
+    },
+    {
+        "id": "plant_89",
+        "category": "General Plant Info",
+        "content": "Plant Name: Lemon\nDescription: Lemon plant is a fruit-bearing plant known for its sour citrus fruits and rich vitamin C content.",
+        "plant_id": 89,
+        "plant_name": "Lemon"
+    },
+    {
+        "id": "plant_48",
+        "category": "General Plant Info",
+        "content": "Plant Name: Dahlia\nDescription: Bold layered winter flower",
+        "plant_id": 48,
+        "plant_name": "Dahlia"
+    },
+    {
+        "id": "plant_49",
+        "category": "General Plant Info",
+        "content": "Plant Name: Tuberose\nDescription: Heavenly night fragrant flower",
+        "plant_id": 49,
+        "plant_name": "Tuberose"
+    },
+    {
+        "id": "plant_50",
+        "category": "General Plant Info",
+        "content": "Plant Name: Bougainvillea\nDescription: Hardy colourful outdoor climber",
+        "plant_id": 50,
+        "plant_name": "Bougainvillea"
+    },
+    {
+        "id": "plant_51",
+        "category": "General Plant Info",
+        "content": "Plant Name: Oleander\nDescription: Heat-tolerant flowering shrub",
+        "plant_id": 51,
+        "plant_name": "Oleander"
+    },
+    {
+        "id": "plant_52",
+        "category": "General Plant Info",
+        "content": "Plant Name: Ashoka Tree\nDescription: Symbol of positivity and peace",
+        "plant_id": 52,
+        "plant_name": "Ashoka Tree"
+    },
+    {
+        "id": "plant_53",
+        "category": "General Plant Info",
+        "content": "Plant Name: Bottle Palm\nDescription: Ornamental dwarf palm tree",
+        "plant_id": 53,
+        "plant_name": "Bottle Palm"
+    },
+    {
+        "id": "plant_54",
+        "category": "General Plant Info",
+        "content": "Plant Name: Gulmohar\nDescription: Flame tree with orange blossoms",
+        "plant_id": 54,
+        "plant_name": "Gulmohar"
+    },
+    {
+        "id": "plant_55",
+        "category": "General Plant Info",
+        "content": "Plant Name: Mexican Sunflower\nDescription: Drought-hardy flowering shrub",
+        "plant_id": 55,
+        "plant_name": "Mexican Sunflower"
+    },
+    {
+        "id": "plant_56",
+        "category": "General Plant Info",
+        "content": "Plant Name: Jatropha\nDescription: Outdoor flowering shrub with clusters",
+        "plant_id": 56,
+        "plant_name": "Jatropha"
+    },
+    {
+        "id": "plant_57",
+        "category": "General Plant Info",
+        "content": "Plant Name: Plumeria\nDescription: Frangipani tropical flower tree",
+        "plant_id": 57,
+        "plant_name": "Plumeria"
+    },
+    {
+        "id": "plant_58",
+        "category": "General Plant Info",
+        "content": "Plant Name: Ixora\nDescription: Cluster bloom garden shrub",
+        "plant_id": 58,
+        "plant_name": "Ixora"
+    },
+    {
+        "id": "plant_59",
+        "category": "General Plant Info",
+        "content": "Plant Name: Lantana\nDescription: Bright pollinator attracting plant",
+        "plant_id": 59,
+        "plant_name": "Lantana"
+    },
+    {
+        "id": "plant_60",
+        "category": "General Plant Info",
+        "content": "Plant Name: Tulsi\nDescription: Holy basil with immunity benefits",
+        "plant_id": 60,
+        "plant_name": "Tulsi"
+    },
+    {
+        "id": "plant_65",
+        "category": "General Plant Info",
+        "content": "Plant Name: Brahmi\nDescription: Brain-boosting herb",
+        "plant_id": 65,
+        "plant_name": "Brahmi"
+    },
+    {
+        "id": "plant_74",
+        "category": "General Plant Info",
+        "content": "Plant Name: Moon Cactus\nDescription: Colour-grafted decorative cactus",
+        "plant_id": 74,
+        "plant_name": "Moon Cactus"
+    },
+    {
+        "id": "plant_75",
+        "category": "General Plant Info",
+        "content": "Plant Name: Opuntia Prickly Pear\nDescription: Fruit bearing cactus variety",
+        "plant_id": 75,
+        "plant_name": "Opuntia Prickly Pear"
+    },
+    {
+        "id": "plant_94",
+        "category": "General Plant Info",
+        "content": "Plant Name: Papaya\nDescription: New plant: Papaya",
+        "plant_id": 94,
+        "plant_name": "Papaya"
+    },
+    {
+        "id": "plant_77",
+        "category": "General Plant Info",
+        "content": "Plant Name: Gymnocalycium\nDescription: Dome-shaped flowering cactus",
+        "plant_id": 77,
+        "plant_name": "Gymnocalycium"
+    },
+    {
+        "id": "plant_81",
+        "category": "General Plant Info",
+        "content": "Plant Name: Tomato Plant\nDescription: Easy-to-grow vegetable plant producing fresh red tomatoes, suitable for pots and home gardens.",
+        "plant_id": 81,
+        "plant_name": "Tomato Plant"
+    },
+    {
+        "id": "plant_82",
+        "category": "General Plant Info",
+        "content": "Plant Name: Chili Plant\nDescription: Compact chili plant that produces spicy green chilies and grows well in warm climates.",
+        "plant_id": 82,
+        "plant_name": "Chili Plant"
+    },
+    {
+        "id": "plant_83",
+        "category": "General Plant Info",
+        "content": "Plant Name: Spinach Plant\nDescription: Leafy green vegetable rich in iron, grows quickly and needs minimal maintenance.",
+        "plant_id": 83,
+        "plant_name": "Spinach Plant"
+    },
+    {
+        "id": "plant_84",
+        "category": "General Plant Info",
+        "content": "Plant Name: Coriander Plant\nDescription: Aromatic leafy herb commonly used in cooking, ideal for small pots and balconies.",
+        "plant_id": 84,
+        "plant_name": "Coriander Plant"
+    },
+    {
+        "id": "plant_85",
+        "category": "General Plant Info",
+        "content": "Plant Name: Mint Plant\nDescription: Fast-growing herb with refreshing aroma, suitable for indoor and outdoor planting.",
+        "plant_id": 85,
+        "plant_name": "Mint Plant"
+    },
+    {
+        "id": "plant_86",
+        "category": "General Plant Info",
+        "content": "Plant Name: Fenugreek Plant\nDescription: Nutritious leafy vegetable (methi) that grows easily and is ready to harvest in weeks.",
+        "plant_id": 86,
+        "plant_name": "Fenugreek Plant"
+    },
+    {
+        "id": "plant_90",
+        "category": "General Plant Info",
+        "content": "Plant Name: apple\nDescription: New plant: apple",
+        "plant_id": 90,
+        "plant_name": "apple"
+    },
+    {
+        "id": "plant_1",
+        "category": "General Plant Info",
+        "content": "Plant Name: Aloe Vera\nDescription: A soothing succulent with air-purifying qualities.",
+        "plant_id": 1,
+        "plant_name": "Aloe Vera"
+    },
+    {
+        "id": "plant_2",
+        "category": "General Plant Info",
+        "content": "Plant Name: Peace Lily\nDescription: Elegant indoor plant with white flowers.",
+        "plant_id": 2,
+        "plant_name": "Peace Lily"
+    },
+    {
+        "id": "plant_3",
+        "category": "General Plant Info",
+        "content": "Plant Name: Snake Plant\nDescription: Low-maintenance green plant for home or office.",
+        "plant_id": 3,
+        "plant_name": "Snake Plant"
+    },
+    {
+        "id": "plant_4",
+        "category": "General Plant Info",
+        "content": "Plant Name: Red Aglaonema\nDescription: Indoor plant with red-tinted leaves.",
+        "plant_id": 4,
+        "plant_name": "Red Aglaonema"
+    },
+    {
+        "id": "plant_5",
+        "category": "General Plant Info",
+        "content": "Plant Name: Golden Pothos\nDescription: Trailing vine plant with yellow-green leaves.",
+        "plant_id": 5,
+        "plant_name": "Golden Pothos"
+    },
+    {
+        "id": "plant_71",
+        "category": "General Plant Info",
+        "content": "Plant Name: Agave\nDescription: Hardy desert succulent",
+        "plant_id": 71,
+        "plant_name": "Agave"
+    },
+    {
+        "id": "plant_15",
+        "category": "General Plant Info",
+        "content": "Plant Name: Anthurium\nDescription: Bright red flowering indoor plant.",
+        "plant_id": 15,
+        "plant_name": "Anthurium"
+    },
+    {
+        "id": "plant_6",
+        "category": "General Plant Info",
+        "content": "Plant Name: Carnation\nDescription: A long-lasting and fragrant flower that comes in a variety of colors including red and pink.",
+        "plant_id": 6,
+        "plant_name": "Carnation"
+    },
+    {
+        "id": "plant_21",
+        "category": "General Plant Info",
+        "content": "Plant Name: ZZ Plant\nDescription: A low-maintenance plant with glossy, dark green leaves.",
+        "plant_id": 21,
+        "plant_name": "ZZ Plant"
+    },
+    {
+        "id": "plant_29",
+        "category": "General Plant Info",
+        "content": "Plant Name: Pothos\nDescription: Easy trailing plant, good for beginners.",
+        "plant_id": 29,
+        "plant_name": "Pothos"
+    },
+    {
+        "id": "plant_32",
+        "category": "General Plant Info",
+        "content": "Plant Name: Spider Plant\nDescription: Long, arching green and white striped leaves; easy to care for and air-purifying.**",
+        "plant_id": 32,
+        "plant_name": "Spider Plant"
+    },
+    {
+        "id": "plant_37",
+        "category": "General Plant Info",
+        "content": "Plant Name: Money Plant\nDescription: Air-purifying indoor vine",
+        "plant_id": 37,
+        "plant_name": "Money Plant"
+    },
+    {
+        "id": "plant_38",
+        "category": "General Plant Info",
+        "content": "Plant Name: Areca Palm\nDescription: Tall lush indoor palm",
+        "plant_id": 38,
+        "plant_name": "Areca Palm"
+    },
+    {
+        "id": "plant_39",
+        "category": "General Plant Info",
+        "content": "Plant Name: Syngonium\nDescription: Arrowhead shaped leaf plant",
+        "plant_id": 39,
+        "plant_name": "Syngonium"
+    },
+    {
+        "id": "plant_40",
+        "category": "General Plant Info",
+        "content": "Plant Name: Dieffenbachia\nDescription: Decorative indoor foliage plant",
+        "plant_id": 40,
+        "plant_name": "Dieffenbachia"
+    },
+    {
+        "id": "plant_41",
+        "category": "General Plant Info",
+        "content": "Plant Name: Rubber Plant\nDescription: Glossy leaf indoor tree",
+        "plant_id": 41,
+        "plant_name": "Rubber Plant"
+    },
+    {
+        "id": "plant_42",
+        "category": "General Plant Info",
+        "content": "Plant Name: Bamboo Palm\nDescription: Compact palm perfect for rooms",
+        "plant_id": 42,
+        "plant_name": "Bamboo Palm"
+    },
+    {
+        "id": "plant_43",
+        "category": "General Plant Info",
+        "content": "Plant Name: Jasmine\nDescription: Aromatic night-blooming creeper",
+        "plant_id": 43,
+        "plant_name": "Jasmine"
+    },
+    {
+        "id": "plant_44",
+        "category": "General Plant Info",
+        "content": "Plant Name: Sunflower\nDescription: Bright large seasonal flower",
+        "plant_id": 44,
+        "plant_name": "Sunflower"
+    },
+    {
+        "id": "plant_45",
+        "category": "General Plant Info",
+        "content": "Plant Name: Orchid\nDescription: Elegant exotic blooms",
+        "plant_id": 45,
+        "plant_name": "Orchid"
+    },
+    {
+        "id": "plant_46",
+        "category": "General Plant Info",
+        "content": "Plant Name: Marigold\nDescription: Most popular festive flower",
+        "plant_id": 46,
+        "plant_name": "Marigold"
+    },
+    {
+        "id": "plant_47",
+        "category": "General Plant Info",
+        "content": "Plant Name: Hydrangea\nDescription: Large ball-shaped bloom clusters",
+        "plant_id": 47,
+        "plant_name": "Hydrangea"
+    },
+    {
+        "id": "plant_61",
+        "category": "General Plant Info",
+        "content": "Plant Name: Neem\nDescription: Strong antiseptic medicinal tree",
+        "plant_id": 61,
+        "plant_name": "Neem"
+    },
+    {
+        "id": "plant_62",
+        "category": "General Plant Info",
+        "content": "Plant Name: Curry Leaves\nDescription: Aromatic herb used in cooking",
+        "plant_id": 62,
+        "plant_name": "Curry Leaves"
+    },
+    {
+        "id": "plant_63",
+        "category": "General Plant Info",
+        "content": "Plant Name: Mint\nDescription: Cooling herb for drinks & digestion",
+        "plant_id": 63,
+        "plant_name": "Mint"
+    },
+    {
+        "id": "plant_66",
+        "category": "General Plant Info",
+        "content": "Plant Name: Thyme\nDescription: Aromatic herb with antibacterial properties",
+        "plant_id": 66,
+        "plant_name": "Thyme"
+    },
+    {
+        "id": "plant_78",
+        "category": "General Plant Info",
+        "content": "Plant Name: Ferocactus\nDescription: Ribbed heavy-spine cactus",
+        "plant_id": 78,
+        "plant_name": "Ferocactus"
+    },
+    {
+        "id": "plant_79",
+        "category": "General Plant Info",
+        "content": "Plant Name: Rosette Blossom\nDescription: A delicate flowering plant with a rosette of soft pink petals",
+        "plant_id": 79,
+        "plant_name": "Rosette Blossom"
+    },
+    {
+        "id": "plant_80",
+        "category": "General Plant Info",
+        "content": "Plant Name: Velvet Petunia\nDescription: A velvety-textured flowering plant with deep pink blooms",
+        "plant_id": 80,
+        "plant_name": "Velvet Petunia"
+    },
+    {
+        "id": "plant_72",
+        "category": "General Plant Info",
+        "content": "Plant Name: Haworthia\nDescription: Small zebra patterned cactus",
+        "plant_id": 72,
+        "plant_name": "Haworthia"
+    },
+    {
+        "id": "plant_73",
+        "category": "General Plant Info",
+        "content": "Plant Name: Euphorbia Cactus\nDescription: Branching cactus species",
+        "plant_id": 73,
+        "plant_name": "Euphorbia Cactus"
+    },
+    {
+        "id": "plant_22",
+        "category": "General Plant Info",
+        "content": "Plant Name: English Ivy\nDescription: An evergreen climbing plant with small, lobed, bright green leaves.",
+        "plant_id": 22,
+        "plant_name": "English Ivy"
+    },
+    {
+        "id": "plant_23",
+        "category": "General Plant Info",
+        "content": "Plant Name: Lavender\nDescription: A fragrant, flowering shrub with delicate purple blooms.",
+        "plant_id": 23,
+        "plant_name": "Lavender"
+    },
+    {
+        "id": "plant_8",
+        "category": "General Plant Info",
+        "content": "Plant Name: Poppy\nDescription: With delicate, papery petals, poppies can be found in shades of red and pink, adding a whimsical touch to any garden.",
+        "plant_id": 8,
+        "plant_name": "Poppy"
+    },
+    {
+        "id": "plant_27",
+        "category": "General Plant Info",
+        "content": "Plant Name: Ipomoea\nDescription: A flowering plant with trumpet-shaped blooms, often in shades of blue and purple.",
+        "plant_id": 27,
+        "plant_name": "Ipomoea"
+    },
+    {
+        "id": "plant_28",
+        "category": "General Plant Info",
+        "content": "Plant Name: Ivy\nDescription: An evergreen climbing plant with lobed or variegated leaves, often used for decoration.",
+        "plant_id": 28,
+        "plant_name": "Ivy"
+    },
+    {
+        "id": "plant_30",
+        "category": "General Plant Info",
+        "content": "Plant Name: Monstera Deliciosa\nDescription: A tropical plant with large, glossy, and deeply lobed leaves that are a vibrant green.",
+        "plant_id": 30,
+        "plant_name": "Monstera Deliciosa"
+    },
+    {
+        "id": "plant_31",
+        "category": "General Plant Info",
+        "content": "Plant Name: Philodendron Brasil\nDescription: A trailing or climbing plant with heart-shaped leaves that are a rich green with yellow or lime-green variegation.",
+        "plant_id": 31,
+        "plant_name": "Philodendron Brasil"
+    },
+    {
+        "id": "plant_33",
+        "category": "General Plant Info",
+        "content": "Plant Name: Begonia\nDescription: Waxy, glossy leaves and vibrant flowers in pink, red, or white; ideal for both indoor and outdoor use.**",
+        "plant_id": 33,
+        "plant_name": "Begonia"
+    },
+    {
+        "id": "plant_34",
+        "category": "General Plant Info",
+        "content": "Plant Name: Blushing Bells (Impatiens)\nDescription: ** These vibrant flowers come in a range of shades, including a beautiful blushing pink that adds a soft, romantic touch to any garden or indoor space.",
+        "plant_id": 34,
+        "plant_name": "Blushing Bells (Impatiens)"
+    },
+    {
+        "id": "plant_64",
+        "category": "General Plant Info",
+        "content": "Plant Name: Insulin Plant\nDescription: Medicinal herb beneficial for diabetes",
+        "plant_id": 64,
+        "plant_name": "Insulin Plant"
+    },
+    {
+        "id": "plant_67",
+        "category": "General Plant Info",
+        "content": "Plant Name: Oregano\nDescription: Herbal seasoning & medicinal leaves",
+        "plant_id": 67,
+        "plant_name": "Oregano"
+    },
+    {
+        "id": "plant_68",
+        "category": "General Plant Info",
+        "content": "Plant Name: Calotropis\nDescription: Ayurvedic medicinal shrub",
+        "plant_id": 68,
+        "plant_name": "Calotropis"
+    },
+    {
+        "id": "plant_69",
+        "category": "General Plant Info",
+        "content": "Plant Name: Cactus\nDescription: Low-maintenance spiky desert plant",
+        "plant_id": 69,
+        "plant_name": "Cactus"
+    },
+    {
+        "id": "plant_70",
+        "category": "General Plant Info",
+        "content": "Plant Name: Golden Barrel Cactus\nDescription: Round golden-spine cactus",
+        "plant_id": 70,
+        "plant_name": "Golden Barrel Cactus"
+    },
+    {
+        "id": "plant_36",
+        "category": "General Plant Info",
+        "content": "Plant Name: Sunset Glow\nDescription: With petals that transition from warm yellows to deep oranges, this plant captures the essence of a stunning sunset, bringing warmth and beauty to your surroundings.",
+        "plant_id": 36,
+        "plant_name": "Sunset Glow"
+    },
+    {
+        "id": "plant_96",
+        "category": "General Plant Info",
+        "content": "Plant Name: dates\nDescription: No description available.",
+        "plant_id": 96,
+        "plant_name": "dates"
+    },
+    {
+        "id": "plant_7",
+        "category": "General Plant Info",
+        "content": "Plant Name: Tulip\nDescription: Known for its cup-shaped blooms, tulips are available in numerous colors, including vibrant red and soft pink hues.",
+        "plant_id": 7,
+        "plant_name": "Tulip"
+    },
+    {
+        "id": "plant_9",
+        "category": "General Plant Info",
+        "content": "Plant Name: Camellia\nDescription: A stunning, rose-like flowering evergreen with glossy leaves.",
+        "plant_id": 9,
+        "plant_name": "Camellia"
+    },
+    {
+        "id": "plant_10",
+        "category": "General Plant Info",
+        "content": "Plant Name: Hibiscus\nDescription: A tropical, showy flowering plant with large, rose-like blooms.",
+        "plant_id": 10,
+        "plant_name": "Hibiscus"
+    },
+    {
+        "id": "plant_11",
+        "category": "General Plant Info",
+        "content": "Plant Name: Cyclamen\nDescription: A delicate, heart-shaped flower with beautiful pink petals and attractive marbled foliage.",
+        "plant_id": 11,
+        "plant_name": "Cyclamen"
+    },
+    {
+        "id": "plant_12",
+        "category": "General Plant Info",
+        "content": "Plant Name: Red Cactus\nDescription: A small, flowering cactus with bright red flowers.",
+        "plant_id": 12,
+        "plant_name": "Red Cactus"
+    },
+    {
+        "id": "plant_13",
+        "category": "General Plant Info",
+        "content": "Plant Name: Purple Basil\nDescription: An aromatic herb with deep purple leaves.",
+        "plant_id": 13,
+        "plant_name": "Purple Basil"
+    },
+    {
+        "id": "plant_14",
+        "category": "General Plant Info",
+        "content": "Plant Name: Blue Forget-Me-Not\nDescription: A delicate wildflower with sky-blue petals.",
+        "plant_id": 14,
+        "plant_name": "Blue Forget-Me-Not"
+    },
+    {
+        "id": "plant_16",
+        "category": "General Plant Info",
+        "content": "Plant Name: Rose Mallow\nDescription: A perennial flower with large, showy rose-colored blooms.",
+        "plant_id": 16,
+        "plant_name": "Rose Mallow"
+    },
+    {
+        "id": "plant_17",
+        "category": "General Plant Info",
+        "content": "Plant Name: Rose Campion\nDescription: A flowering plant with bright rose-pink flowers and silvery leaves.",
+        "plant_id": 17,
+        "plant_name": "Rose Campion"
+    },
+    {
+        "id": "plant_18",
+        "category": "General Plant Info",
+        "content": "Plant Name: Rose Geranium\nDescription: A fragrant, flowering plant with rose-colored blooms and attractive foliage.",
+        "plant_id": 18,
+        "plant_name": "Rose Geranium"
+    },
+    {
+        "id": "plant_19",
+        "category": "General Plant Info",
+        "content": "Plant Name: Rose\nDescription: A classic, fragrant, and timeless flowering shrub.",
+        "plant_id": 19,
+        "plant_name": "Rose"
+    },
+    {
+        "id": "plant_20",
+        "category": "General Plant Info",
+        "content": "Plant Name: Boston Fern\nDescription: A delicate, lush green fern with feathery fronds.",
+        "plant_id": 20,
+        "plant_name": "Boston Fern"
+    },
+    {
+        "id": "plant_24",
+        "category": "General Plant Info",
+        "content": "Plant Name: Petunia\nDescription: A popular annual flower that comes in a variety of purple shades.",
+        "plant_id": 24,
+        "plant_name": "Petunia"
+    },
+    {
+        "id": "plant_25",
+        "category": "General Plant Info",
+        "content": "Plant Name: Wisteria\nDescription: A climbing vine with long, fragrant purple flowers that bloom in clusters.",
+        "plant_id": 25,
+        "plant_name": "Wisteria"
+    },
+    {
+        "id": "plant_26",
+        "category": "General Plant Info",
+        "content": "Plant Name: Iris\nDescription: A perennial flower known for its showy, fragrant blooms in a variety of colors.",
+        "plant_id": 26,
+        "plant_name": "Iris"
+    },
+    {
+        "id": "plant_35",
+        "category": "General Plant Info",
+        "content": "Plant Name: Lavender Mist (Lavandula)\nDescription: ** Known for its soothing purple hues and calming fragrance, this plant is perfect for adding a touch of elegance and tranquility.",
+        "plant_id": 35,
+        "plant_name": "Lavender Mist (Lavandula)"
+    },
+    {
+        "id": "tomato_temperature",
+        "category": "Temperature",
+        "content": "Tomatoes are warm-season crops. They thrive in daytime temperatures between 18\u00b0C and 27\u00b0C (64\u00b0F\u201381\u00b0F). Night temperatures should stay above 13\u00b0C (55\u00b0F). Soil temperatures should be at least 13\u00b0C before planting. Extreme heat above 34\u00b0C can stress the plant and affect fruit set."
+    },
+    {
+        "id": "tomato_humidity",
+        "category": "Humidity",
+        "content": "Tomatoes prefer moderate humidity levels. Proper humidity is crucial for nutrient and water uptake. In greenhouses, maintaining balanced humidity prevents stress. High humidity can encourage fungal diseases like Septoria leaf spot or Early Blight, while very low humidity can dry out the plant."
+    },
+    {
+        "id": "tomato_moisture",
+        "category": "Moisture",
+        "content": "Tomatoes require consistent soil moisture. The ideal soil pH is 5.5 to 6.5. Ensure soil is well-drained to avoid waterlogging, which causes root rot. Mulching around the base helps retain soil moisture and prevents water splash that can spread soil-borne diseases."
+    },
+    {
+        "id": "tomato_water",
+        "category": "Watering",
+        "content": "Watering requirements peak during early fruit development. Provide deep, consistent watering at the base of the plant to avoid wetting the leaves. Moderate water stress (slightly less water) during the final ripening stage can improve fruit taste and sugar content. Avoid overhead irrigation to prevent leaf diseases."
+    },
+    {
+        "id": "tomato_nutrients",
+        "category": "Nutrients",
+        "content": "Tomato nutrient needs shift as the plant matures. Seedlings need high phosphorus for root development. Vegetative plants need Nitrogen for lush foliage. During flowering and fruit set, increase Phosphorus and Potassium. Calcium is essential to prevent blossom end rot, a common disorder caused by calcium deficiency."
+    },
+    {
+        "id": "tomato_fertilizer",
+        "category": "Fertilizer",
+        "content": "Use a balanced NPK (Nitrogen-Phosphorus-Potassium) fertilizer. Initially, use a starter fertilizer high in phosphorus. Once flowers appear, switch to a fertilizer higher in potassium to support fruit quality and flavor. Avoid excessive nitrogen late in the season as it may favor leaf growth over fruit production."
+    },
+    {
+        "id": "tomato_pesticide",
+        "category": "Pest Control",
+        "content": "Common pests include tomato hornworms, aphids, and spider mites. Hand-picking large insects is effective for small gardens. Organic controls like neem oil or introducing predatory mites can manage smaller pests. Ensure proper spacing for airflow to reduce disease and pest pressure. Hybrid varieties often have VFNT resistance markings (Verticillium, Fusarium, Nematodes, Tobacco mosaic virus)."
+    },
+    {
+        "id": "tomato_general_profile",
+        "category": "General Profiling",
+        "content": "Tomato (Solanum lycopersicum) profiling involves managing temperature (18-27\u00b0C), consistent watering (at base), shifted nutrient intake (Nitrogen -> Phosphorus -> Potassium), and balanced soil pH (5.5-6.5). Sunlight requirement is Full Sun (at least 6-8 hours a day)."
+    }
+]
