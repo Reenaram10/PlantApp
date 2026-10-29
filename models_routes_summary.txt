@@ -1,0 +1,92 @@
+=== MODELS ===
+- UserQuery
+- UserInterest
+- User
+- Plant
+- PlantKnowledge
+- DiseaseKnowledge
+- Supplier
+- InventoryTransaction
+- SupplierPurchase
+- PurchaseItem
+- Variety
+- Conversation
+- Cart
+- Order
+- Category
+- PlantCategory
+- LLMResult
+- Query
+- QueryResult
+- CategorySynonym
+
+=== ROUTES ===
+- save_user_query: ['/api/user_queries']
+- register: ['/register']
+- identify_plant_endpoint: ['/api/identify']
+- login: ['/login']
+- chat: ['/api/chat']
+- suggest_varieties: ['/api/admin/suggest-varieties']
+- sync_rag_index: ['/api/rebuild-index']
+- sync_rag_index: ['/api/admin/rag/sync']
+- add_varieties: ['/api/admin/add-varieties']
+- get_inventory: ['/api/admin/inventory']
+- restock_plant: ['/api/admin/restock/<int:plant_id>']
+- get_plant_details: ['/api/admin/get-plant/<int:plant_id>']
+- add_plant: ['/api/admin/add-plant']
+- update_plant_details: ['/api/admin/update-plant/<int:plant_id>']
+- delete_plant_endpoint: ['/api/admin/delete-plant/<int:plant_id>']
+- search_plants_admin: ['/api/admin/search-plants']
+- get_suppliers: ['/api/admin/suppliers']
+- add_supplier: ['/api/admin/suppliers']
+- get_categories_admin: ['/api/admin/categories']
+- add_category_admin: ['/api/admin/categories']
+- delete_category_admin: ['/api/admin/categories/<int:cat_id>']
+- get_category_plants_admin: ['/api/admin/categories/<int:cat_id>/plants']
+- list_plant_images: ['/api/debug/list-plant-images']
+- index: ['/']
+- admin_page: ['/admin']
+- admin_page: ['/admin.html']
+- serve_root_files: ['/<path:filename>']
+- suggest_plants: ['/api/suggest_plants/<user_id>']
+- save_user_interest: ['/api/user_interest']
+- update_cart: ['/api/cart/update']
+- inventory_add: ['/api/admin/inventory/add']
+- inventory_remove: ['/api/admin/inventory/remove']
+- get_inventory_transactions: ['/api/admin/inventory/transactions']
+- get_customers_admin: ['/api/admin/customers']
+- get_all_orders_admin: ['/api/admin/orders']
+- record_order_payment: ['/api/admin/orders/record-payment']
+- get_order_details_admin: ['/api/admin/orders/<order_group_id>']
+- update_order_status_admin: ['/api/admin/orders/<order_group_id>']
+- add_supplier_purchase: ['/api/admin/purchases']
+- get_supplier_purchases: ['/api/admin/purchases']
+- record_purchase_payment: ['/api/admin/purchases/record-payment']
+- get_existing_varieties_admin: ['/api/admin/varieties/existing/<int:plant_id>']
+- update_plant_image_admin: ['/api/admin/update-plant-image/<int:plant_id>']
+- get_user_history: ['/api/user_queries/<user_id>']
+- manage_category_synonyms: ['/api/category_synonyms']
+- manage_config: ['/api/config']
+- stt_api: ['/api/stt']
+- manage_plant_image: ['/api/plant/<int:plant_id>/image']
+- manage_query_results: ['/api/query_results']
+- logout: ['/logout']
+- get_plants: ['/plants']
+- add_to_cart: ['/api/cart']
+- get_cart: ['/api/cart']
+- checkout: ['/api/checkout']
+- payment_response: ['/api/payment/response']
+- get_shop_plants: ['/api/shop/plants']
+- remove_from_cart: ['/api/cart/remove']
+- get_history: ['/api/history/<user_id>']
+- manage_queries: ['/api/queries']
+- flask_history_query: ['/api/history/query']
+- flask_history_profile: ['/api/history/profile']
+- flask_history_variable: ['/api/history/variable']
+- flask_history_analysis: ['/api/history/analysis']
+- get_orders: ['/api/orders/<int:user_id>']
+- health_check: ['/health']
+- api_detect_tomato_disease: ['/api/detect-tomato-disease']
+- get_profile_stats: ['/api/admin/profile-stats']
+- upload_profile_dataset: ['/api/admin/upload-profiles']
+- download_profile_template: ['/api/admin/download-template/<profile_type>']

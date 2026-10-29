@@ -1,0 +1,129 @@
+{
+    "name": "Plant & Disease Identification Workflow",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "plant-disease-pipeline",
+                "options": {}
+            },
+            "name": "1. Incoming Webhook Trigger",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=http://localhost:8082/api/tools/plant-identify",
+                "jsonParameters": true,
+                "options": {},
+                "bodyParametersJson": "={\n  \"image_path\": \"{{ $json.body.image_path || 'sample_leaf.jpg' }}\"\n}"
+            },
+            "name": "2. Plant Identification Tool",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 2,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=http://localhost:8082/api/tools/disease-identify",
+                "jsonParameters": true,
+                "options": {},
+                "bodyParametersJson": "={\n  \"plant_name\": \"{{ $json.plant.name }}\",\n  \"image_path\": \"{{ $('1. Incoming Webhook Trigger').item.json.body.image_path || 'sample_leaf.jpg' }}\"\n}"
+            },
+            "name": "3. Disease Identification Tool",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 2,
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=http://localhost:8082/api/get-remedies",
+                "jsonParameters": true,
+                "options": {},
+                "bodyParametersJson": "={\n  \"plant_name\": \"{{ $json.disease.plant_name }}\",\n  \"disease_name\": \"{{ $json.disease.disease_name }}\",\n  \"disease_confidence\": {{ $json.disease.confidence }}\n}"
+            },
+            "name": "4. Remedy Retrieval Tool",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 2,
+            "position": [
+                850,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "options": {},
+                "respondWith": "json",
+                "responseBody": "={\n  \"status\": \"success\",\n  \"orchestrator\": \"n8n\",\n  \"plant\": \"{{ $('2. Plant Identification Tool').item.json.plant.name }}\",\n  \"scientific_name\": \"{{ $('2. Plant Identification Tool').item.json.plant.scientific_name }}\",\n  \"disease\": \"{{ $('3. Disease Identification Tool').item.json.disease.disease_name }}\",\n  \"confidence\": {{ $('3. Disease Identification Tool').item.json.disease.confidence }},\n  \"treatment\": {{ $json.treatment }},\n  \"prevention\": {{ $json.prevention }}\n}"
+            },
+            "name": "5. Unified Response Node",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                1050,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "1. Incoming Webhook Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "2. Plant Identification Tool",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "2. Plant Identification Tool": {
+            "main": [
+                [
+                    {
+                        "node": "3. Disease Identification Tool",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "3. Disease Identification Tool": {
+            "main": [
+                [
+                    {
+                        "node": "4. Remedy Retrieval Tool",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "4. Remedy Retrieval Tool": {
+            "main": [
+                [
+                    {
+                        "node": "5. Unified Response Node",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": true,
+    "settings": {}
+}

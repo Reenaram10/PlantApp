@@ -1,0 +1,11 @@
+{
+  "include": [
+    "."
+  ],
+  "extraPaths": [
+    "C:/Users/Reena/AppData/Local/Programs/Python/Python313/Lib/site-packages"
+  ],
+  "pythonPath": "C:/Users/Reena/AppData/Local/Programs/Python/Python313/python.exe",
+  "pythonVersion": "3.13",
+  "pythonPlatform": "Windows"
+}

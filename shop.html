@@ -17,26 +17,29 @@
 <body>
     <section class="sub-header">
         <nav>
-            <a href="index.html"><img src="./images/23797272.jpg"></a>
-            <div class="nav-links" id="navLinks">
-
-                <ul>
-                    <li><a href="index.html">HOME</a></li>
-                    <li><a href="about.html">ABOUT</a></li>
-                    <li><a href="seeds.html">SEEDS</a></li>
-                    <li><a href="contact.html">CONTACT</a></li>
-                    <li><a href="index.html#cart-section">🛒 CART</a></li>
-                </ul>
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <button class="nav-hamburger-btn" onclick="toggleSideNav()" aria-label="Open Menu">☰ Menu</button>
+                <a href="index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                    <img src="static/images/23797272.jpg" alt="Logo">
+                    <span
+                        style="color: #ffffff; font-weight: 700; font-size: 1.15rem; letter-spacing: 1px;">GREEN-BUY</span>
+                </a>
             </div>
-
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="index.html#cart-section"
+                    style="color: #ffffff; text-decoration: none; background: rgba(255, 255, 255, 0.15); padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.25); backdrop-filter: blur(4px); transition: all 0.2s ease;">🛒
+                    Cart</a>
+            </div>
         </nav>
         <h1>Shop With Us</h1>
     </section>
-    <section class="pllants">
-        <h1>OUR PLANTS</h1>
-        <p>High quality plants</p>
-        <div id="plants-grid" class="row"
-            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; width: 90%; margin: auto; padding-top: 20px;">
+    <section class="pllants" style="padding-top: 40px; padding-bottom: 60px; background: #f8fbf8;">
+        <h1 style="text-align: center; color: #006400; font-size: 32px; font-weight: 700; margin-bottom: 5px;">OUR
+            PLANTS</h1>
+        <p style="text-align: center; color: #666; font-size: 16px; margin-bottom: 30px;">High quality plants delivered
+            directly to your doorstep</p>
+        <div id="plants-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 320px)); gap: 30px; justify-content: center; width: 90%; max-width: 1200px; margin: 0 auto;">
             <p style="text-align: center; width: 100%; font-size: 1.2rem;">Loading plants...</p>
         </div>
     </section>
@@ -162,6 +165,63 @@
                     alert("❌ Could not add to cart");
                 });
         }
+    </script>
+    <!-- Side Navigation Drawer Component -->
+    <div id="sidenavOverlay" class="sidenav-overlay" onclick="toggleSideNav()"></div>
+    <div id="sidenavDrawer" class="sidenav-drawer">
+        <div class="sidenav-header">
+            <div class="sidenav-brand">
+                <img src="static/images/23797272.jpg" alt="GREEN-BUY Logo">
+                <span>GREEN-BUY</span>
+            </div>
+            <button class="sidenav-close-btn" onclick="toggleSideNav()">✖</button>
+        </div>
+        <ul class="sidenav-links">
+            <li><a href="index.html"><span>🏠</span> Home</a></li>
+            <li><a href="shop.html" class="active"><span>🛍️</span> Shop Plants</a></li>
+            <li><a href="seeds.html"><span>🌱</span> Seeds Collection</a></li>
+            <li><a href="about.html"><span>ℹ️</span> About Us</a></li>
+            <li><a href="contact.html"><span>📞</span> Contact Us</a></li>
+            <li><a href="index.html#cart-section"><span>🛒</span> Shopping Cart</a></li>
+            <li id="navAuthItem"><a href="auth.html"><span>🔑</span> Login / Account</a></li>
+        </ul>
+        <div class="sidenav-footer">
+            <p>🌿 Rooted in nature.<br>Delivered to your door.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleSideNav() {
+            const drawer = document.getElementById('sidenavDrawer');
+            const overlay = document.getElementById('sidenavOverlay');
+            if (!drawer || !overlay) return;
+            drawer.classList.toggle('active');
+            overlay.classList.toggle('active');
+            updateSideNavAuth();
+        }
+
+        function updateSideNavAuth() {
+            const userId = localStorage.getItem("user_id");
+            const username = localStorage.getItem("username") || "User";
+            const authNavItem = document.getElementById("navAuthItem");
+            if (!authNavItem) return;
+
+            if (userId && userId !== "anonymous") {
+                authNavItem.innerHTML = `<a href="#" onclick="logoutUser()"><span>🚪</span> Logout (${username})</a>`;
+            } else {
+                authNavItem.innerHTML = `<a href="auth.html"><span>🔑</span> Login / Account</a>`;
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem("user_id");
+            localStorage.removeItem("username");
+            localStorage.removeItem("email");
+            localStorage.removeItem("user");
+            window.location.href = "auth.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", updateSideNavAuth);
     </script>
 </body>
 

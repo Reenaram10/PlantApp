@@ -1,0 +1,2144 @@
+{
+  "audit_logs": {
+    "columns": [
+      [
+        "id",
+        "integer",
+        null,
+        "NO",
+        "nextval('audit_logs_id_seq'::regclass)"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        null
+      ],
+      [
+        "user_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "user_email",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "action",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "module",
+        "character varying",
+        50,
+        "NO",
+        null
+      ],
+      [
+        "record_id",
+        "character varying",
+        50,
+        "YES",
+        null
+      ],
+      [
+        "timestamp",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "details",
+        "text",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": []
+  },
+  "businesses": {
+    "columns": [
+      [
+        "business_id",
+        "character varying",
+        50,
+        "NO",
+        null
+      ],
+      [
+        "business_name",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "owner_name",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "email",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "phone",
+        "character varying",
+        20,
+        "YES",
+        null
+      ],
+      [
+        "address",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "city",
+        "character varying",
+        50,
+        "YES",
+        null
+      ],
+      [
+        "state",
+        "character varying",
+        50,
+        "YES",
+        null
+      ],
+      [
+        "country",
+        "character varying",
+        50,
+        "YES",
+        null
+      ],
+      [
+        "status",
+        "character varying",
+        20,
+        "YES",
+        "'Active'::character varying"
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "updated_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ]
+    ],
+    "primary_key": [
+      "business_id"
+    ],
+    "foreign_keys": []
+  },
+  "cart_new": {
+    "columns": [
+      [
+        "cart_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('cart_new_cart_id_seq'::regclass)"
+      ],
+      [
+        "user_id",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "added_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "quantity",
+        "integer",
+        null,
+        "YES",
+        "1"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "cart_id"
+    ],
+    "foreign_keys": [
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ]
+    ]
+  },
+  "cart_old": {
+    "columns": [
+      [
+        "user_id",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "plant_name",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "added_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ]
+    ],
+    "primary_key": [
+      "user_id",
+      "plant_name"
+    ],
+    "foreign_keys": []
+  },
+  "category": {
+    "columns": [
+      [
+        "category_name",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "category_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('category_category_id_seq'::regclass)"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "category_id"
+    ],
+    "foreign_keys": []
+  },
+  "category_synonym": {
+    "columns": [
+      [
+        "synonym_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('category_synonym_synonym_id_seq'::regclass)"
+      ],
+      [
+        "synonym",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "category_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "synonym_id"
+    ],
+    "foreign_keys": [
+      [
+        "category_id",
+        "category",
+        "category_id"
+      ]
+    ]
+  },
+  "conversation": {
+    "columns": [
+      [
+        "conversation_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('conversation_conversation_id_seq'::regclass)"
+      ],
+      [
+        "user_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "conversation",
+        "text",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "conversation_id"
+    ],
+    "foreign_keys": [
+      [
+        "user_id",
+        "login",
+        "id"
+      ]
+    ]
+  },
+  "conversation_history": {
+    "columns": [
+      [
+        "id",
+        "integer",
+        null,
+        "NO",
+        "nextval('conversation_history_id_seq'::regclass)"
+      ],
+      [
+        "user_query",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "db_result",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "llm_output",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "now()"
+      ]
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": []
+  },
+  "disease_knowledge": {
+    "columns": [
+      [
+        "id",
+        "integer",
+        null,
+        "NO",
+        "nextval('disease_knowledge_id_seq'::regclass)"
+      ],
+      [
+        "disease_name",
+        "character varying",
+        255,
+        "YES",
+        null
+      ],
+      [
+        "symptoms",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "causes",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "organic_treatment",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "chemical_treatment",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "prevention",
+        "text",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": []
+  },
+  "inventory_transaction": {
+    "columns": [
+      [
+        "transaction_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('inventory_transaction_transaction_id_seq'::regclass)"
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "supplier_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "type",
+        "character varying",
+        10,
+        "NO",
+        null
+      ],
+      [
+        "quantity",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "notes",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "bill_no",
+        "character varying",
+        50,
+        "YES",
+        null
+      ],
+      [
+        "bill_date",
+        "character varying",
+        20,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "transaction_id"
+    ],
+    "foreign_keys": [
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ],
+      [
+        "supplier_id",
+        "supplier",
+        "supplier_id"
+      ]
+    ]
+  },
+  "llm_results": {
+    "columns": [
+      [
+        "id",
+        "integer",
+        null,
+        "NO",
+        "nextval('llm_results_id_seq'::regclass)"
+      ],
+      [
+        "user_query",
+        "text",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "llm_response",
+        "text",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "category_suggested",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "plants_found",
+        "integer",
+        null,
+        "YES",
+        "0"
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "llm_name",
+        "character varying",
+        50,
+        "YES",
+        null
+      ],
+      [
+        "expires_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": []
+  },
+  "login": {
+    "columns": [
+      [
+        "id",
+        "integer",
+        null,
+        "NO",
+        "nextval('login_id_seq'::regclass)"
+      ],
+      [
+        "username",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "password",
+        "character varying",
+        200,
+        "YES",
+        null
+      ],
+      [
+        "email",
+        "character varying",
+        120,
+        "NO",
+        null
+      ],
+      [
+        "last_login",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "last_logout",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "is_online",
+        "boolean",
+        null,
+        "YES",
+        "false"
+      ],
+      [
+        "role",
+        "character varying",
+        20,
+        "YES",
+        "'user'::character varying"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": []
+  },
+  "orders": {
+    "columns": [
+      [
+        "order_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('orders_order_id_seq'::regclass)"
+      ],
+      [
+        "plant_name",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "user_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "order_date",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "total_amount",
+        "double precision",
+        null,
+        "YES",
+        "0.0"
+      ],
+      [
+        "payment_status",
+        "character varying",
+        50,
+        "YES",
+        "'Pending'::character varying"
+      ],
+      [
+        "order_group_id",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "quantity",
+        "integer",
+        null,
+        "YES",
+        "1"
+      ],
+      [
+        "payment_method",
+        "character varying",
+        50,
+        "YES",
+        null
+      ],
+      [
+        "order_status",
+        "character varying",
+        50,
+        "YES",
+        "'Processing'::character varying"
+      ],
+      [
+        "shipping_address",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "delivery_date",
+        "date",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "tracking_number",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "notes",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "price",
+        "double precision",
+        null,
+        "YES",
+        "0"
+      ],
+      [
+        "amount_paid",
+        "double precision",
+        null,
+        "YES",
+        "0.0"
+      ],
+      [
+        "balance",
+        "double precision",
+        null,
+        "YES",
+        "0"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "order_id"
+    ],
+    "foreign_keys": [
+      [
+        "user_id",
+        "login",
+        "id"
+      ]
+    ]
+  },
+  "plant": {
+    "columns": [
+      [
+        "plant_name",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "description",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "price",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('plant_id_seq'::regclass)"
+      ],
+      [
+        "image_path",
+        "character varying",
+        255,
+        "YES",
+        null
+      ],
+      [
+        "stock",
+        "integer",
+        null,
+        "YES",
+        "0"
+      ],
+      [
+        "discount_price",
+        "double precision",
+        null,
+        "YES",
+        "0.0"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "plant_id"
+    ],
+    "foreign_keys": []
+  },
+  "plant_backup": {
+    "columns": [
+      [
+        "plant_name",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "description",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "price",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "image_path",
+        "character varying",
+        255,
+        "YES",
+        null
+      ],
+      [
+        "new_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [],
+    "foreign_keys": []
+  },
+  "plant_backup_fix": {
+    "columns": [
+      [
+        "plant_name",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "description",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "price",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "image_path",
+        "character varying",
+        255,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [],
+    "foreign_keys": []
+  },
+  "plant_category": {
+    "columns": [
+      [
+        "plant_category_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('plant_category_plant_category_id_seq'::regclass)"
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "category_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ]
+    ],
+    "primary_key": [
+      "plant_category_id"
+    ],
+    "foreign_keys": [
+      [
+        "category_id",
+        "category",
+        "category_id"
+      ],
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ]
+    ]
+  },
+  "plant_category_backup": {
+    "columns": [
+      [
+        "plant_category_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "category_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [],
+    "foreign_keys": []
+  },
+  "plant_knowledge": {
+    "columns": [
+      [
+        "id",
+        "integer",
+        null,
+        "NO",
+        "nextval('plant_knowledge_id_seq'::regclass)"
+      ],
+      [
+        "plant_name",
+        "character varying",
+        255,
+        "YES",
+        null
+      ],
+      [
+        "scientific_name",
+        "character varying",
+        255,
+        "YES",
+        null
+      ],
+      [
+        "description",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "sunlight",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "water_requirement",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "soil_type",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "fertilizer",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "medicinal_uses",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "common_diseases",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "care_tips",
+        "text",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": []
+  },
+  "plant_synonym": {
+    "columns": [
+      [
+        "synonym_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('plant_synonym_synonym_id_seq'::regclass)"
+      ],
+      [
+        "synonym",
+        "text",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "now()"
+      ]
+    ],
+    "primary_key": [
+      "synonym_id"
+    ],
+    "foreign_keys": [
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ]
+    ]
+  },
+  "plant_variety": {
+    "columns": [
+      [
+        "variety_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('plant_variety_variety_id_seq'::regclass)"
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "variety_name",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "price",
+        "double precision",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "stock",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "image_path",
+        "text",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [
+      "variety_id"
+    ],
+    "foreign_keys": [
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ]
+    ]
+  },
+  "purchase_item": {
+    "columns": [
+      [
+        "item_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('purchase_item_item_id_seq'::regclass)"
+      ],
+      [
+        "purchase_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "quantity",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "unit_price",
+        "double precision",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "item_id"
+    ],
+    "foreign_keys": [
+      [
+        "purchase_id",
+        "supplier_purchase",
+        "purchase_id"
+      ],
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ]
+    ]
+  },
+  "purchase_record": {
+    "columns": [
+      [
+        "purchase_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('purchase_record_purchase_id_seq'::regclass)"
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "supplier_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "quantity",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "purchase_price",
+        "double precision",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "purchase_date",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [
+      "purchase_id"
+    ],
+    "foreign_keys": [
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ],
+      [
+        "supplier_id",
+        "supplier",
+        "supplier_id"
+      ]
+    ]
+  },
+  "query": {
+    "columns": [
+      [
+        "query_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('query_query_id_seq'::regclass)"
+      ],
+      [
+        "description",
+        "text",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "user_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "canonical_key",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "query_id"
+    ],
+    "foreign_keys": [
+      [
+        "user_id",
+        "login",
+        "id"
+      ]
+    ]
+  },
+  "query_result": {
+    "columns": [
+      [
+        "result_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('query_result_result_id_seq'::regclass)"
+      ],
+      [
+        "query_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "result_description",
+        "text",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "result_source",
+        "character varying",
+        50,
+        "NO",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "response_type",
+        "character varying",
+        50,
+        "YES",
+        "'text'::character varying"
+      ],
+      [
+        "response_data",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "result_id"
+    ],
+    "foreign_keys": [
+      [
+        "query_id",
+        "query",
+        "query_id"
+      ]
+    ]
+  },
+  "query_synonym": {
+    "columns": [
+      [
+        "synonym_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('query_synonym_synonym_id_seq'::regclass)"
+      ],
+      [
+        "synonym",
+        "text",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "canonical_key",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "now()"
+      ]
+    ],
+    "primary_key": [
+      "synonym_id"
+    ],
+    "foreign_keys": []
+  },
+  "stock_transaction": {
+    "columns": [
+      [
+        "transaction_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('stock_transaction_transaction_id_seq'::regclass)"
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "supplier_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "quantity",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "transaction_type",
+        "character varying",
+        20,
+        "NO",
+        null
+      ],
+      [
+        "notes",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "bill_date",
+        "date",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "bill_no",
+        "character varying",
+        50,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [
+      "transaction_id"
+    ],
+    "foreign_keys": [
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ],
+      [
+        "supplier_id",
+        "suppliers",
+        "supplier_id"
+      ]
+    ]
+  },
+  "stock_transactions": {
+    "columns": [
+      [
+        "transaction_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('stock_transactions_transaction_id_seq'::regclass)"
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "supplier_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "quantity",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "transaction_type",
+        "character varying",
+        20,
+        "NO",
+        null
+      ],
+      [
+        "notes",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [
+      "transaction_id"
+    ],
+    "foreign_keys": [
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ],
+      [
+        "supplier_id",
+        "suppliers",
+        "supplier_id"
+      ]
+    ]
+  },
+  "supplier": {
+    "columns": [
+      [
+        "supplier_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('supplier_supplier_id_seq'::regclass)"
+      ],
+      [
+        "supplier_name",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "contact_person",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "phone",
+        "character varying",
+        20,
+        "YES",
+        null
+      ],
+      [
+        "email",
+        "character varying",
+        100,
+        "YES",
+        null
+      ],
+      [
+        "address",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "supplier_id"
+    ],
+    "foreign_keys": []
+  },
+  "supplier_purchase": {
+    "columns": [
+      [
+        "purchase_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('supplier_purchase_purchase_id_seq'::regclass)"
+      ],
+      [
+        "supplier_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "bill_no",
+        "character varying",
+        50,
+        "NO",
+        null
+      ],
+      [
+        "bill_date",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "total_amount",
+        "double precision",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "amount_paid",
+        "double precision",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "balance",
+        "double precision",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "status",
+        "character varying",
+        20,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "purchase_id"
+    ],
+    "foreign_keys": [
+      [
+        "supplier_id",
+        "supplier",
+        "supplier_id"
+      ]
+    ]
+  },
+  "suppliers": {
+    "columns": [
+      [
+        "supplier_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('suppliers_supplier_id_seq'::regclass)"
+      ],
+      [
+        "name",
+        "character varying",
+        100,
+        "NO",
+        null
+      ],
+      [
+        "contact_number",
+        "character varying",
+        20,
+        "YES",
+        null
+      ],
+      [
+        "email",
+        "character varying",
+        120,
+        "YES",
+        null
+      ],
+      [
+        "address",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        null
+      ]
+    ],
+    "primary_key": [
+      "supplier_id"
+    ],
+    "foreign_keys": []
+  },
+  "user_category_interest": {
+    "columns": [
+      [
+        "id",
+        "integer",
+        null,
+        "NO",
+        "nextval('user_category_interest_id_seq'::regclass)"
+      ],
+      [
+        "user_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "category_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "interest_type",
+        "character varying",
+        30,
+        "YES",
+        null
+      ],
+      [
+        "count",
+        "integer",
+        null,
+        "YES",
+        "1"
+      ],
+      [
+        "last_interaction",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "now()"
+      ]
+    ],
+    "primary_key": [
+      "id"
+    ],
+    "foreign_keys": [
+      [
+        "user_id",
+        "login",
+        "id"
+      ],
+      [
+        "category_id",
+        "category",
+        "category_id"
+      ]
+    ]
+  },
+  "user_interest": {
+    "columns": [
+      [
+        "interest_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('user_interest_interest_id_seq'::regclass)"
+      ],
+      [
+        "user_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "interest_type",
+        "character varying",
+        20,
+        "NO",
+        null
+      ],
+      [
+        "notes",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "interest_id"
+    ],
+    "foreign_keys": [
+      [
+        "user_id",
+        "login",
+        "id"
+      ],
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ]
+    ]
+  },
+  "user_queries": {
+    "columns": [
+      [
+        "uq_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('user_queries_uq_id_seq'::regclass)"
+      ],
+      [
+        "user_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "query",
+        "text",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "uq_id"
+    ],
+    "foreign_keys": [
+      [
+        "user_id",
+        "login",
+        "id"
+      ],
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ]
+    ]
+  },
+  "variety": {
+    "columns": [
+      [
+        "variety_id",
+        "integer",
+        null,
+        "NO",
+        "nextval('variety_variety_id_seq'::regclass)"
+      ],
+      [
+        "plant_id",
+        "integer",
+        null,
+        "NO",
+        null
+      ],
+      [
+        "variety_name",
+        "character varying",
+        120,
+        "NO",
+        null
+      ],
+      [
+        "variety_description",
+        "text",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "variety_price",
+        "numeric",
+        null,
+        "YES",
+        null
+      ],
+      [
+        "created_at",
+        "timestamp without time zone",
+        null,
+        "YES",
+        "CURRENT_TIMESTAMP"
+      ],
+      [
+        "business_id",
+        "character varying",
+        50,
+        "YES",
+        "'NURS-0001'::character varying"
+      ]
+    ],
+    "primary_key": [
+      "variety_id"
+    ],
+    "foreign_keys": [
+      [
+        "plant_id",
+        "plant",
+        "plant_id"
+      ]
+    ]
+  }
+}

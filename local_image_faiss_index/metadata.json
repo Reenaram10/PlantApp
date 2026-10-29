@@ -1,0 +1,687 @@
+[
+    {
+        "filename": "aglaonemar2.jpg",
+        "path": "D:\\PlantApp\\plantpics\\aglaonemar2.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "anthuriumr4.jpg",
+        "path": "D:\\PlantApp\\plantpics\\anthuriumr4.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "arecapalmr5.jpg",
+        "path": "D:\\PlantApp\\plantpics\\arecapalmr5.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "calatheasandherianar3.jpg",
+        "path": "D:\\PlantApp\\plantpics\\calatheasandherianar3.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "chinadollr2.jpg",
+        "path": "D:\\PlantApp\\plantpics\\chinadollr2.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "crotonpetrar2.jpg",
+        "path": "D:\\PlantApp\\plantpics\\crotonpetrar2.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "draceanadarasinghr3.jpg",
+        "path": "D:\\PlantApp\\plantpics\\draceanadarasinghr3.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "ficusbonsair4.jpg",
+        "path": "D:\\PlantApp\\plantpics\\ficusbonsair4.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "guava.jpg",
+        "path": "D:\\PlantApp\\plantpics\\guava.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "ixora oranger6.jpg",
+        "path": "D:\\PlantApp\\plantpics\\ixora oranger6.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "ixorapinkr5.jpg",
+        "path": "D:\\PlantApp\\plantpics\\ixorapinkr5.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "ixoraredr5.jpg",
+        "path": "D:\\PlantApp\\plantpics\\ixoraredr5.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "ixorayellowr6.jpg",
+        "path": "D:\\PlantApp\\plantpics\\ixorayellowr6.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "kalanchoeplantr5.jpg",
+        "path": "D:\\PlantApp\\plantpics\\kalanchoeplantr5.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "lemon.jpg",
+        "path": "D:\\PlantApp\\plantpics\\lemon.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "luckybamboor4.jpg",
+        "path": "D:\\PlantApp\\plantpics\\luckybamboor4.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "mango.jpg",
+        "path": "D:\\PlantApp\\plantpics\\mango.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "monestrar4.jpg",
+        "path": "D:\\PlantApp\\plantpics\\monestrar4.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "poinsettiapinkr6.jpg",
+        "path": "D:\\PlantApp\\plantpics\\poinsettiapinkr6.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "pome.jpg",
+        "path": "D:\\PlantApp\\plantpics\\pome.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "rubberr2.jpg",
+        "path": "D:\\PlantApp\\plantpics\\rubberr2.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "sapota (2).jpg",
+        "path": "D:\\PlantApp\\plantpics\\sapota (2).jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "syngoniumpinkr3.jpg",
+        "path": "D:\\PlantApp\\plantpics\\syngoniumpinkr3.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "WhatsApp Image 2025-07-18 at 17.26.44_100b706a.jpg",
+        "path": "D:\\PlantApp\\plantpics\\WhatsApp Image 2025-07-18 at 17.26.44_100b706a.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "zzplantr3.jpg",
+        "path": "D:\\PlantApp\\plantpics\\zzplantr3.jpg",
+        "directory": "plantpics"
+    },
+    {
+        "filename": "apple.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\apple.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "dates.jpg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\dates.jpg",
+        "directory": "plants"
+    },
+    {
+        "filename": "lemon.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\lemon.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "lichi.jpg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\lichi.jpg",
+        "directory": "plants"
+    },
+    {
+        "filename": "mango.jpg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\mango.jpg",
+        "directory": "plants"
+    },
+    {
+        "filename": "orange.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\orange.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "PAPAYATREE_1.webp",
+        "path": "D:\\PlantApp\\static\\images\\plants\\PAPAYATREE_1.webp",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_10_hibiscus.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_10_hibiscus.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_11_cyclamen.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_11_cyclamen.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_12_red_cactus.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_12_red_cactus.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_13_purple_basil.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_13_purple_basil.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_14_blue_forget_me_not.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_14_blue_forget_me_not.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_15_anthurium.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_15_anthurium.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_16_rose_mallow.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_16_rose_mallow.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_17_rose_campion.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_17_rose_campion.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_18_rose_geranium.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_18_rose_geranium.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_19_rose.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_19_rose.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_1_aloe_vera.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_1_aloe_vera.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_20_boston_fern.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_20_boston_fern.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_21_zz_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_21_zz_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_22_english_ivy.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_22_english_ivy.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_23_lavender.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_23_lavender.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_24_petunia.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_24_petunia.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_25_wisteria.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_25_wisteria.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_26_iris.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_26_iris.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_26_snake_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_26_snake_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_27_ipomoea.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_27_ipomoea.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_28_ivy.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_28_ivy.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_29_pothos.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_29_pothos.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_2_peace_lily.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_2_peace_lily.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_30_monestra_deliciosa.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_30_monestra_deliciosa.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_31_philodendron_brasil.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_31_philodendron_brasil.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_32_spider_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_32_spider_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_33_begonia.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_33_begonia.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_34_blushing_bells.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_34_blushing_bells.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_35_lavender_mist.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_35_lavender_mist.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_36_sunset_glow.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_36_sunset_glow.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_37_money_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_37_money_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_38_areca_palm.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_38_areca_palm.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_39_syngonium.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_39_syngonium.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_40_dieffenbachia.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_40_dieffenbachia.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_41_rubber_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_41_rubber_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_42_bamboo_palm.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_42_bamboo_palm.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_43_jasmine.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_43_jasmine.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_44_sunflower.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_44_sunflower.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_45_orchid.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_45_orchid.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_46_marigold.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_46_marigold.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_47_hydrangea.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_47_hydrangea.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_48_dahlia.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_48_dahlia.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_49_tuberose.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_49_tuberose.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_4_red_aglonema.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_4_red_aglonema.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_50_bougainvillea.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_50_bougainvillea.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_51_oleander.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_51_oleander.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_52_ashoka_tree.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_52_ashoka_tree.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_53_bottle_palm.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_53_bottle_palm.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_54_gulmohar.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_54_gulmohar.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_55_mexican_sunflower.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_55_mexican_sunflower.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_56_jastropha.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_56_jastropha.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_57_plumeria.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_57_plumeria.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_58_ixora.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_58_ixora.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_59_lantana.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_59_lantana.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_5_golden_pothos.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_5_golden_pothos.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_60_tulsi.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_60_tulsi.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_61_neem.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_61_neem.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_62_curry_leaves.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_62_curry_leaves.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_63_mint.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_63_mint.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_64_insulin_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_64_insulin_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_65_brahmi.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_65_brahmi.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_66_thyme.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_66_thyme.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_67_oregano.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_67_oregano.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_68_calotropis.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_68_calotropis.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_69_cactus.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_69_cactus.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_6_carnation.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_6_carnation.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_70_golden_barrel_cactus.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_70_golden_barrel_cactus.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_71_agave.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_71_agave.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_72_haworthia.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_72_haworthia.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_73_euphorbia_cactus.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_73_euphorbia_cactus.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_74_moon_cactus.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_74_moon_cactus.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_75_opuntia.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_75_opuntia.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_76_acanthocereus.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_76_acanthocereus.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_77_gymnocalycium.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_77_gymnocalycium.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_78_ferocactus.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_78_ferocactus.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_79_rosette_blossom.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_79_rosette_blossom.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_7_tulip.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_7_tulip.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_80_velvet_petunia.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_80_velvet_petunia.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_81_tomato_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_81_tomato_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_82_chili_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_82_chili_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_83_spinach_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_83_spinach_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_84_coriander_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_84_coriander_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_85_mint_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_85_mint_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_86_fenugreek_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_86_fenugreek_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_87_bfd5be92.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_87_bfd5be92.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_87_spring_onion_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_87_spring_onion_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_88_455c8791.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_88_455c8791.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_88_radish_plant.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_88_radish_plant.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_89_501b1e98.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_89_501b1e98.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_8_poppy.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_8_poppy.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_90_7ffa33c6.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_90_7ffa33c6.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_91_720aa516.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_91_720aa516.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_91_bb8b8496.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_91_bb8b8496.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_92_1d0512d2.jpg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_92_1d0512d2.jpg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_93_e23eba64.jpg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_93_e23eba64.jpg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_94_2ff73fc8.webp",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_94_2ff73fc8.webp",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_95_54c2eacb.jpg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_95_54c2eacb.jpg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_96_d1e9957a.jpg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_96_d1e9957a.jpg",
+        "directory": "plants"
+    },
+    {
+        "filename": "plant_9_camellia.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\plant_9_camellia.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "radish.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\radish.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "spring onion.jpeg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\spring onion.jpeg",
+        "directory": "plants"
+    },
+    {
+        "filename": "strawberry-plant.jpg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\strawberry-plant.jpg",
+        "directory": "plants"
+    },
+    {
+        "filename": "b0FwJOyobV6NnXq4XV6y--Iohrc.png",
+        "path": "D:\\PlantApp\\static\\images\\plants\\orange plant_files\\b0FwJOyobV6NnXq4XV6y--Iohrc.png",
+        "directory": "orange plant_files"
+    },
+    {
+        "filename": "Flag_Feedback.png",
+        "path": "D:\\PlantApp\\static\\images\\plants\\orange plant_files\\Flag_Feedback.png",
+        "directory": "orange plant_files"
+    },
+    {
+        "filename": "Grove-orange-trees-region-Costa-Blanca-Spain.jpg",
+        "path": "D:\\PlantApp\\static\\images\\plants\\orange plant_files\\Grove-orange-trees-region-Costa-Blanca-Spain.jpg",
+        "directory": "orange plant_files"
+    }
+]

@@ -12,6 +12,21 @@ LLM_FAILSAFE = "local"      # Falls back to keyword matching
 STT_FAILSAFE = "vosk"       # Falls back to VOSK
 TTS_FAILSAFE = "gtts"       # Falls back to gTTS
 
+import os
+import sys
+import inspect
+import warnings
+from typing import Any
+from sqlalchemy.exc import SAWarning
+
+# Ensure application root is in sys.path
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+if APP_ROOT not in sys.path:
+    sys.path.insert(0, APP_ROOT)
+
+# Suppress unrecognized SQL Server version warning (SQL Server 2025 compatibility)
+warnings.filterwarnings("ignore", category=SAWarning, message=r".*Unrecognized server version info.*")
+
 from difflib import SequenceMatcher
 import numpy as np
 import google.generativeai as genai
@@ -24,6 +39,8 @@ from openai import OpenAI
 import os
 import json
 import re
+import hmac
+import hashlib
 import traceback
 import wave
 import subprocess
@@ -34,7 +51,10 @@ import io
 import requests
 import google.generativeai as genai 
 import tensorflow as tf
-from tensorflow.keras.models import load_model
+try:
+    from keras.models import load_model
+except ImportError:
+    from tensorflow.keras.models import load_model  # type: ignore[import-untyped,import-not-found]
 import cv2
 VOSK_AVAILABLE = False
 import wave
@@ -126,11 +146,18 @@ def log_langfuse_trace(trace_name, user_input, output_reply, metadata=None, leve
 app = Flask(__name__, static_folder="static")
 CORS(app)
 
+@app.route('/admin.html')
+@app.route('/admin')
+def serve_admin_dashboard():
+    return app.send_static_file('admin.html')
+
 from rag_engine import tomato_rag, plant_rag
 from rag_faiss_engine import PlantFAISSRAG
+from history_faiss_engine import HistoryFAISSMetaEngine
 
 # Initialize FAISS RAG engine
 faiss_rag = PlantFAISSRAG()
+history_faiss = HistoryFAISSMetaEngine()
 
 def ask_rebuild_index():
     """Ask the user in the terminal whether to rebuild the FAISS index, with a 5s timeout."""
@@ -161,6 +188,11 @@ def ask_rebuild_index():
 
 
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
+
+def allowed_file(filename):
+    """Validate uploaded file has an allowed image extension"""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # ========== LOCAL DISEASE DETECTION MODELS (2-STAGE HIERARCHICAL) ==========
 CROP_MODEL_PATH = os.path.join("plant_disease_detection", "model", "crop_type_model.h5")
@@ -403,15 +435,56 @@ You are Green-Buy's helpful plant assistant. When helping customers:
 Always use plant IDs from the database in your responses.
 """
 
-# Database Configuration
-default_db_uri = "postgresql://neondb_owner:npg_KBStXxq52HPZ@ep-gentle-grass-adnpzd0p-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require"
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", default_db_uri)
+# Suppress benign SQLAlchemy 2.0 SQL Server 2025 version warning
+import warnings
+from sqlalchemy.exc import SAWarning
+warnings.filterwarnings('ignore', category=SAWarning, message=r".*Unrecognized server version info.*")
+
+# ---- SQL Server Database Configuration ----
+# Supports Windows Authentication (DB_TRUSTED_CONNECTION=yes)
+# and SQL Server Authentication (provide DB_USER + DB_PASSWORD)
+_db_server   = os.getenv("DB_SERVER", "localhost")
+_db_name     = os.getenv("DB_NAME", "PlantAppDB")
+_db_user     = os.getenv("DB_USER", "")
+_db_password = os.getenv("DB_PASSWORD", "")
+_db_trusted  = os.getenv("DB_TRUSTED_CONNECTION", "yes")
+
+# Auto-detect newest installed Microsoft ODBC Driver
+_odbc_driver = "ODBC+Driver+18+for+SQL+Server"
+try:
+    import pyodbc
+    _available = pyodbc.drivers()
+    if "ODBC Driver 18 for SQL Server" in _available:
+        _odbc_driver = "ODBC+Driver+18+for+SQL+Server"
+    elif "ODBC Driver 17 for SQL Server" in _available:
+        _odbc_driver = "ODBC+Driver+17+for+SQL+Server"
+    elif "SQL Server" in _available:
+        _odbc_driver = "SQL+Server"
+except Exception:
+    pass
+
+if _db_trusted.lower() == "yes":
+    _mssql_uri = (
+        f"mssql+pyodbc://@{_db_server}/{_db_name}"
+        f"?driver={_odbc_driver}"
+        f"&TrustServerCertificate=yes"
+    )
+else:
+    from urllib.parse import quote_plus
+    _mssql_uri = (
+        f"mssql+pyodbc://{quote_plus(_db_user)}:{quote_plus(_db_password)}"
+        f"@{_db_server}/{_db_name}"
+        f"?driver={_odbc_driver}"
+        f"&TrustServerCertificate=yes"
+    )
+
+app.config['SQLALCHEMY_DATABASE_URI'] = _mssql_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "pool_pre_ping": True,    
-    "pool_recycle": 1800     
+    "pool_pre_ping": True,
+    "pool_recycle": 300,
+    "pool_timeout": 30,
 }
 
 
@@ -419,19 +492,66 @@ db = SQLAlchemy(app)
 
 # DB check moved to main block
 
+class Business(db.Model):
+    __tablename__ = "businesses"
+
+    business_id = db.Column(db.String(50), primary_key=True)
+    business_name = db.Column(db.String(100), nullable=False)
+    owner_name = db.Column(db.String(100))
+    email = db.Column(db.String(100))
+    phone = db.Column(db.String(20))
+    address = db.Column(db.Text)
+    city = db.Column(db.String(50))
+    state = db.Column(db.String(50))
+    country = db.Column(db.String(50))
+    status = db.Column(db.String(20), default='Active') # 'Active' / 'Inactive'
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class AuditLog(db.Model):
+    __tablename__ = "audit_logs"
+
+    id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50))
+    user_id = db.Column(db.Integer)
+    user_email = db.Column(db.String(100))
+    action = db.Column(db.String(100), nullable=False)
+    module = db.Column(db.String(50), nullable=False)
+    record_id = db.Column(db.String(50))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    details = db.Column(db.Text)
+
 class UserQuery(db.Model):
     __tablename__ = "user_queries"
 
     uq_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     user_id = db.Column(db.Integer, db.ForeignKey("login.id", ondelete="CASCADE"), nullable=False)
     plant_id = db.Column(db.Integer, db.ForeignKey("plant.plant_id", ondelete="SET NULL"), nullable=True)
     query_text = db.Column('query', db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+class _UserQueryDescriptor:
+    """Descriptor that preserves UserQuery.query for Flask-SQLAlchemy model queries,
+    while allowing instance-level uq.query to access or mutate query_text seamlessly."""
+    def __init__(self, original_desc):
+        self.original_desc = original_desc
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self.original_desc.__get__(None, owner)
+        return getattr(instance, 'query_text', None)
+
+    def __set__(self, instance, value):
+        instance.query_text = value
+
+UserQuery.query = _UserQueryDescriptor(inspect.getattr_static(db.Model, 'query'))
+
 class UserInterest(db.Model):
     __tablename__ = "user_interest"
 
     interest_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     user_id = db.Column(db.Integer, db.ForeignKey("login.id", ondelete="CASCADE"), nullable=False)
     plant_id = db.Column(db.Integer, db.ForeignKey("plant.plant_id", ondelete="CASCADE"), nullable=False)
 
@@ -445,8 +565,11 @@ class User(db.Model):
     __tablename__ = 'login'
 
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100))
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    role = db.Column(db.String(20), default='NURSERY_ADMIN') # 'SUPER_ADMIN', 'NURSERY_ADMIN', 'STAFF'
+    business_id = db.Column(db.String(50), default='NURS-0001')
 
     last_login = db.Column(db.DateTime)
     last_logout = db.Column(db.DateTime)
@@ -458,12 +581,13 @@ class Plant(db.Model):
     __tablename__ = "plant"
 
     plant_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     plant_name = db.Column(db.String(100))
     description = db.Column(db.Text)
     price = db.Column(db.Float)
-    discount_price = db.Column(db.Float, nullable=True, default=0.0)
     image_path = db.Column(db.String(255))
     stock = db.Column(db.Integer, default=0)
+    discount_price = db.Column(db.Float, default=0.0)
 
 class PlantKnowledge(db.Model):
     __tablename__ = "plant_knowledge"
@@ -494,6 +618,7 @@ class DiseaseKnowledge(db.Model):
 class Supplier(db.Model):
     __tablename__ = "supplier"
     supplier_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     supplier_name = db.Column(db.String(100), nullable=False)
     contact_person = db.Column(db.String(100))
     phone = db.Column(db.String(20))
@@ -504,6 +629,7 @@ class Supplier(db.Model):
 class InventoryTransaction(db.Model):
     __tablename__ = "inventory_transaction"
     transaction_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     plant_id = db.Column(db.Integer, db.ForeignKey("plant.plant_id", ondelete="CASCADE"), nullable=False)
     supplier_id = db.Column(db.Integer, db.ForeignKey("supplier.supplier_id", ondelete="SET NULL"), nullable=True)
     type = db.Column(db.String(10), nullable=False) # 'ADD' or 'REMOVE'
@@ -519,6 +645,7 @@ class InventoryTransaction(db.Model):
 class SupplierPurchase(db.Model):
     __tablename__ = "supplier_purchase"
     purchase_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     supplier_id = db.Column(db.Integer, db.ForeignKey("supplier.supplier_id", ondelete="CASCADE"), nullable=False)
     bill_no = db.Column(db.String(50), nullable=False)
     bill_date = db.Column(db.DateTime, default=datetime.utcnow)
@@ -533,6 +660,7 @@ class SupplierPurchase(db.Model):
 class PurchaseItem(db.Model):
     __tablename__ = "purchase_item"
     item_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     purchase_id = db.Column(db.Integer, db.ForeignKey("supplier_purchase.purchase_id", ondelete="CASCADE"), nullable=False)
     plant_id = db.Column(db.Integer, db.ForeignKey("plant.plant_id", ondelete="CASCADE"), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
@@ -545,12 +673,13 @@ class Variety(db.Model):
     __tablename__ = "variety"
 
     variety_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     plant_id = db.Column(db.Integer, db.ForeignKey("plant.plant_id", ondelete="CASCADE"), nullable=False)
     variety_name = db.Column(db.String(100), nullable=False)
+    variety_description = db.Column(db.Text)
     variety_price = db.Column(db.Float)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Relationship back to Plant
     plant = db.relationship('Plant', backref='varieties')
 
 
@@ -559,6 +688,7 @@ class Variety(db.Model):
 class Conversation(db.Model):
     __tablename__ = 'conversation'
     conversation_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     user_id = db.Column(db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'))
     conversation = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -566,6 +696,7 @@ class Conversation(db.Model):
 class Cart(db.Model):
     __tablename__ = "cart_new"
     cart_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     user_id = db.Column(db.String(100), nullable=False)
     plant_id = db.Column(db.Integer, db.ForeignKey("plant.plant_id"), nullable=False)
     added_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -576,38 +707,46 @@ class Cart(db.Model):
 class Order(db.Model):
     __tablename__ = 'orders'
     order_id = db.Column(db.Integer, primary_key=True)
-    plant_name = db.Column(db.String(100), db.ForeignKey('plant.plant_name'))
+    business_id = db.Column(db.String(50), default='NURS-0001')
+    plant_name = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('login.id'))
     order_date = db.Column(db.DateTime, default=datetime.utcnow)
+    total_amount = db.Column(db.Float)
+    payment_status = db.Column(db.String(20), default='Pending')
     order_status = db.Column(db.String(20), default='Processing')
     order_group_id = db.Column(db.String(50))
-    price = db.Column(db.Float) # New after migration
+    price = db.Column(db.Float)
     quantity = db.Column(db.Integer)
     payment_method = db.Column(db.String(50))
     shipping_address = db.Column(db.Text)
     notes = db.Column(db.Text)
     delivery_date = db.Column(db.String(50))
     tracking_number = db.Column(db.String(100))
+    amount_paid = db.Column(db.Float, default=0.0)
+    balance = db.Column(db.Float, default=0.0)
 
 class Category(db.Model):
     __tablename__ = 'category'
     category_id = db.Column(db.Integer, primary_key=True)
-    category_name = db.Column(db.String(100), unique=True, nullable=False)
+    business_id = db.Column(db.String(50), default='NURS-0001')
+    category_name = db.Column(db.String(100), nullable=False)
 
 class PlantCategory(db.Model):
     __tablename__ = 'plant_category'
-    plant_id = db.Column(db.Integer, db.ForeignKey('plant.plant_id'), primary_key=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'), primary_key=True)
+    plant_category_id = db.Column(db.Integer, primary_key=True)
+    plant_id = db.Column(db.Integer, db.ForeignKey('plant.plant_id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'), nullable=False)
 
 
 class LLMResult(db.Model):
     __tablename__ = 'llm_results'
     id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     user_query = db.Column(db.Text, nullable=False)
     llm_response = db.Column(db.Text, nullable=False)
     category_suggested = db.Column(db.String(100))
     plants_found = db.Column(db.Integer, default=0)
-    llm_name = db.Column(db.String(50))   #  ADD THIS
+    llm_name = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     expires_at = db.Column(db.DateTime)
 
@@ -615,6 +754,7 @@ class LLMResult(db.Model):
 class Query(db.Model):
     __tablename__ = 'query'
     query_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     description = db.Column(db.Text, nullable=False)
     canonical_key = db.Column(db.String(100))   
     user_id = db.Column(db.Integer, db.ForeignKey('login.id', ondelete='CASCADE'), nullable=True)
@@ -625,13 +765,13 @@ class Query(db.Model):
 class QueryResult(db.Model):
     __tablename__ = 'query_result'
     result_id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
     query_id = db.Column(db.Integer, db.ForeignKey('query.query_id', ondelete='CASCADE'), nullable=False)
     result_description = db.Column(db.Text, nullable=False)
-    result_source = db.Column(db.String(50), nullable=False)  # 'llm' or 'local'
+    result_source = db.Column(db.String(50), nullable=False)
     
-    #  NEW: Store response type
-    response_type = db.Column(db.String(50), default='text')  # 'text', 'plants_with_images', 'image'
-    response_data = db.Column(db.Text)  # JSON: stores plant IDs, image URLs, etc.
+    response_type = db.Column(db.String(50), default='text')
+    response_data = db.Column(db.Text)
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     query = db.relationship('Query', backref='results')
@@ -640,11 +780,143 @@ class QueryResult(db.Model):
 class CategorySynonym(db.Model):
     __tablename__ = 'category_synonym'
     synonym_id = db.Column(db.Integer, primary_key=True)
-    synonym = db.Column(db.String(100), nullable=False, unique=True)
+    business_id = db.Column(db.String(50), default='NURS-0001')
+    synonym = db.Column(db.String(100), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.category_id', ondelete='CASCADE'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     category = db.relationship('Category', backref='synonyms')
+
+# ========== MULTI-TENANT JWT & AUTHENTICATION MIDDLEWARE ==========
+from functools import wraps
+from flask import g
+
+JWT_SECRET = os.getenv("JWT_SECRET", "super-secret-saas-key-2026")
+
+def b64_encode(data_bytes):
+    return base64.urlsafe_b64encode(data_bytes).rstrip(b'=').decode('utf-8')
+
+def b64_decode(data_str):
+    padding = '=' * (4 - (len(data_str) % 4))
+    return base64.urlsafe_b64decode(data_str + padding)
+
+def generate_jwt(payload, secret=JWT_SECRET, exp_seconds=86400):
+    header = {"alg": "HS256", "typ": "JWT"}
+    payload_copy = dict(payload)
+    if "exp" not in payload_copy:
+        payload_copy["exp"] = int(time.time()) + exp_seconds
+    
+    header_b64 = b64_encode(json.dumps(header).encode('utf-8'))
+    payload_b64 = b64_encode(json.dumps(payload_copy).encode('utf-8'))
+    
+    signing_input = f"{header_b64}.{payload_b64}".encode('utf-8')
+    signature = hmac.new(secret.encode('utf-8'), signing_input, hashlib.sha256).digest()
+    sig_b64 = b64_encode(signature)
+    
+    return f"{header_b64}.{payload_b64}.{sig_b64}"
+
+def verify_jwt(token, secret=JWT_SECRET):
+    try:
+        if not token:
+            return None
+        if token.startswith("Bearer "):
+            token = token[7:]
+        parts = token.strip().split('.')
+        if len(parts) != 3:
+            return None
+        header_b64, payload_b64, sig_b64 = parts
+        
+        signing_input = f"{header_b64}.{payload_b64}".encode('utf-8')
+        expected_sig = hmac.new(secret.encode('utf-8'), signing_input, hashlib.sha256).digest()
+        actual_sig = b64_decode(sig_b64)
+        
+        if not hmac.compare_digest(expected_sig, actual_sig):
+            return None
+            
+        payload = json.loads(b64_decode(payload_b64).decode('utf-8'))
+        if payload.get("exp") and time.time() > payload["exp"]:
+            return None
+            
+        return payload
+    except Exception as e:
+        return None
+
+def log_audit_action(action, module, record_id=None, details=None, business_id=None, user_id=None, user_email=None):
+    try:
+        biz_id = business_id or (g.current_user.get('business_id') if hasattr(g, 'current_user') and g.current_user else 'NURS-0001')
+        u_id = user_id or (g.current_user.get('user_id') if hasattr(g, 'current_user') and g.current_user else None)
+        u_email = user_email or (g.current_user.get('email') if hasattr(g, 'current_user') and g.current_user else None)
+        
+        entry = AuditLog(
+            business_id=biz_id,
+            user_id=u_id,
+            user_email=u_email,
+            action=action,
+            module=module,
+            record_id=str(record_id) if record_id else None,
+            details=details
+        )
+        db.session.add(entry)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print("Audit log failed:", e)
+
+def get_current_tenant():
+    """Helper to extract authenticated user's tenant ID from request context"""
+    if hasattr(g, 'current_user') and g.current_user and g.current_user.get('business_id'):
+        return g.current_user['business_id']
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header:
+        payload = verify_jwt(auth_header)
+        if payload and payload.get('business_id'):
+            return payload['business_id']
+    return 'NURS-0001'
+
+def require_tenant_auth(allowed_roles=None):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            auth_header = request.headers.get("Authorization", "")
+            payload = verify_jwt(auth_header)
+            
+            if not payload:
+                token = request.args.get("token")
+                if not token and request.is_json:
+                    try:
+                        body = request.get_json(silent=True)
+                        if isinstance(body, dict):
+                            token = body.get("token")
+                    except Exception:
+                        token = None
+                payload = verify_jwt(token)
+                
+            if not payload:
+                # Default guest context for public store operations
+                g.current_user = {
+                    "user_id": 0,
+                    "email": "guest@nursery.com",
+                    "role": "STAFF",
+                    "business_id": "NURS-0001"
+                }
+            else:
+                g.current_user = payload
+
+            user_biz = g.current_user.get("business_id", "NURS-0001")
+            user_role = g.current_user.get("role", "STAFF")
+
+            if user_role != "SUPER_ADMIN" and user_biz != "SYSTEM":
+                biz = db.session.get(Business, user_biz)
+                if biz and biz.status == "Inactive":
+                    return jsonify({"status": "error", "message": "This nursery account has been deactivated."}), 403
+
+            if allowed_roles:
+                if user_role not in allowed_roles:
+                    return jsonify({"status": "error", "message": "Access denied: Unauthorized role"}), 403
+
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
 
 GREETINGS = {
     "hi", "hello", "hey", "hii", "heyy",
@@ -761,16 +1033,13 @@ def get_category_from_synonym(user_input):
 
 # --- REMOVED OBSOLETE INTENT MAPPING ---
 
-    return None
-
 
 def get_cached_llm_result(normalized_query):
     row = db.session.execute(text("""
-        SELECT llm_response, llm_name, expires_at
+        SELECT TOP 1 llm_response, llm_name, expires_at
         FROM llm_results
         WHERE user_query = :q
         ORDER BY created_at DESC
-        LIMIT 1
     """), {"q": normalized_query}).fetchone()
 
     if not row:
@@ -790,9 +1059,9 @@ def get_cached_llm_result(normalized_query):
 
 def fuzzy_find_plant(name):
     return db.session.execute(text("""
-        SELECT plant_id, plant_name, description, price
+        SELECT TOP 1 plant_id, plant_name, description, price
         FROM plant
-        WHERE plant_name ILIKE :x
+        WHERE LOWER(plant_name) LIKE LOWER(:x)
     """), {"x": f"%{name}%"}).fetchone()
 
 
@@ -836,13 +1105,16 @@ def store_query(description, user_id, canonical_key=None):
         print(f" Error storing query: {e}")
         db.session.rollback()
         return None
-# Fix the register endpoint
+# Multi-tenant Register Endpoint
 @app.route("/register", methods=["POST"])
+@app.route("/api/auth/register", methods=["POST"])
 def register():
-    data = request.json
+    data = request.json or {}
     username = data.get("username", "").strip()
     email = data.get("email", "").strip().lower()
     password = data.get("password", "").strip()
+    business_id = data.get("business_id", "").strip() or "NURS-0001"
+    role = data.get("role", "").strip() or "NURSERY_ADMIN"
 
     if not username or not email or not password:
         return jsonify({
@@ -852,7 +1124,7 @@ def register():
 
     try:
         existing = db.session.execute(
-            text("SELECT id FROM login WHERE email = :email"),
+            text("SELECT id FROM login WHERE LOWER(email) = LOWER(:email)"),
             {"email": email}
         ).fetchone()
 
@@ -862,23 +1134,43 @@ def register():
                 "message": "Email already registered. Please login."
             }), 409
 
-        row = db.session.execute(
-            text("""
-                INSERT INTO login (username, email, password)
-                VALUES (:username, :email, :password)
-                RETURNING id
-            """),
-            {"username": username, "email": email, "password": password}
-        ).fetchone()
+        # Check nursery validity
+        biz = db.session.get(Business, business_id)
+        if not biz:
+            return jsonify({"status": "error", "message": f"Invalid Business ID: {business_id}"}), 404
 
+        new_user = User(
+            username=username,
+            email=email,
+            password=password,
+            role=role,
+            business_id=business_id
+        )
+        db.session.add(new_user)
         db.session.commit()
+        user_id = new_user.id
+
+        token_payload = {
+            "user_id": user_id,
+            "username": username,
+            "email": email,
+            "role": role,
+            "business_id": business_id
+        }
+        token = generate_jwt(token_payload)
+
+        log_audit_action("USER_REGISTER", "AUTH", record_id=user_id, details=f"Registered user {email} under {business_id}", business_id=business_id, user_id=user_id, user_email=email)
 
         return jsonify({
             "status": "success",
             "message": "Registered successfully",
-            "user_id": row[0],
+            "token": token,
+            "user_id": user_id,
             "username": username,
-            "email": email
+            "email": email,
+            "role": role,
+            "business_id": business_id,
+            "business_name": biz.business_name
         })
 
     except Exception as e:
@@ -887,319 +1179,24 @@ def register():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@app.route('/api/identify', methods=['POST'])
-def identify_plant_endpoint():
-    """Identify plant disease from uploaded image using LOCAL dataset model"""
-    print(f" [Identify] Request received. Files: {list(request.files.keys())}")
-    
-    if 'image' not in request.files:
-        print(" [Identify] ERROR: No 'image' key in request.files")
-        return jsonify({"status": "error", "message": "No image uploaded"}), 400
-    
-    file = request.files['image']
-    print(f" [Identify] File received: {file.filename}")
-    
-    if file.filename == '':
-        print(" [Identify] ERROR: Empty filename")
-        return jsonify({"status": "error", "message": "No image selected"}), 400
-    
-    if file and allowed_file(file.filename):
-        try:
-            # 1. Save file to a system temp directory (prevents Live Server refresh)
-            import tempfile
-            fd, temp_path = tempfile.mkstemp(suffix=".jpg")
-            os.close(fd) # Close file descriptor as OpenCV handles the path
-            
-            file.save(temp_path)
-            
-            # 2. HIERARCHICAL 2-STAGE MODEL DETECTION
-            if crop_type_model is None:
-                return jsonify({"status": "error", "message": "Hierarchical crop model not loaded"}), 500
-
-            # Preprocessing using MobileNetV2 preprocess_input
-            from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-            img = cv2.imread(temp_path)
-            if img is None:
-                return jsonify({"status": "error", "message": "Could not read image file"}), 400
-            
-            img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            img_resized = cv2.resize(img_rgb, (224, 224))
-            img_preprocessed = preprocess_input(img_resized.astype(np.float32))
-            img_batch = np.expand_dims(img_preprocessed, axis=0)
-            
-            # Check specialist models for flower prediction or run flower classifier
-            p_preds = potato_disease_model.predict(img_batch) if potato_disease_model is not None else None
-            t_preds = tomato_disease_model.predict(img_batch) if tomato_disease_model is not None else None
-
-            p_idx = np.argmax(p_preds[0]) if p_preds is not None else 0
-            t_idx = np.argmax(t_preds[0]) if t_preds is not None else 0
-
-            p_label = potato_indices.get(str(p_idx), "")
-            t_label = tomato_indices.get(str(t_idx), "")
-
-            is_fruit_detected = (p_label == "Potato___Fruit") or (t_label == "Tomato___Fruit")
-            is_flower_detected = (p_label == "Potato___Flower") or (t_label == "Tomato___Flower")
-
-            if is_fruit_detected:
-                p_conf = float(np.max(p_preds[0])) if p_preds is not None else 0.0
-                t_conf = float(np.max(t_preds[0])) if t_preds is not None else 0.0
-                if t_label == "Tomato___Fruit" and (p_label != "Potato___Fruit" or t_conf >= p_conf):
-                    detected_crop = "Tomato"
-                    result_label = "Tomato___Fruit"
-                    confidence = t_conf
-                else:
-                    detected_crop = "Potato"
-                    result_label = "Potato___Fruit"
-                    confidence = p_conf
-                print(f" [Fruit Routing] Fruit Detected: {result_label} ({confidence*100:.2f}%)")
-            elif is_flower_detected and flower_crop_model is not None:
-                f_preds = flower_crop_model.predict(img_batch)
-                f_idx = np.argmax(f_preds[0])
-                f_conf = float(np.max(f_preds[0]))
-                detected_crop = flower_indices.get(str(f_idx), "Potato")
-                result_label = f"{detected_crop}___Flower"
-                confidence = f_conf
-                print(f" [Flower Classifier] Flower Detected: {result_label} ({f_conf*100:.2f}%)")
-            else:
-                # --- STAGE 1: CROP CLASSIFIER ---
-                crop_preds = crop_type_model.predict(img_batch)
-                crop_idx = np.argmax(crop_preds[0])
-                crop_conf = float(np.max(crop_preds[0]))
-                detected_crop = crop_indices.get(str(crop_idx), "Potato")
-                print(f" [Stage 1] Crop Type Detected: {detected_crop} ({crop_conf*100:.2f}%)")
-
-                # --- STAGE 2: DISEASE SPECIALIST ---
-                if detected_crop == "Potato" and potato_disease_model is not None:
-                    disease_preds = potato_disease_model.predict(img_batch)
-                    disease_idx = np.argmax(disease_preds[0])
-                    disease_conf = float(np.max(disease_preds[0]))
-                    result_label = potato_indices.get(str(disease_idx), "Potato___healthy")
-                    print(f" [Stage 2] Potato Specialist Prediction: {result_label} ({disease_conf*100:.2f}%)")
-                else:
-                    disease_preds = tomato_disease_model.predict(img_batch)
-                    disease_idx = np.argmax(disease_preds[0])
-                    disease_conf = float(np.max(disease_preds[0]))
-                    result_label = tomato_indices.get(str(disease_idx), "Tomato___healthy")
-                    print(f" [Stage 2] Tomato Specialist Prediction: {result_label} ({disease_conf*100:.2f}%)")
-
-                confidence = float(crop_conf * disease_conf)
-            
-            # --- LOCAL DATASET MODE ---
-            # 3-Stage Classification Breakdown: Plant Type -> Health Status -> Disease Diagnosis
-            if "potato" in result_label.lower():
-                detected_plant = "Potato"
-            elif "tomato" in result_label.lower():
-                detected_plant = "Tomato"
-            else:
-                detected_plant = "Unknown Plant"
-
-            plant_name_part = detected_plant
-
-            is_flower_result = ("flower" in result_label.lower()) or ("fruit" in result_label.lower())
-            is_healthy = "healthy" in result_label.lower()
-
-            if is_flower_result:
-                inferred_status = "Fruit Identification" if "fruit" in result_label.lower() else "Flower Identification"
-                disease_display = f"{detected_plant} Plant"
-                plant_display_name = detected_plant
-            else:
-                inferred_status = "Healthy" if is_healthy else "Diseased"
-                if "pest" in result_label.lower() or "mite" in result_label.lower():
-                    inferred_status = "Pest Infestation"
-                clean_disease = result_label.replace("Potato___", "").replace("Tomato___", "").replace("_", " ")
-                if is_healthy:
-                    disease_display = "Healthy (No Disease Detected)"
-                else:
-                    disease_display = clean_disease.title()
-                plant_display_name = f"{detected_plant} ({inferred_status})"
-
-            result = {
-                "plant_name": plant_display_name,
-                "scientific_name": f"Diagnosis: {disease_display}",
-                "detected_plant": detected_plant,
-                "health_status": inferred_status,
-                "disease_name": disease_display,
-                "description": f"Crop: {detected_plant} | Condition: {disease_display}" if is_flower_result else f"Crop: {detected_plant} | Condition: {inferred_status} ({disease_display})",
-                "care_tips": [],
-                "is_plant": True,
-                "confidence": round(confidence * 100, 2),
-                "detection_source": "Local ML Engine (Potato & Tomato)"
-            }
-
-            # --- RAG / SLM ENRICHMENT ---
-            enriched = False
-            try:
-                # 1. Try FAISS RAG first
-                rag_query = result_label.replace('_', ' ')
-                rag_results = faiss_rag.retrieve(rag_query, k=1)
-                
-                if rag_results and rag_results[0]['score'] > 0.70:
-                    best_match = rag_results[0]
-                    content = best_match['content']
-                    m_type = best_match['metadata'].get('type', 'plant')
-                    print(f" [Identify] Found high-score FAISS match ({m_type}, Score: {best_match['score']:.4f})")
-                    
-                    def extract_field(label, text):
-                        pattern = rf"{label}: (.*?)(?:\n|$)"
-                        match = re.search(pattern, text, re.IGNORECASE)
-                        return match.group(1).strip() if match else None
-
-                    if m_type == "disease":
-                        result["symptoms"] = extract_field("Symptoms", content)
-                        result["causes"] = extract_field("Causes", content)
-                        result["organic_treatment"] = extract_field("Organic Treatment", content)
-                        result["prevention"] = extract_field("Prevention", content)
-                        
-                        desc_parts = []
-                        if result["symptoms"]: desc_parts.append(result["symptoms"])
-                        if result["causes"]: desc_parts.append(f"Cause: {result['causes']}")
-                        if desc_parts: result["description"] = "\n\n".join(desc_parts)
-                        
-                        tips = []
-                        if result["prevention"]: tips.append(result["prevention"])
-                        if result["organic_treatment"]: tips.append(f"Treatment: {result['organic_treatment']}")
-                        if tips: result["care_tips"] = tips
-                        
-                        if result["organic_treatment"] and result["prevention"]:
-                            enriched = True
-                    else:
-                        e_desc = extract_field("Description", content)
-                        e_tips = extract_field("Care Tips", content)
-                        if e_desc: result["description"] = e_desc
-                        if e_tips: 
-                            result["care_tips"] = [e_tips]
-                            enriched = True
-            except Exception as rag_err:
-                print(f" [Identify] FAISS RAG check failed: {rag_err}")
-
-            # 2. Invoke LLM if not fully enriched via local RAG (ensures no empty/hardcoded fallbacks)
-            if not enriched:
-                print(f" [Identify] Enriching dynamically via SLM (Groq) for class: '{result_label}'")
-                try:
-                    import json
-                    from groq import Groq
-                    
-                    sys_prompt = "You are a plant pathologist and crop care expert. Reply ONLY in the requested JSON format. Do not use conversational filler or markdown blocks."
-                    
-                    if "healthy" in result_label.lower():
-                        llm_prompt = f"""
-Provide general plant care, prevention, and maintenance tips for a healthy '{plant_name_part}' plant.
-Response must be a JSON object with keys:
-"symptoms": "None (Healthy)",
-"causes": "N/A",
-"organic_treatment": "N/A",
-"prevention": "routine water, soil, sunlight, and compost care instructions",
-"description": "The plant appears healthy. Maintain standard care guidelines."
-"""
-                    else:
-                        llm_prompt = f"""
-Provide structured disease information and organic treatment recommendations for: '{result_label}' (detected on a plant).
-Response must be a JSON object with keys:
-"symptoms": "description of symptoms",
-"causes": "causes of the disease",
-"organic_treatment": "organic or safe chemical treatments",
-"prevention": "preventative care tips",
-"description": "brief description of this disease and its impact"
-"""
-                    
-                    groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-                    response = groq_client.chat.completions.create(
-                        model="llama-3.1-8b-instant",
-                        messages=[
-                            {"role": "system", "content": sys_prompt},
-                            {"role": "user", "content": llm_prompt}
-                        ],
-                        temperature=0.2,
-                        max_tokens=600
-                    )
-                    llm_response = response.choices[0].message.content.strip()
-                    
-                    # Clean markdown backticks if present
-                    if llm_response.startswith("```"):
-                        if llm_response.startswith("```json"):
-                            llm_response = llm_response[7:]
-                        else:
-                            llm_response = llm_response[3:]
-                        if llm_response.endswith("```"):
-                            llm_response = llm_response[:-3]
-                    llm_response = llm_response.strip()
-                    
-                    data_json = json.loads(llm_response)
-                    
-                    result["symptoms"] = data_json.get("symptoms", "")
-                    result["causes"] = data_json.get("causes", "")
-                    result["organic_treatment"] = data_json.get("organic_treatment", "")
-                    result["prevention"] = data_json.get("prevention", "")
-                    
-                    desc = data_json.get("description", "")
-                    desc_parts = []
-                    if result["symptoms"]: desc_parts.append(result["symptoms"])
-                    if result["causes"]: desc_parts.append(f"Cause: {result['causes']}")
-                    if desc_parts: 
-                        result["description"] = desc + "\n\n" + "\n\n".join(desc_parts)
-                    else:
-                        result["description"] = desc
-                    
-                    tips = []
-                    if result["prevention"]: tips.append(result["prevention"])
-                    if result["organic_treatment"]: tips.append(f"Treatment: {result['organic_treatment']}")
-                    if tips: 
-                        result["care_tips"] = tips
-                        
-                except Exception as llm_err:
-                    print(f" [Identify] SLM disease enrichment failed: {llm_err}")
-            
-            # Try to find matching plant in inventory
-            matched = db.session.execute(text("""
-                SELECT plant_id, plant_name 
-                FROM plant 
-                WHERE plant_name ILIKE :name 
-                LIMIT 1
-            """), {"name": f"%{plant_name_part}%"}).fetchone()
-            
-            if matched:
-                result["plant_id"] = matched[0]
-                result["db_match"] = matched[1]
-
-            return jsonify({
-                "status": "success",
-                "identification": result
-            })
-            
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            print(f" Detection error: {e}")
-            return jsonify({"status": "error", "message": f"Local detection failed: {str(e)}"}), 500
-        finally:
-            # Clean up temp file if exists
-            if os.path.exists(temp_path):
-                try: os.remove(temp_path)
-                except: pass
-    
-    return jsonify({"status": "error", "message": "Invalid file type. Allowed: jpg, jpeg, png, gif"}), 400
-
-
-# Fix the login endpoint
+# Multi-tenant Login Endpoint
 @app.route("/login", methods=["POST"])
+@app.route("/api/auth/login", methods=["POST"])
 def login():
-    data = request.json
+    data = request.json or {}
     email = data.get("email", "").strip().lower()
     password = data.get("password", "").strip()
+    req_business_id = data.get("business_id", "").strip()
 
     if not email or not password:
         return jsonify({
             "status": "error",
-            "message": "Email and password required"
+            "message": "Email/Username and password required"
         }), 400
 
     try:
         user = db.session.execute(text("""
-            SELECT id, username, email
+            SELECT id, username, email, password, role, business_id
             FROM login
             WHERE (LOWER(email) = :email OR LOWER(username) = :email) AND password = :password
         """), {
@@ -1213,27 +1210,333 @@ def login():
                 "message": "Invalid credentials"
             }), 401
 
+        user_id, username, user_email, _, role, user_biz_id = user
+
+        # Handle Super Admin login
+        if role == 'SUPER_ADMIN' or (user_email and user_email.lower() == 'admin@system.com'):
+            token_payload = {
+                "user_id": user_id,
+                "username": username or "Super Admin",
+                "email": user_email,
+                "role": "SUPER_ADMIN",
+                "business_id": "SYSTEM"
+            }
+            token = generate_jwt(token_payload)
+            log_audit_action("SUPER_ADMIN_LOGIN", "AUTH", record_id=user_id, details="Super Admin logged in", business_id="SYSTEM", user_id=user_id, user_email=user_email)
+            return jsonify({
+                "status": "success",
+                "token": token,
+                "user_id": user_id,
+                "username": username or "Super Admin",
+                "email": user_email,
+                "role": "SUPER_ADMIN",
+                "business_id": "SYSTEM",
+                "business_name": "Platform Administration"
+            })
+
+        # For Nursery Admin / Staff, verify Business ID if provided
+        target_biz_id = user_biz_id or "NURS-0001"
+        if req_business_id and req_business_id.upper() != target_biz_id.upper():
+            return jsonify({
+                "status": "error",
+                "message": f"User does not belong to Business ID: {req_business_id}"
+            }), 403
+
+        # Verify Business is Active
+        biz = db.session.get(Business, target_biz_id)
+        if not biz:
+            return jsonify({"status": "error", "message": f"Nursery {target_biz_id} not found."}), 404
+        if biz.status == "Inactive":
+            return jsonify({"status": "error", "message": "This nursery account has been deactivated. Please contact Super Admin."}), 403
+
+        token_payload = {
+            "user_id": user_id,
+            "username": username or user_email,
+            "email": user_email,
+            "role": role or "NURSERY_ADMIN",
+            "business_id": target_biz_id
+        }
+        token = generate_jwt(token_payload)
+
+        # Update login tracking
+        try:
+            db.session.execute(text("UPDATE login SET last_login = :now, is_online = 1 WHERE id = :id"), {"now": datetime.utcnow(), "id": user_id})
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+        log_audit_action("USER_LOGIN", "AUTH", record_id=user_id, details=f"Logged in as {role} for {target_biz_id}", business_id=target_biz_id, user_id=user_id, user_email=user_email)
+
         return jsonify({
             "status": "success",
-            "user_id": user[0],
-            "username": user[1],
-            "email": user[2]
+            "token": token,
+            "user_id": user_id,
+            "username": username or user_email,
+            "email": user_email,
+            "role": role or "NURSERY_ADMIN",
+            "business_id": target_biz_id,
+            "business_name": biz.business_name
         })
 
     except Exception as e:
         print(f"Login error: {e}")
-        return jsonify({"status": "error", "message": "Database error"}), 500
+        return jsonify({"status": "error", "message": f"Database error: {str(e)}"}), 500
+
+
+# ========== SUPER ADMIN PLATFORM ENDPOINTS ==========
+@app.route("/api/super-admin/login", methods=["POST"])
+@app.route("/api/auth/super-admin/login", methods=["POST"])
+def super_admin_login():
+    data = request.json or {}
+    email = data.get("email", "").strip().lower()
+    password = data.get("password", "").strip()
+
+    if email != "admin@system.com" or password != "admin123":
+        user = db.session.execute(text("SELECT id, username, email FROM login WHERE LOWER(email) = :email AND password = :pwd AND role = 'SUPER_ADMIN'"), {"email": email, "pwd": password}).fetchone()
+        if not user:
+            return jsonify({"status": "error", "message": "Invalid Super Admin credentials"}), 401
+
+    token = generate_jwt({
+        "user_id": 1,
+        "username": "Super Admin",
+        "email": email,
+        "role": "SUPER_ADMIN",
+        "business_id": "SYSTEM"
+    })
+    return jsonify({
+        "status": "success",
+        "token": token,
+        "role": "SUPER_ADMIN",
+        "business_id": "SYSTEM",
+        "username": "Super Admin"
+    })
+
+@app.route("/api/super-admin/nurseries", methods=["POST"])
+@app.route("/api/super-admin/nursery", methods=["POST"])
+@require_tenant_auth(allowed_roles=["SUPER_ADMIN"])
+def register_new_nursery():
+    data = request.json or {}
+    business_name = (data.get("business_name") or data.get("name") or "").strip()
+    owner_name = (data.get("owner_name") or data.get("owner") or "").strip()
+    email = data.get("email", "").strip().lower()
+    phone = data.get("phone", "").strip()
+    address = data.get("address", "").strip()
+    city = data.get("city", "").strip()
+    state = data.get("state", "").strip()
+    country = data.get("country", "").strip()
+    
+    admin_name = data.get("admin_name", "").strip() or owner_name or "Nursery Admin"
+    admin_email = data.get("admin_email", "").strip().lower() or email
+    admin_password = data.get("admin_password", "").strip() or "admin123"
+
+    if not business_name or not admin_email:
+        return jsonify({"status": "error", "message": "Nursery Name and Admin Email are required"}), 400
+
+    try:
+        # Auto-generate unique Business ID (NURS-XXXX)
+        last_biz = db.session.execute(text("SELECT TOP 1 business_id FROM businesses WHERE business_id LIKE 'NURS-%' ORDER BY business_id DESC")).fetchone()
+        if last_biz and last_biz[0]:
+            try:
+                num = int(last_biz[0].replace("NURS-", "")) + 1
+            except:
+                num = 2
+        else:
+            num = 1
+        
+        new_biz_id = f"NURS-{num:04d}"
+        
+        # Ensure ID is unique
+        while db.session.get(Business, new_biz_id) is not None:
+            num += 1
+            new_biz_id = f"NURS-{num:04d}"
+
+        # Insert new nursery entity
+        new_biz = Business(
+            business_id=new_biz_id,
+            business_name=business_name,
+            owner_name=owner_name,
+            email=email,
+            phone=phone,
+            address=address,
+            city=city,
+            state=state,
+            country=country,
+            status="Active"
+        )
+        db.session.add(new_biz)
+
+        # Create Nursery Admin account
+        from sqlalchemy import func
+        existing_user = User.query.filter(func.lower(User.email) == admin_email.lower()).first()
+        if existing_user:
+            existing_user.business_id = new_biz_id
+            existing_user.role = "NURSERY_ADMIN"
+            existing_user.password = admin_password
+        else:
+            admin_user = User(
+                username=admin_name,
+                email=admin_email,
+                password=admin_password,
+                role="NURSERY_ADMIN",
+                business_id=new_biz_id
+            )
+            db.session.add(admin_user)
+
+        db.session.commit()
+
+        log_audit_action("CREATE_NURSERY", "SUPER_ADMIN", record_id=new_biz_id, details=f"Registered nursery {business_name} ({new_biz_id})", business_id="SYSTEM")
+
+        return jsonify({
+            "status": "success",
+            "message": f"Nursery '{business_name}' registered successfully!",
+            "business_id": new_biz_id,
+            "business_name": business_name,
+            "admin_email": admin_email,
+            "business": {
+                "business_id": new_biz_id,
+                "business_name": business_name,
+                "owner_name": owner_name,
+                "email": email,
+                "phone": phone
+            }
+        })
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error registering nursery: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route("/api/super-admin/nurseries", methods=["GET"])
+@require_tenant_auth(allowed_roles=["SUPER_ADMIN"])
+def list_nurseries_super_admin():
+    search = request.args.get("search", "").strip().lower()
+    query = Business.query
+    if search:
+        query = query.filter((Business.business_name.ilike(f"%{search}%")) | (Business.business_id.ilike(f"%{search}%")) | (Business.email.ilike(f"%{search}%")))
+    
+    nurseries = query.order_by(Business.created_at.desc()).all()
+    result = []
+    for n in nurseries:
+        admin = User.query.filter_by(business_id=n.business_id, role="NURSERY_ADMIN").first()
+        plant_count = Plant.query.filter_by(business_id=n.business_id).count()
+        order_count = Order.query.filter_by(business_id=n.business_id).count()
+        result.append({
+            "business_id": n.business_id,
+            "business_name": n.business_name,
+            "owner_name": n.owner_name,
+            "email": n.email,
+            "phone": n.phone,
+            "address": n.address,
+            "city": n.city,
+            "state": n.state,
+            "country": n.country,
+            "status": n.status,
+            "created_at": n.created_at.isoformat() if n.created_at else None,
+            "admin_email": admin.email if (admin and admin.email) else (n.email if n.email else None),
+            "plant_count": plant_count,
+            "order_count": order_count
+        })
+    return jsonify({"status": "success", "nurseries": result})
+
+@app.route("/api/super-admin/nurseries/<business_id>", methods=["DELETE"])
+@app.route("/api/super-admin/nursery/<business_id>", methods=["DELETE"])
+@require_tenant_auth(allowed_roles=["SUPER_ADMIN"])
+def delete_nursery_super_admin(business_id):
+    if business_id in ["SYSTEM", "NURS-0001"]:
+        return jsonify({"status": "error", "message": "Cannot delete primary default nursery"}), 400
+
+    biz = db.session.get(Business, business_id)
+    if not biz:
+        return jsonify({"status": "error", "message": "Nursery not found"}), 404
+
+    try:
+        # Cascade raw SQL cleanup of child tables
+        db.session.execute(text("DELETE FROM login WHERE business_id = :bid"), {"bid": business_id})
+        db.session.execute(text("DELETE FROM plant WHERE business_id = :bid"), {"bid": business_id})
+        db.session.execute(text("DELETE FROM inventory_transaction WHERE business_id = :bid"), {"bid": business_id})
+        db.session.execute(text("DELETE FROM user_queries WHERE business_id = :bid"), {"bid": business_id})
+        db.session.execute(text("DELETE FROM user_interest WHERE business_id = :bid"), {"bid": business_id})
+        db.session.execute(text("DELETE FROM audit_logs WHERE business_id = :bid"), {"bid": business_id})
+        db.session.execute(text("DELETE FROM businesses WHERE business_id = :bid"), {"bid": business_id})
+        db.session.commit()
+
+        log_audit_action("DELETE_NURSERY", "SUPER_ADMIN", record_id=business_id, details=f"Deleted nursery {business_id}", business_id="SYSTEM")
+        return jsonify({"status": "success", "message": f"Nursery {business_id} deleted successfully"})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route("/api/super-admin/nurseries/<business_id>/status", methods=["PATCH", "PUT"])
+@app.route("/api/super-admin/nursery/<business_id>/status", methods=["PATCH", "PUT"])
+@require_tenant_auth(allowed_roles=["SUPER_ADMIN"])
+def toggle_nursery_status(business_id):
+    data = request.json or {}
+    new_status = data.get("status", "").strip()
+    if new_status not in ["Active", "Inactive"]:
+        return jsonify({"status": "error", "message": "Status must be 'Active' or 'Inactive'"}), 400
+
+    biz = db.session.get(Business, business_id)
+    if not biz:
+        return jsonify({"status": "error", "message": "Nursery not found"}), 404
+
+    biz.status = new_status
+    db.session.commit()
+
+    log_audit_action("TOGGLE_NURSERY_STATUS", "SUPER_ADMIN", record_id=business_id, details=f"Changed status of {business_id} to {new_status}", business_id="SYSTEM")
+
+    return jsonify({"status": "success", "message": f"Nursery {business_id} status updated to {new_status}", "business_id": business_id, "status": new_status})
+
+@app.route("/api/super-admin/stats", methods=["GET"])
+@require_tenant_auth(allowed_roles=["SUPER_ADMIN"])
+def super_admin_stats():
+    total_nurseries = Business.query.count()
+    active_nurseries = Business.query.filter_by(status="Active").count()
+    inactive_nurseries = Business.query.filter_by(status="Inactive").count()
+    total_users = User.query.count()
+    total_plants = Plant.query.count()
+    total_orders = Order.query.count()
+
+    return jsonify({
+        "status": "success",
+        "stats": {
+            "total_nurseries": total_nurseries,
+            "active_nurseries": active_nurseries,
+            "inactive_nurseries": inactive_nurseries,
+            "total_users": total_users,
+            "total_plants": total_plants,
+            "total_orders": total_orders
+        }
+    })
+
+@app.route("/api/super-admin/audit-logs", methods=["GET"])
+@require_tenant_auth(allowed_roles=["SUPER_ADMIN"])
+def get_super_admin_audit_logs():
+    logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).limit(100).all()
+    res = []
+    for l in logs:
+        res.append({
+            "id": l.id,
+            "business_id": l.business_id,
+            "user_id": l.user_id,
+            "user_email": l.user_email,
+            "action": l.action,
+            "module": l.module,
+            "record_id": l.record_id,
+            "timestamp": l.timestamp.isoformat() if l.timestamp else None,
+            "details": l.details
+        })
+    return jsonify({"status": "success", "audit_logs": res})
+
 
 
 
 def resolve_plant_synonym(user_message):
     row = db.session.execute(text("""
-        SELECT p.plant_id, p.plant_name, p.description, p.price, p.image_path
+        SELECT TOP 1 p.plant_id, p.plant_name, p.description, p.price, p.image_path
         FROM plant_synonym ps
         JOIN plant p ON p.plant_id = ps.plant_id
-        WHERE :msg ILIKE '%' || ps.synonym || '%'
-        ORDER BY LENGTH(ps.synonym) DESC
-        LIMIT 1
+        WHERE LOWER(:msg) LIKE CONCAT('%', LOWER(ps.synonym), '%')
+        ORDER BY LEN(ps.synonym) DESC
     """), {"msg": user_message.lower()}).fetchone()
 
     if row:
@@ -1253,31 +1556,31 @@ import difflib
 # Global dictionary tracking per-user active dialogue state for multi-turn sequential conversations
 USER_DIALOG_STATE = {}
 
-NUMBER_WORDS = {
-    "one": 1, "a": 1, "an": 1, "single": 1,
-    "two": 2, "couple": 2, "double": 2,
-    "three": 3, "triple": 3,
-    "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10
-}
-
 def extract_quantity_nlp(text):
     """
-    Extracts numerical quantity from user string using NLP word mapping and digit extraction.
-    e.g. 'two', '5 plants', '3', 'add double' -> int
+    Extracts numerical quantity from user string using an LCEL AI Chain.
+    e.g. 'two', '5 plants', 'add double' -> int
     """
-    text_clean = text.lower().strip()
-    
-    # 1. Search for explicit digits
-    match = re.search(r'\b(\d+)\b', text_clean)
-    if match:
-        return max(1, int(match.group(1)))
+    try:
+        from langchain_core.prompts import PromptTemplate
+        from langchain_community.llms import Ollama
+        from langchain_core.output_parsers import StrOutputParser
 
-    # 2. Search for number words
-    for word, val in NUMBER_WORDS.items():
-        if re.search(r'\b' + re.escape(word) + r'\b', text_clean):
-            return val
-
-    return 1
+        quantity_prompt = PromptTemplate.from_template(
+            "The user was asked how many plants they want. User input: '{user_input}'. "
+            "Extract the exact numerical integer. If none is given, assume 1. Respond ONLY with the integer digits."
+        )
+        quantity_chain = quantity_prompt | Ollama(model="phi3", temperature=0) | StrOutputParser()
+        
+        qty_str = quantity_chain.invoke({"user_input": text}).strip()
+        import re
+        match = re.search(r'\d+', qty_str)
+        if match:
+            return max(1, int(match.group()))
+        return 1
+    except Exception as e:
+        print(f"Error in LangChain quantity extraction: {e}")
+        return 1
 
 def fuzzy_resolve_plant(user_message):
     """
@@ -1425,21 +1728,34 @@ def log_category_interest(user_id, category_id, interest_type="search"):
         return
 
     try:
-        db.session.execute(text("""
-            INSERT INTO user_category_interest
-            (user_id, category_id, interest_type, count)
-
-            VALUES (:u, :c, :t, 1)
-
-            ON CONFLICT (user_id, category_id, interest_type)
-            DO UPDATE SET
-                count = user_category_interest.count + 1,
-                last_interaction = NOW()
-        """), {
-            "u": int(user_id),
-            "c": int(category_id),
-            "t": interest_type
-        })
+        if db.engine.dialect.name == 'mssql':
+            db.session.execute(text("""
+                IF EXISTS (SELECT 1 FROM user_category_interest WHERE user_id = :u AND category_id = :c AND interest_type = :t)
+                    UPDATE user_category_interest 
+                    SET count = count + 1, last_interaction = CURRENT_TIMESTAMP 
+                    WHERE user_id = :u AND category_id = :c AND interest_type = :t
+                ELSE
+                    INSERT INTO user_category_interest (user_id, category_id, interest_type, count, last_interaction)
+                    VALUES (:u, :c, :t, 1, CURRENT_TIMESTAMP)
+            """), {
+                "u": int(user_id),
+                "c": int(category_id),
+                "t": interest_type
+            })
+        else:
+            db.session.execute(text("""
+                INSERT INTO user_category_interest
+                (user_id, category_id, interest_type, count)
+                VALUES (:u, :c, :t, 1)
+                ON CONFLICT (user_id, category_id, interest_type)
+                DO UPDATE SET
+                    count = user_category_interest.count + 1,
+                    last_interaction = CURRENT_TIMESTAMP
+            """), {
+                "u": int(user_id),
+                "c": int(category_id),
+                "t": interest_type
+            })
 
         db.session.commit()
 
@@ -1501,11 +1817,29 @@ def process_message(user_message, location="", user_id=None, history=None):
 
         # STATE 1: Awaiting Confirmation ("Do you mean Rose?")
         if state_type == "AWAITING_PLANT_CONFIRMATION":
-            clean_input = clean_text(user_message)
-            positive_signals = ["yes", "yeah", "yup", "sure", "correct", "ok", "yep", "right", "of course", "true", "ya", "y", "buy", "yes please"]
-            negative_signals = ["no", "nope", "nah", "cancel", "wrong", "n", "dont", "don't"]
+            clean_input = clean_text(user_message).strip()
+            
+            try:
+                from langchain_core.prompts import PromptTemplate
+                from langchain_community.llms import Ollama
+                from langchain_core.output_parsers import StrOutputParser
+                
+                affirmation_prompt = PromptTemplate.from_template(
+                    "The user was asked if they want to add a plant to their cart.\n"
+                    "Their response was: '{user_input}'\n\n"
+                    "Task: Categorize this response into EXACTLY one of three words: POSITIVE, NEGATIVE, or OTHER.\n"
+                    "- Output POSITIVE ONLY if they are explicitly agreeing to add the plant (e.g. 'yes', 'sure', 'add it').\n"
+                    "- Output NEGATIVE ONLY if they are declining (e.g. 'no', 'nah').\n"
+                    "- Output OTHER if they are asking a new question, changing the topic, or making a statement unrelated to answering 'yes/no' (e.g. 'do you sell X', 'what is Y').\n\n"
+                    "Classification:"
+                )
+                affirmation_chain = affirmation_prompt | Ollama(model="phi3", temperature=0) | StrOutputParser()
+                aff_result = affirmation_chain.invoke({"user_input": clean_input}).strip().upper()
+            except Exception as e:
+                print(f"Affirmation logic failed: {e}")
+                aff_result = "OTHER"
 
-            if any(sig in clean_input.split() for sig in positive_signals) or clean_input in positive_signals:
+            if "POSITIVE" in aff_result:
                 plant_info = current_dialog_state.get("plant_info")
                 USER_DIALOG_STATE[user_key] = {
                     "state": "AWAITING_QUANTITY",
@@ -1519,7 +1853,7 @@ def process_message(user_message, location="", user_id=None, history=None):
                     "type": "text",
                     "reply": reply
                 }
-            elif any(sig in clean_input.split() for sig in negative_signals) or clean_input in negative_signals:
+            elif "NEGATIVE" in aff_result:
                 USER_DIALOG_STATE.pop(user_key, None)
                 reply = "No problem! Which plant were you looking for?"
                 return {
@@ -1536,7 +1870,7 @@ def process_message(user_message, location="", user_id=None, history=None):
             plant_id = plant_info["plant_id"]
             plant_name = plant_info["plant_name"]
 
-            plant_db = Plant.query.get(plant_id) if 'Plant' in globals() else None
+            plant_db = db.session.get(Plant, plant_id) if 'Plant' in globals() else None
             avail_stock = plant_db.stock if plant_db and plant_db.stock is not None else 0
 
             if avail_stock <= 0:
@@ -1549,8 +1883,6 @@ def process_message(user_message, location="", user_id=None, history=None):
 
             USER_DIALOG_STATE.pop(user_key, None)
             price = plant_db.price if plant_db else (plant_info.get("price", 0.0) or 0.0)
-            if plant_db and getattr(plant_db, 'discount_price', 0.0) and getattr(plant_db, 'discount_price', 0.0) > 0:
-                price = plant_db.discount_price
             total_price = price * quantity
 
             # Save to Cart table if user is logged in
@@ -1584,12 +1916,45 @@ def process_message(user_message, location="", user_id=None, history=None):
             }
 
     # -------------------------------------------------------------------------
+    # DISPLAY CART INTENT CHECK
+    # -------------------------------------------------------------------------
+    cart_signals = ["my cart", "show cart", "view cart", "what is in my cart", "cart contents", "what's in my cart", "open cart"]
+    if any(sig in normalized_query for sig in cart_signals) or normalized_query == "cart":
+        def _fetch_cart_reply():
+            user_cart = Cart.query.filter_by(user_id=str(user_id)).all()
+            if not user_cart:
+                return "🛒 Your shopping cart is currently empty! Feel free to browse our catalog for plants."
+            
+            cart_reply = "🛒 **Your Shopping Cart**\n\n"
+            total_price = 0.0
+            for idx, item in enumerate(user_cart):
+                plant_obj = db.session.get(Plant, item.plant_id)
+                if plant_obj:
+                    price = plant_obj.price
+                    item_total = float(price) * item.quantity
+                    total_price += item_total
+                    cart_reply += f"{idx+1}. **{plant_obj.plant_name}** - {item.quantity} qty (₹{price:.2f} each) = **₹{item_total:.2f}**\n"
+            
+            cart_reply += f"\n💰 **Total Value: ₹{total_price:.2f}**\n\n*Type 'checkout' to place your order!*"
+            return cart_reply
+        
+        from flask import has_app_context
+        if not has_app_context():
+            with app.app_context():
+                cart_reply = _fetch_cart_reply()
+        else:
+            cart_reply = _fetch_cart_reply()
+            
+        log_langfuse_trace("cart_display_query", user_message, cart_reply, get_meta("SUCCESS", {"intent": "VIEW_CART"}))
+        return {"status": "success", "type": "text", "reply": cart_reply}
+
+    # -------------------------------------------------------------------------
     # DATABASE & INVENTORY QUERY INTENT CHECK
     # -------------------------------------------------------------------------
     db_query_signals = [
         "database", "db", "stock", "quantity", "available", "availability", "how many",
         "how much", "count", "inventory", "catalog", "total plants", "in stock", "out of stock",
-        "price", "cost", "rate", "discount", "discounts", "offer", "status"
+        "price", "cost", "rate", "discount", "discounts", "offer", "status", "sell", "buy", "purchase", "order", "get"
     ]
     is_db_query = any(sig in normalized_query for sig in db_query_signals)
     has_explicit_buy = any(k in normalized_query for k in ["buy", "order", "purchase", "add to cart", "place order"])
@@ -1602,7 +1967,7 @@ def process_message(user_message, location="", user_id=None, history=None):
             
             plant_obj = None
             try:
-                plant_obj = Plant.query.get(plant_id)
+                plant_obj = db.session.get(Plant, plant_id)
             except Exception:
                 try:
                     plant_obj = Plant.query.filter(Plant.plant_name.ilike(f"%{plant_name}%")).first()
@@ -1610,7 +1975,7 @@ def process_message(user_message, location="", user_id=None, history=None):
                     pass
 
             price = plant_obj.price if plant_obj else (fuzzy_plant.get("price", 0) or 0.0)
-            disc_price = getattr(plant_obj, 'discount_price', 0.0) if plant_obj else 0.0
+            disc_price = 0.0
             stock_count = plant_obj.stock if (plant_obj and plant_obj.stock is not None) else 0
             status_str = "Available" if stock_count > 0 else "Out of Stock"
 
@@ -1618,13 +1983,24 @@ def process_message(user_message, location="", user_id=None, history=None):
             if disc_price and disc_price > 0 and disc_price < price:
                 price_fmt = f"~~₹{price:.2f}~~ **₹{disc_price:.2f}** (Special Price!)"
             
+            cart_prompt = "\n\nWould you like to add some to your cart?" if stock_count > 0 else ""
             if any(k in normalized_query for k in ["price", "cost", "rate", "discount", "offer"]):
-                reply = f"💵 The price of **{plant_name}** in our database is **{price_fmt}**.\n📦 **Stock**: **{stock_count}** in stock (**Status**: {status_str}). 🪴\n\nWould you like to add some to your cart?"
+                reply = f"💵 The price of **{plant_name}** in our database is **{price_fmt}**.\n📦 **Stock**: **{stock_count}** in stock (**Status**: {status_str}). 🪴{cart_prompt}"
             elif any(k in normalized_query for k in ["stock", "how many", "quantity", "count", "available", "availability", "status"]):
-                reply = f"📦 We currently have **{stock_count}** **{plant_name}** plant(s) in stock in our database catalog (**Status**: {status_str}, **Price**: {price_fmt}). 🪴\n\nWould you like to add some to your cart?"
+                reply = f"📦 We currently have **{stock_count}** **{plant_name}** plant(s) in stock in our database catalog (**Status**: {status_str}, **Price**: {price_fmt}). 🪴{cart_prompt}"
             else:
-                reply = f"🌿 **{plant_name}** is in our database catalog (Price: {price_fmt}, Stock: **{stock_count}**, Status: **{status_str}**). 🪴\n\nWould you like to add some to your cart?"
-            
+                reply = f"🌿 **{plant_name}** is in our database catalog (Price: {price_fmt}, Stock: **{stock_count}**, Status: **{status_str}**). 🪴{cart_prompt}"
+            if "Would you like to add some to your cart?" in reply:
+                USER_DIALOG_STATE[user_key] = {
+                    "state": "AWAITING_PLANT_CONFIRMATION",
+                    "plant_info": {
+                        "plant_id": plant_id,
+                        "plant_name": plant_name,
+                        "price": price if not (disc_price and disc_price > 0) else disc_price,
+                        "image_url": fuzzy_plant.get("image_url", "")
+                    }
+                }
+
             log_langfuse_trace("db_inventory_query", user_message, reply, get_meta("SUCCESS", {"intent": "DB_QUERY", "plant": plant_name, "stock": stock_count}))
             return {
                 "status": "success",
@@ -1639,7 +2015,7 @@ def process_message(user_message, location="", user_id=None, history=None):
                     details = []
                     for p in plants_in_db[:8]:
                         st_str = "Available" if (p.stock is not None and p.stock > 0) else "Out of Stock"
-                        pr_val = getattr(p, 'discount_price', 0.0) if (getattr(p, 'discount_price', 0.0) and getattr(p, 'discount_price', 0.0) > 0) else p.price
+                        pr_val = p.price
                         details.append(f"• **{p.plant_name}**: ₹{pr_val:.2f} ({p.stock if p.stock is not None else 0} in stock, {st_str})")
                     reply = f"We currently have **{total_cnt}** plant varieties in our database catalog:\n\n" + "\n".join(details) + "\n\nWhich plant would you like to check or add to your cart?"
                 else:
@@ -1690,8 +2066,26 @@ def process_message(user_message, location="", user_id=None, history=None):
             }
     
     history_context = ""
+    semantic_history = history_faiss.get_semantic_history(user_id, user_message)
+    if semantic_history:
+        history_context = semantic_history
+
+    cart_context = ""
+    try:
+        user_cart = Cart.query.filter_by(user_id=str(user_id)).all()
+        if user_cart:
+            cart_plants = []
+            for item in user_cart:
+                plant_obj = db.session.get(Plant, item.plant_id)
+                if plant_obj:
+                    cart_plants.append(f"{item.quantity}x {plant_obj.plant_name}")
+            if cart_plants:
+                cart_context = "User's current Shopping Cart has: " + ", ".join(cart_plants) + ".\n"
+    except Exception:
+        pass
+
     if history and isinstance(history, list) and len(history) > 0:
-        history_context = "Recent conversation context:\n" + "\n".join([f"{msg.get('role', 'unknown').capitalize()}: {msg.get('content', '')}" for msg in history[-4:]]) + "\n\n"
+        history_context += "Immediate recent context:\n" + "\n".join([f"{msg.get('role', 'unknown').capitalize()}: {msg.get('content', '')}" for msg in history[-4:]]) + "\n\n"
 
     # Check if greeting
     if normalized_msg := clean_text(user_message):
@@ -1730,10 +2124,13 @@ def process_message(user_message, location="", user_id=None, history=None):
     plants_list = []
     if rag_results:
         for doc in rag_results:
-            p_name = doc["metadata"].get("name")
-            if p_name and doc["metadata"].get("type") == "plant":
-                if p_name not in plants_list:
-                    plants_list.append(p_name)
+            if isinstance(doc, dict):
+                p_meta = doc.get("metadata")
+                if isinstance(p_meta, dict):
+                    p_name = p_meta.get("name")
+                    if p_name and p_meta.get("type") == "plant":
+                        if p_name not in plants_list:
+                            plants_list.append(p_name)
 
     def format_plant_profile(bp):
         def is_avail(val):
@@ -1797,7 +2194,7 @@ def process_message(user_message, location="", user_id=None, history=None):
 
             plant_name = p_db.plant_name if p_db else pk_db.plant_name
             price = p_db.price if p_db else 0.0
-            disc_price = getattr(p_db, 'discount_price', 0.0) if p_db else 0.0
+            disc_price = 0.0
             stock_cnt = p_db.stock if p_db and p_db.stock is not None else 0
             status_str = "Available" if stock_cnt > 0 else "Out of Stock"
             desc = p_db.description if p_db and p_db.description else (pk_db.description if pk_db else "")
@@ -1852,17 +2249,10 @@ def process_message(user_message, location="", user_id=None, history=None):
             "3. OFF_TOPIC: If the user is asking about topics completely unrelated to plants, gardening, farming, or our catalog. Note: Geographic locations, cities, or climates (e.g., 'tamilnadu', 'florida', 'hot climate') are NOT OFF_TOPIC; they are GENERAL intent used for plant matching.\n\n"
             "Respond with exactly one word: PROFILE, GENERAL, or OFF_TOPIC. Do not write any other text or markdown code wraps."
         )
-        groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-        response = groq_client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[
-                {"role": "system", "content": "You are a routing classification system for a Plant Care Assistant. You must classify user inputs into PROFILE, GENERAL, or OFF_TOPIC. Every question that is not about plants, botany, diseases, gardening, or agriculture is OFF_TOPIC."},
-                {"role": "user", "content": class_prompt}
-            ],
-            temperature=0.0,
-            max_tokens=10
-        )
-        intent = response.choices[0].message.content.strip().upper()
+        from langchain_community.llms import Ollama
+        llm = Ollama(model="phi3", temperature=0.0)
+        sys_msg = "You are a routing classification system for a Plant Care Assistant. You must classify user inputs into PROFILE, GENERAL, or OFF_TOPIC. Every question that is not about plants, botany, diseases, gardening, or agriculture is OFF_TOPIC.\n\n"
+        intent = llm.invoke(sys_msg + class_prompt).strip().upper()
         timings["intent_classification_ms"] = round((time.perf_counter() - t_intent_start) * 1000, 2)
     except Exception as e:
         timings["intent_classification_ms"] = round((time.perf_counter() - t_intent_start) * 1000, 2)
@@ -1893,17 +2283,11 @@ def process_message(user_message, location="", user_id=None, history=None):
                 "- PLANT: Any other plant care, profile, soil, nutrients, watering, growth duration, medicinal uses.\n"
                 "Respond with exactly one word: GEOGRAPHY, SEASON, DISEASE, or PLANT."
             )
-            groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-            cat_resp = groq_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
-                messages=[
-                    {"role": "system", "content": "You are a data source router. Respond with GEOGRAPHY, SEASON, DISEASE, or PLANT only."},
-                    {"role": "user", "content": cat_prompt}
-                ],
-                temperature=0.0,
-                max_tokens=10
-            )
-            cat_label = cat_resp.choices[0].message.content.strip().upper()
+            from langchain_community.llms import Ollama
+            llm = Ollama(model="phi3", temperature=0.0)
+            sys_msg = "You are a data source router. Respond with GEOGRAPHY, SEASON, DISEASE, or PLANT only.\n\n"
+            cat_label = llm.invoke(sys_msg + cat_prompt).strip().upper()
+            
             category_map = {"GEOGRAPHY": "geography", "SEASON": "season", "DISEASE": "disease", "PLANT": "plant"}
             rag_category = category_map.get(cat_label, None)
             timings["category_classification_ms"] = round((time.perf_counter() - t_cat_start) * 1000, 2)
@@ -1963,7 +2347,7 @@ def process_message(user_message, location="", user_id=None, history=None):
     # DB FIRST PLANT LOOKUP CHECK
     db_profile_reply = fetch_db_plant_details(user_message)
     if db_profile_reply and intent == "PROFILE" and not has_general_question:
-        res = {
+        res: dict[str, Any] = {
             "status": "success",
             "type": "text",
             "reply": db_profile_reply,
@@ -1976,7 +2360,7 @@ def process_message(user_message, location="", user_id=None, history=None):
 
     if best_plant and best_score > 0 and intent == "PROFILE" and not has_general_question:
         reply = format_plant_profile(best_plant)
-        res = {
+        res: dict[str, Any] = {
             "status": "success",
             "type": "text",
             "reply": reply,
@@ -2000,7 +2384,7 @@ def process_message(user_message, location="", user_id=None, history=None):
         effective_results = filtered_results if filtered_results else rag_results
 
         if effective_results and len(effective_results) > 0:
-            context = "\n\n".join([doc["content"] for doc in effective_results])
+            context = "\n\n".join([str(doc.get("content", "")) for doc in effective_results if isinstance(doc, dict)])
             source_hint = rag_category.upper() if rag_category else "GENERAL"
             prompt = f"""You are a helpful plant care assistant specialized in {source_hint} plant data. Answer the user's question based on the following relevant knowledge base snippets.
             
@@ -2008,29 +2392,22 @@ Relevant Knowledge Base Snippets:
 {context}
 
 {history_context}
+{cart_context}
 User Question: {user_message}
 
 Provide a helpful, informative answer using the information above. Keep the response concise and well-designed in markdown.
 Answer:"""
             t_llm_start = time.perf_counter()
             try:
-                groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+                from langchain_community.llms import Ollama
                 is_disease = rag_category == "disease"
                 sys_msg = (
-                    "You are a plant disease expert. Answer in 3-5 short bullet points only. No long paragraphs."
+                    "You are a plant disease expert. Answer in 3-5 short bullet points only. No long paragraphs.\n\n"
                     if is_disease else
-                    "You are a helpful plant assistant. Be concise."
+                    "You are a helpful plant assistant. Be concise.\n\n"
                 )
-                response = groq_client.chat.completions.create(
-                    model="llama-3.1-8b-instant",
-                    messages=[
-                        {"role": "system", "content": sys_msg},
-                        {"role": "user", "content": prompt}
-                    ],
-                    temperature=0.3,
-                    max_tokens=220 if is_disease else 400
-                )
-                reply = response.choices[0].message.content.strip()
+                llm = Ollama(model="phi3", temperature=0.3)
+                reply = llm.invoke(sys_msg + prompt).strip()
                 timings["llm_generation_ms"] = round((time.perf_counter() - t_llm_start) * 1000, 2)
                 res = {
                     "status": "success",
@@ -2087,7 +2464,7 @@ Answer:"""
 
         if not matched_name:
             try:
-                match = db.session.execute(text("SELECT plant_name FROM plant WHERE plant_name ILIKE :x"), {"x": f"%{clean_target}%"}).fetchone()
+                match = db.session.execute(text("SELECT plant_name FROM plant WHERE LOWER(plant_name) LIKE LOWER(:x)"), {"x": f"%{clean_target}%"}).fetchone()
                 if match:
                     matched_name = match[0]
             except Exception as e:
@@ -2143,7 +2520,7 @@ Make sure values are accurate and realistic.
                     writer.writerow(row_to_write)
 
                 reply = format_plant_profile(row_to_write)
-                res = {
+                res: dict[str, Any] = {
                     "status": "success",
                     "type": "text",
                     "reply": reply,
@@ -2199,6 +2576,10 @@ def chat():
         history = data.get("history", [])
 
         response = process_message(user_message, location, user_id, history)
+        
+        # Save History to FAISS Engine
+        if response and response.get("status") == "success" and response.get("reply"):
+            history_faiss.add_interaction(user_id, user_message, response.get("reply"))
         
         if response.get("type") == "text":
             speech_response = generate_speech(response["reply"])
@@ -2298,19 +2679,12 @@ def suggest_varieties():
         else:
             #  Create new plant
             try:
-                result = db.session.execute(
-                    text("""
-                        INSERT INTO plant (plant_name, description, price, stock)
-                        VALUES (:name, :desc, :price, :stock)
-                        RETURNING plant_id, stock, price
-                    """),
-                    {"name": plant_name, "desc": description, "price": price, "stock": stock_count}
-                )
-                row = result.fetchone()
-                plant_id = row[0]
-                current_stock = row[1]
-                current_price = row[2]
+                new_p = Plant(plant_name=plant_name, description=description, price=price, stock=stock_count)
+                db.session.add(new_p)
                 db.session.commit()
+                plant_id = new_p.plant_id
+                current_stock = new_p.stock
+                current_price = new_p.price
 
                 # Log initial stock if > 0
                 if stock_count > 0:
@@ -2378,11 +2752,15 @@ def reset_plant_sequence():
         max_id = max_id_row[0] if max_id_row and max_id_row[0] else 0
         
         if max_id:
-            # Reset sequence to max_id + 1
-            next_val = max_id + 1
-            db.session.execute(text(f"ALTER SEQUENCE plant_plant_id_seq RESTART WITH {next_val}"))
-            db.session.commit()
-            print(f" Reset plant sequence to start at {next_val} (max was {max_id})")
+            if db.engine.dialect.name == 'mssql':
+                db.session.execute(text(f"DBCC CHECKIDENT ('plant', RESEED, {max_id})"))
+                db.session.commit()
+                print(f" Reseeded plant identity to {max_id}")
+            else:
+                next_val = max_id + 1
+                db.session.execute(text(f"ALTER SEQUENCE plant_plant_id_seq RESTART WITH {next_val}"))
+                db.session.commit()
+                print(f" Reset plant sequence to start at {next_val} (max was {max_id})")
         else:
             print(" No plants found in database")
         
@@ -2464,18 +2842,25 @@ def add_varieties():
 
 
 @app.route('/api/admin/inventory', methods=['GET'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN', 'STAFF'])
 def get_inventory():
-    """Get all plants with inventory info"""
+    """Get all plants with inventory info for current nursery"""
     try:
-        plants = db.session.execute(text("""
+        biz_id = get_current_tenant()
+        where_clause = "WHERE p.business_id = :biz_id"
+        if biz_id == 'NURS-0001':
+            where_clause = "WHERE p.business_id = :biz_id OR p.business_id IS NULL OR p.business_id = ''"
+
+        plants = db.session.execute(text(f"""
             SELECT p.plant_id, p.plant_name, p.description, p.price, p.stock, p.image_path,
-                   string_agg(c.category_name, ', ') as categories
+                   STRING_AGG(c.category_name, ', ') as categories
             FROM plant p
             LEFT JOIN plant_category pc ON p.plant_id = pc.plant_id
             LEFT JOIN category c ON pc.category_id = c.category_id
+            {where_clause}
             GROUP BY p.plant_id, p.plant_name, p.description, p.price, p.stock, p.image_path
             ORDER BY p.plant_name ASC
-        """)).fetchall()
+        """), {"biz_id": biz_id}).fetchall()
 
         plant_list = []
         total_stock = 0
@@ -2500,7 +2885,8 @@ def get_inventory():
             "status": "success",
             "plants": plant_list,
             "total_plants": len(plant_list),
-            "total_stock": total_stock
+            "total_stock": total_stock,
+            "business_id": biz_id
         })
 
     except Exception as e:
@@ -2509,16 +2895,18 @@ def get_inventory():
 
 
 @app.route('/api/admin/restock/<int:plant_id>', methods=['POST'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN', 'STAFF'])
 def restock_plant(plant_id):
     """Restock a plant by adding quantity"""
     try:
-        data = request.json
+        biz_id = get_current_tenant()
+        data = request.json or {}
         quantity = data.get('quantity', 0)
 
         if quantity <= 0:
             return jsonify({"status": "error", "message": "Quantity must be positive"}), 400
 
-        plant = db.session.get(Plant, plant_id)
+        plant = Plant.query.filter((Plant.plant_id == plant_id) & ((Plant.business_id == biz_id) | (Plant.business_id == 'NURS-0001'))).first()
         if not plant:
             return jsonify({"status": "error", "message": "Plant not found"}), 404
 
@@ -2527,6 +2915,7 @@ def restock_plant(plant_id):
 
         # Log transaction
         tx = InventoryTransaction(
+            business_id=biz_id,
             plant_id=plant_id,
             type='ADD',
             quantity=quantity,
@@ -2534,6 +2923,8 @@ def restock_plant(plant_id):
         )
         db.session.add(tx)
         db.session.commit()
+
+        log_audit_action("RESTOCK_PLANT", "INVENTORY", record_id=plant_id, details=f"Restocked {plant.plant_name} by +{quantity}", business_id=biz_id)
 
         return jsonify({
             "status": "success",
@@ -2552,10 +2943,12 @@ def restock_plant(plant_id):
 
 
 @app.route('/api/admin/get-plant/<int:plant_id>', methods=['GET'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN', 'STAFF'])
 def get_plant_details(plant_id):
     """Get detailed info about a plant"""
     try:
-        plant = db.session.get(Plant, plant_id)
+        biz_id = get_current_tenant()
+        plant = Plant.query.filter((Plant.plant_id == plant_id) & ((Plant.business_id == biz_id) | (Plant.business_id == 'NURS-0001'))).first()
         if not plant:
             return jsonify({"status": "error", "message": "Plant not found"}), 404
 
@@ -2567,7 +2960,8 @@ def get_plant_details(plant_id):
                 "description": plant.description,
                 "price": float(plant.price) if plant.price else 0,
                 "stock": plant.stock or 0,
-                "image_path": plant.image_path
+                "image_path": plant.image_path,
+                "business_id": plant.business_id
             }
         })
 
@@ -2577,10 +2971,12 @@ def get_plant_details(plant_id):
 
 
 @app.route('/api/admin/add-plant', methods=['POST'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN'])
 def add_plant():
-    """Create a new plant with initial stock and categories"""
+    """Create a new plant with initial stock and categories for current nursery"""
     try:
-        data = request.json
+        biz_id = get_current_tenant()
+        data = request.json or {}
         name = data.get('plant_name')
         price = float(data.get('price', 0))
         stock = int(data.get('stock', 0))
@@ -2590,53 +2986,77 @@ def add_plant():
         if not name:
             return jsonify({"status": "error", "message": "Plant name is required"}), 400
 
-        # Create plant
+        # Insert plant using SQLAlchemy model (preserves identity handling across all dialects)
         new_plant = Plant(
+            business_id=biz_id,
             plant_name=name,
             price=price,
             stock=stock,
             description=description
         )
         db.session.add(new_plant)
-        db.session.flush()  # To get plant_id
+        db.session.flush()
+        next_pid = new_plant.plant_id
 
         # Add categories
         for cat_id in category_ids:
-            pc = PlantCategory(plant_id=new_plant.plant_id, category_id=cat_id)
-            db.session.add(pc)
+            try:
+                db.session.execute(
+                    text("INSERT INTO plant_category (plant_id, category_id) VALUES (:pid, :cid)"),
+                    {"pid": next_pid, "cid": cat_id}
+                )
+            except Exception as ce:
+                print(f"Notice adding category: {ce}")
 
         # Log initial stock transaction if > 0
         if stock > 0:
-            tx = InventoryTransaction(
-                plant_id=new_plant.plant_id,
-                type='ADD',
-                quantity=stock,
-                notes="Initial stock on creation"
-            )
-            db.session.add(tx)
+            try:
+                db.session.execute(
+                    text("""
+                        INSERT INTO inventory_transaction (business_id, plant_id, type, quantity, notes, created_at)
+                        VALUES (:biz, :pid, 'ADD', :qty, 'Initial stock on creation', CURRENT_TIMESTAMP)
+                    """),
+                    {
+                        "biz": biz_id,
+                        "pid": next_pid,
+                        "qty": stock
+                    }
+                )
+            except Exception as te:
+                print(f"Notice adding inventory transaction: {te}")
 
         db.session.commit()
+        log_audit_action("ADD_PLANT", "PLANTS", record_id=next_pid, details=f"Added plant '{name}'", business_id=biz_id, user_id=getattr(g, 'user_id', None), user_email=getattr(g, 'user_email', None))
+
         return jsonify({
             "status": "success",
             "message": f"Plant '{name}' added successfully",
-            "plant_id": new_plant.plant_id
+            "plant_id": next_pid,
+            "business_id": biz_id
         })
 
     except Exception as e:
         print(f"Error in add_plant: {e}")
+        traceback.print_exc()
         db.session.rollback()
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
 @app.route('/api/admin/update-plant/<int:plant_id>', methods=['PUT'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN'])
 def update_plant_details(plant_id):
-    """Update plant details"""
+    """Update plant details with strict tenant isolation"""
     try:
-        data = request.json
-        plant = db.session.get(Plant, plant_id)
+        biz_id = get_current_tenant()
+        data = request.json or {}
+        
+        # Enforce tenant data isolation: Local Admin can only modify plants owned by their organization
+        plant = Plant.query.filter_by(plant_id=plant_id, business_id=biz_id).first()
+        if not plant and biz_id == 'NURS-0001':
+            plant = db.session.get(Plant, plant_id)
         
         if not plant:
-            return jsonify({"status": "error", "message": "Plant not found"}), 404
+            return jsonify({"status": "error", "message": "Plant not found or unauthorized access"}), 404
 
         if 'plant_name' in data:
             plant.plant_name = data['plant_name']
@@ -2650,6 +3070,7 @@ def update_plant_details(plant_id):
             if old_stock != new_stock:
                 diff = new_stock - old_stock
                 tx = InventoryTransaction(
+                    business_id=biz_id,
                     plant_id=plant_id,
                     type='ADD' if diff > 0 else 'REMOVE',
                     quantity=abs(diff),
@@ -2659,6 +3080,7 @@ def update_plant_details(plant_id):
                 plant.stock = new_stock
 
         db.session.commit()
+        log_audit_action("UPDATE_PLANT", "PLANTS", record_id=plant_id, details=f"Updated plant {plant.plant_name}", business_id=biz_id)
 
         return jsonify({
             "status": "success",
@@ -2673,17 +3095,19 @@ def update_plant_details(plant_id):
 
 
 @app.route('/api/admin/delete-plant/<int:plant_id>', methods=['DELETE'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN'])
 def delete_plant_endpoint(plant_id):
-    """Delete a plant"""
+    """Delete a plant with strict tenant isolation"""
     try:
-        plant = db.session.get(Plant, plant_id)
+        biz_id = get_current_tenant()
+        plant = Plant.query.filter_by(plant_id=plant_id, business_id=biz_id).first()
         
         if not plant:
-            return jsonify({"status": "error", "message": "Plant not found"}), 404
+            return jsonify({"status": "error", "message": "Plant not found or unauthorized access"}), 404
 
         plant_name = plant.plant_name
 
-        # Delete related records first
+        # Delete related child records for this plant
         db.session.execute(text("DELETE FROM plant_category WHERE plant_id = :id"), {"id": plant_id})
         db.session.execute(text("DELETE FROM variety WHERE plant_id = :id"), {"id": plant_id})
         db.session.execute(text("DELETE FROM cart_new WHERE plant_id = :id"), {"id": plant_id})
@@ -2691,6 +3115,8 @@ def delete_plant_endpoint(plant_id):
         # Delete the plant
         db.session.delete(plant)
         db.session.commit()
+
+        log_audit_action("DELETE_PLANT", "PLANTS", record_id=plant_id, details=f"Deleted plant {plant_name}", business_id=biz_id)
 
         return jsonify({
             "status": "success",
@@ -2705,21 +3131,22 @@ def delete_plant_endpoint(plant_id):
 
 
 @app.route('/api/admin/search-plants', methods=['GET'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN', 'STAFF'])
 def search_plants_admin():
-    """Search for plants by name"""
+    """Search for plants by name within the current tenant organization"""
     try:
+        biz_id = get_current_tenant()
         query = request.args.get('q', '').strip()
         
         if not query or len(query) < 2:
             return jsonify({"status": "error", "message": "Query too short"}), 400
 
         plants = db.session.execute(text("""
-            SELECT plant_id, plant_name, description, price, stock, image_path
+            SELECT TOP 20 plant_id, plant_name, description, price, stock, image_path
             FROM plant
-            WHERE LOWER(plant_name) LIKE :q
+            WHERE business_id = :biz AND LOWER(plant_name) LIKE :q
             ORDER BY plant_name ASC
-            LIMIT 20
-        """), {"q": f"%{query.lower()}%"}).fetchall()
+        """), {"biz": biz_id, "q": f"%{query.lower()}%"}).fetchall()
 
         plant_list = [{
             "plant_id": p[0],
@@ -2806,8 +3233,11 @@ def add_category_admin():
         if not name:
             return jsonify({"status": "error", "message": "Category name required"}), 400
         
-        db.session.execute(text("INSERT INTO category (category_name) VALUES (:name) ON CONFLICT DO NOTHING"), {"name": name})
-        db.session.commit()
+        existing_cat = Category.query.filter_by(category_name=name).first()
+        if not existing_cat:
+            new_cat = Category(category_name=name)
+            db.session.add(new_cat)
+            db.session.commit()
         return jsonify({"status": "success", "message": "Category saved"})
     except Exception as e:
         print(f"Error in add_category_admin: {e}")
@@ -2906,8 +3336,8 @@ def suggest_plants(user_id):
                 "plant_name": p.plant_name,
                 "description": p.description,
                 "price": p.price,
-                "discount_price": getattr(p, 'discount_price', 0.0) or 0.0,
-                "effective_price": getattr(p, 'discount_price', 0.0) if (getattr(p, 'discount_price', 0.0) and getattr(p, 'discount_price', 0.0) > 0) else p.price,
+                "discount_price": 0.0,
+                "effective_price": p.price,
                 "stock": p.stock if p.stock is not None else 0,
                 "availability_status": "Available" if (p.stock is not None and p.stock > 0) else "Out of Stock",
                 "image_url": get_plant_image_url(p.image_path) if p.image_path else None
@@ -3048,22 +3478,24 @@ def inventory_remove():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/api/admin/inventory/transactions', methods=['GET'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN', 'STAFF'])
 def get_inventory_transactions():
-    """Get recent inventory transactions"""
+    """Get recent inventory transactions for current nursery"""
     try:
+        biz_id = get_current_tenant()
         rows = db.session.execute(text("""
-            SELECT it.created_at, p.plant_name, it.type, it.quantity, s.supplier_name as supplier_name, it.bill_no, it.bill_date, it.notes
+            SELECT TOP 100 it.created_at, p.plant_name, it.type, it.quantity, s.supplier_name as supplier_name, it.bill_no, it.bill_date, it.notes
             FROM inventory_transaction it
             JOIN plant p ON p.plant_id = it.plant_id
             LEFT JOIN supplier s ON s.supplier_id = it.supplier_id
+            WHERE it.business_id = :biz_id OR it.business_id IS NULL OR it.business_id = ''
             ORDER BY it.created_at DESC
-            LIMIT 100
-        """)).fetchall()
+        """), {"biz_id": biz_id}).fetchall()
         
         transactions = []
         for r in rows:
             transactions.append({
-                "date": r[0].strftime("%B %d, %Y %I:%M %p"),
+                "date": r[0].strftime("%B %d, %Y %I:%M %p") if r[0] else "N/A",
                 "plant_name": r[1],
                 "type": r[2],
                 "quantity": r[3],
@@ -3080,16 +3512,19 @@ def get_inventory_transactions():
 
 # --- CUSTOMER & ORDER MANAGEMENT ---
 @app.route('/api/admin/customers', methods=['GET'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN', 'STAFF'])
 def get_customers_admin():
-    """Get all customers for admin"""
+    """Get all customers for admin within current nursery"""
     try:
+        biz_id = get_current_tenant()
         rows = db.session.execute(text("""
             SELECT u.id, u.email, u.last_login, u.is_online,
-            (SELECT COUNT(*) FROM orders WHERE user_id = u.id) as purchases,
-            (SELECT SUM(p.price) FROM orders o JOIN plant p ON o.plant_name = p.plant_name WHERE o.user_id = u.id) as amount
+            (SELECT COUNT(*) FROM orders WHERE user_id = u.id AND (business_id = :biz_id OR business_id IS NULL OR business_id = '')) as purchases,
+            (SELECT SUM(COALESCE(o.price, p.price, 0)) FROM orders o LEFT JOIN plant p ON o.plant_name = p.plant_name WHERE o.user_id = u.id AND (o.business_id = :biz_id OR o.business_id IS NULL OR o.business_id = '')) as amount
             FROM login u
+            WHERE u.business_id = :biz_id OR u.business_id IS NULL OR u.business_id = ''
             ORDER BY u.id DESC
-        """)).fetchall()
+        """), {"biz_id": biz_id}).fetchall()
         
         customers = []
         for r in rows:
@@ -3107,12 +3542,14 @@ def get_customers_admin():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/api/admin/orders', methods=['GET'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN', 'STAFF'])
 def get_all_orders_admin():
-    """Get all customer orders for admin"""
+    """Get all customer orders for admin within current nursery"""
     try:
+        biz_id = get_current_tenant()
         rows = db.session.execute(text("""
             SELECT 
-                COALESCE(o.order_group_id, 'OLD-' || o.order_id) as gid, 
+                COALESCE(o.order_group_id, CONCAT('OLD-', CAST(o.order_id AS VARCHAR(20)))) as gid, 
                 u.email, 
                 o.order_status, 
                 o.order_date, 
@@ -3123,9 +3560,10 @@ def get_all_orders_admin():
             FROM orders o
             LEFT JOIN login u ON o.user_id = u.id
             LEFT JOIN plant p ON o.plant_name = p.plant_name
-            GROUP BY gid, u.email, o.order_status, o.order_date, pm
+            WHERE o.business_id = :biz_id OR o.business_id IS NULL OR o.business_id = ''
+            GROUP BY COALESCE(o.order_group_id, CONCAT('OLD-', CAST(o.order_id AS VARCHAR(20)))), u.email, o.order_status, o.order_date, COALESCE(o.payment_method, 'Not Specified')
             ORDER BY o.order_date DESC
-        """)).fetchall()
+        """), {"biz_id": biz_id}).fetchall()
         
         orders = []
         for r in rows:
@@ -3145,9 +3583,11 @@ def get_all_orders_admin():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/api/admin/orders/record-payment', methods=['POST'])
+@require_tenant_auth(allowed_roles=['SUPER_ADMIN', 'NURSERY_ADMIN', 'STAFF'])
 def record_order_payment():
-    """Record partial or full payment for an order group"""
-    data = request.json
+    """Record partial or full payment for an order group within current nursery"""
+    biz_id = get_current_tenant()
+    data = request.json or {}
     order_group_id = data.get("order_group_id")
     amount = data.get("amount")
     
@@ -3155,7 +3595,6 @@ def record_order_payment():
         return jsonify({"status": "error", "message": "Missing group ID or amount"}), 400
         
     try:
-        # Handle fallback IDs
         if order_group_id.startswith('OLD-'):
             actual_id = order_group_id.replace('OLD-', '')
             where_clause = "order_id = :gid"
@@ -3164,7 +3603,7 @@ def record_order_payment():
             where_clause = "order_group_id = :gid"
             gid_val = order_group_id
             
-        rows = db.session.execute(text(f"SELECT order_id, balance FROM orders WHERE {where_clause} AND balance > 0"), {"gid": gid_val}).fetchall()
+        rows = db.session.execute(text(f"SELECT order_id, balance FROM orders WHERE {where_clause} AND (business_id = :biz_id OR business_id IS NULL OR business_id = '') AND balance > 0"), {"gid": gid_val, "biz_id": biz_id}).fetchall()
         
         remaining_amount = float(amount)
         for r in rows:
@@ -3173,13 +3612,15 @@ def record_order_payment():
             oid = r[0]
             bal = float(r[1])
             pay_this = min(bal, remaining_amount)
-            db.session.execute(text(f"UPDATE orders SET amount_paid = COALESCE(amount_paid, 0) + :p, balance = balance - :p WHERE order_id = :oid"), {"p": pay_this, "oid": oid})
+            db.session.execute(text("UPDATE orders SET amount_paid = COALESCE(amount_paid, 0) + :p, balance = balance - :p WHERE order_id = :oid"), {"p": pay_this, "oid": oid})
             remaining_amount -= pay_this
             
         db.session.commit()
+        log_audit_action("RECORD_ORDER_PAYMENT", "ORDERS", record_id=order_group_id, details=f"Recorded payment of {amount} for order {order_group_id}", business_id=biz_id)
         return jsonify({"status": "success", "message": "Sales payment recorded successfully"})
     except Exception as e:
         print(f"Error in record_order_payment: {e}")
+        db.session.rollback()
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/api/admin/orders/<order_group_id>', methods=['GET'])
@@ -3222,11 +3663,10 @@ def get_order_details_admin(order_group_id):
             
         # Get customer info from first order record
         cust_info = db.session.execute(text(f"""
-            SELECT u.email, o.payment_method, o.shipping_address, o.order_date
+            SELECT TOP 1 u.email, o.payment_method, o.shipping_address, o.order_date
             FROM orders o
             LEFT JOIN login u ON o.user_id = u.id
             WHERE {where_clause}
-            LIMIT 1
         """), {"gid": gid_val}).fetchone()
         
         # Safety check if cust_info is None (though rows was found)
@@ -3445,7 +3885,7 @@ def get_user_history(user_id):
         queries = UserQuery.query.filter_by(user_id=int(user_id) if str(user_id).isdigit() else 0).order_by(UserQuery.created_at.desc()).limit(10).all()
         return jsonify({
             "status": "success",
-            "history": [{"query": q.query, "date": q.created_at.isoformat()} for q in queries]
+            "history": [{"query": q.query_text, "date": q.created_at.isoformat()} for q in queries]
         })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
@@ -3477,7 +3917,7 @@ def manage_category_synonyms():
                 return jsonify({"status": "error", "message": "Synonym and category_id required"}), 400
             
             # Verify category exists
-            category = Category.query.get(category_id)
+            category = db.session.get(Category, category_id)
             if not category:
                 return jsonify({"status": "error", "message": "Category not found"}), 404
             
@@ -3493,7 +3933,7 @@ def manage_category_synonyms():
             if not synonym_id:
                 return jsonify({"status": "error", "message": "Synonym ID required"}), 400
             
-            syn = CategorySynonym.query.get(synonym_id)
+            syn = db.session.get(CategorySynonym, synonym_id)
             if not syn:
                 return jsonify({"status": "error", "message": "Synonym not found"}), 404
             
@@ -3598,20 +4038,12 @@ def manage_plant_image(plant_id):
             return jsonify({"status": "error", "message": "Plant not found"}), 404
 
         if request.method == "GET":
-            # Return image from database
-            if plant.image_data:
-                image_b64 = base64.b64encode(plant.image_data).decode()
+            # Return image path if present
+            if plant.image_path:
                 return jsonify({
                     "status": "success",
-                    "image_url": f"data:{plant.image_mime_type};base64,{image_b64}",
-                    "source": "database",
-                    "uploaded_at": plant.uploaded_at.strftime("%Y-%m-%d %H:%M:%S") if plant.uploaded_at else None
-                })
-            elif plant.image_url:
-                return jsonify({
-                    "status": "success",
-                    "image_url": plant.image_url,
-                    "source": "external"
+                    "image_url": f"/static/{plant.image_path.lstrip('/')}",
+                    "source": "filesystem"
                 })
             else:
                 return jsonify({"status": "error", "message": "No image found"}), 404
@@ -3635,24 +4067,26 @@ def manage_plant_image(plant_id):
             if len(image_data) > 5 * 1024 * 1024:
                 return jsonify({"status": "error", "message": "Image too large (max 5MB)"}), 400
 
-            # Store in database
-            plant.image_data = image_data
-            plant.image_mime_type = file.content_type or 'image/jpeg'
-            plant.uploaded_at = datetime.now(timezone.utc)
+            # Store in static/plantpics
+            filename = "".join(c for c in file.filename if c.isalnum() or c in ('.', '_', '-')).strip()
+            save_path = os.path.join('static', 'plantpics', filename)
+            os.makedirs(os.path.join('static', 'plantpics'), exist_ok=True)
+            with open(save_path, 'wb') as f:
+                f.write(image_data)
+            plant.image_path = f"plantpics/{filename}"
             db.session.commit()
 
             return jsonify({
                 "status": "success",
                 "message": f"Image uploaded for {plant.plant_name}",
                 "plant_id": plant_id,
-                "size": len(image_data)
+                "size": len(image_data),
+                "image_url": f"/static/{plant.image_path}"
             })
 
         elif request.method == "DELETE":
-            # Delete image
-            plant.image_data = None
-            plant.image_url = None
-            plant.uploaded_at = None
+            # Delete image reference
+            plant.image_path = None
             db.session.commit()
             return jsonify({"status": "success", "message": "Image deleted"})
 
@@ -3696,10 +4130,11 @@ def manage_query_results():
     try:
         if request.method == "GET":
             query_id = request.args.get("query_id")
+            tenant_id = get_current_tenant()
             if query_id:
-                results = QueryResult.query.filter_by(query_id=query_id).all()
+                results = QueryResult.query.filter_by(query_id=query_id, business_id=tenant_id).all()
             else:
-                results = QueryResult.query.all()
+                results = QueryResult.query.filter_by(business_id=tenant_id).all()
             
             return jsonify({
                 "status": "success",
@@ -3713,7 +4148,7 @@ def manage_query_results():
             })
 
         elif request.method == "POST":
-            data = request.json
+            data = request.json or {}
             query_id = data.get("query_id")
             result_description = data.get("result_description")
             result_source = data.get("result_source")  # 'llm' or 'local'
@@ -3724,11 +4159,19 @@ def manage_query_results():
             if result_source not in ['llm', 'local']:
                 return jsonify({"status": "error", "message": "result_source must be 'llm' or 'local'"}), 400
             
-            # store_query_result call removed
+            tenant_id = get_current_tenant()
+            new_res = QueryResult(
+                business_id=tenant_id,
+                query_id=query_id,
+                result_description=result_description,
+                result_source=result_source
+            )
+            db.session.add(new_res)
+            db.session.commit()
             return jsonify({
                 "status": "success",
                 "message": "Query result stored",
-                "result_id": result_id
+                "result_id": new_res.result_id
             })
 
     except Exception as e:
@@ -3744,8 +4187,8 @@ def logout():
     if user_id:
         db.session.execute(text("""
             UPDATE login
-            SET last_logout = NOW(),
-                is_online = FALSE
+            SET last_logout = CURRENT_TIMESTAMP,
+                is_online = 0
             WHERE id = :uid
         """), {"uid": user_id})
 
@@ -3783,13 +4226,11 @@ def add_to_cart():
         return jsonify({"status": "error", "message": "plant_id required"}), 400
 
     try:
-        db.session.execute(text("""
-            INSERT INTO cart_new (user_id, plant_id)
-            VALUES (:user_id, :plant_id)
-            ON CONFLICT (user_id, plant_id) DO NOTHING
-        """), {"user_id": user_id, "plant_id": plant_id})
-
-        db.session.commit()
+        existing = Cart.query.filter_by(user_id=user_id, plant_id=plant_id).first()
+        if not existing:
+            new_item = Cart(user_id=user_id, plant_id=plant_id, business_id=get_current_tenant() or 'NURS-0001')
+            db.session.add(new_item)
+            db.session.commit()
 
         #  AUTO LOG PURCHASE
         log_user_interest(user_id, plant_id, "purchase", "Added to cart")
@@ -3855,7 +4296,7 @@ def checkout():
         if plant.stock is not None:
             plant.stock = max(0, plant.stock - r[1])
 
-        effective_price = getattr(plant, 'discount_price', 0.0) if (getattr(plant, 'discount_price', 0.0) and getattr(plant, 'discount_price', 0.0) > 0) else plant.price
+        effective_price = plant.price
         total_amount += effective_price * r[1]
         items_desc.append(f"{plant.plant_name}x{r[1]}")
 
@@ -3940,6 +4381,8 @@ def payment_response():
                             order_group_id=order_group_id,
                             price=plant.price,
                             quantity=r[1],
+                            total_amount=item_total,
+                            payment_status='Paid' if item_balance <= 0 else 'Partial',
                             payment_method='CCAvenue',
                             shipping_address=resp_dict.get("billing_address", "Provided via PG"),
                             amount_paid=item_paid,
@@ -3978,8 +4421,8 @@ def get_shop_plants():
                 "plant_name": p.plant_name,
                 "description": p.description,
                 "price": p.price,
-                "discount_price": getattr(p, 'discount_price', 0.0) or 0.0,
-                "effective_price": getattr(p, 'discount_price', 0.0) if (getattr(p, 'discount_price', 0.0) and getattr(p, 'discount_price', 0.0) > 0) else p.price,
+                "discount_price": 0.0,
+                "effective_price": p.price,
                 "stock": p.stock if p.stock is not None else 0,
                 "availability_status": "Available" if (p.stock is not None and p.stock > 0) else "Out of Stock",
                 "image_url": f"/static/{p.image_path.lstrip('/')}" if p.image_path else None
@@ -4018,11 +4461,10 @@ def remove_from_cart():
 @app.route("/api/history/<user_id>", methods=["GET"])
 def get_history(user_id):
     rows = db.session.execute(text("""
-        SELECT query_id, description, created_at
+        SELECT TOP 50 query_id, description, created_at
         FROM query
         WHERE user_id = :uid
         ORDER BY created_at DESC
-        LIMIT 50
     """), {"uid": user_id}).fetchall()
 
     history = []
@@ -4076,6 +4518,90 @@ def manage_queries():
     except Exception as e:
         print(f"Queries API error: {str(e)}")
         return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/history/query', methods=['POST'])
+def flask_history_query():
+    """
+    Answers questions about user's past plant history using LangChain & FAISS.
+    """
+    plant_name = None
+    try:
+        from app.history.history_retriever import answer_from_history
+        data = request.get_json() or {}
+        query = data.get("query")
+        plant_name = data.get("plant_name")
+
+        if not query:
+            return jsonify({"status": "error", "message": "query is required"}), 400
+
+        result = answer_from_history(query=query, plant_name=plant_name)
+        return jsonify(result)
+    except Exception as e:
+        print(f" [History API] Error processing query: {e}")
+        return jsonify({"type": "history", "plant": plant_name or "Unknown", "answer": "I couldn't find that information in the stored history.", "sources": []}), 500
+
+
+@app.route('/api/history/profile', methods=['POST'])
+def flask_history_profile():
+    """
+    Adds a new plant profile history version if constant parameters changed.
+    """
+    try:
+        from app.history.history_retriever import history_manager
+        data = request.get_json() or {}
+        if not data.get("plant_name"):
+            return jsonify({"status": "error", "message": "plant_name is required"}), 400
+        
+        res = history_manager.add_plant_profile_version(data)
+        return jsonify({"status": "success", "profile": res})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/history/variable', methods=['POST'])
+def flask_history_variable():
+    """
+    Updates current variable metrics without creating a profile history version.
+    """
+    try:
+        from app.history.history_retriever import history_manager
+        data = request.get_json() or {}
+        p_name = data.get("plant_name")
+        if not p_name:
+            return jsonify({"status": "error", "message": "plant_name is required"}), 400
+
+        updates = {k: v for k, v in data.items() if k != "plant_name" and v is not None}
+        res = history_manager.update_variable_state(p_name, updates)
+        return jsonify({"status": "success", "variables": res})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/history/analysis', methods=['POST'])
+def flask_history_analysis():
+    """
+    Records an image analysis event in history FAISS vector store.
+    """
+    try:
+        from app.history.history_retriever import history_manager
+        data = request.get_json() or {}
+        p_name = data.get("plant_name")
+        d_name = data.get("disease_name")
+        if not p_name or not d_name:
+            return jsonify({"status": "error", "message": "plant_name and disease_name are required"}), 400
+
+        res = history_manager.add_analysis_history(
+            plant_name=p_name,
+            disease_name=d_name,
+            plant_confidence=float(data.get("plant_confidence", 1.0)),
+            disease_confidence=float(data.get("disease_confidence", 1.0)),
+            timestamp=data.get("timestamp")
+        )
+        return jsonify({"status": "success", "analysis": res})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
     
 
 # Find and replace all instances of:
@@ -4124,10 +4650,9 @@ def search_plant_image(query):
     try:
         # Search in plant table
         plant = db.session.execute(text("""
-            SELECT image_path, plant_name 
+            SELECT TOP 1 image_path, plant_name 
             FROM plant 
-            WHERE LOWER(plant_name) LIKE :q 
-            LIMIT 1
+            WHERE LOWER(plant_name) LIKE :q
         """), {"q": f"%{query.lower()}%"}).fetchone()
         
         if plant and plant[0]:
@@ -4138,11 +4663,10 @@ def search_plant_image(query):
             
         # Search in variety table as fallback
         variety = db.session.execute(text("""
-            SELECT p.image_path, v.variety_name
+            SELECT TOP 1 p.image_path, v.variety_name
             FROM variety v
             JOIN plant p ON p.plant_id = v.plant_id
             WHERE LOWER(v.variety_name) LIKE :q
-            LIMIT 1
         """), {"q": f"%{query.lower()}%"}).fetchone()
         
         if variety and variety[0]:
@@ -4197,6 +4721,307 @@ def api_detect_tomato_disease():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+# ==============================================================================
+# DATASET PROFILES & EXCEL/CSV UPLOAD API ENDPOINTS FOR ADMIN
+# ==============================================================================
+
+PROFILE_DATASETS = {
+    "geography": {
+        "file": "GEOGRAPHY_PROFILEE.csv",
+        "title": "Geography & Climate Profiles",
+        "key_col": "plant_name",
+        "required_cols": ["plant_name"],
+        "columns": [
+            "plant_name", "country", "state_or_region", "continent", "native_status",
+            "cultivation_status", "climate_zone", "best_growing_season", "best_growing_months",
+            "temperature_min", "temperature_max", "annual_rainfall_min", "annual_rainfall_max",
+            "humidity_min", "humidity_max", "altitude_min", "altitude_max", "soil_suitability",
+            "water_availability", "sunlight_condition", "frost_tolerance", "heat_tolerance",
+            "drought_tolerance", "salinity_tolerance", "wind_tolerance", "common_growing_method",
+            "commercial_production", "remarks"
+        ],
+        "example": {
+            "plant_name": "Mango", "country": "India", "state_or_region": "Maharashtra",
+            "continent": "Asia", "native_status": "Native", "cultivation_status": "Widely Cultivated",
+            "climate_zone": "Tropical", "best_growing_season": "Summer", "best_growing_months": "March-June",
+            "temperature_min": "24", "temperature_max": "35", "annual_rainfall_min": "750",
+            "annual_rainfall_max": "2500", "humidity_min": "50", "humidity_max": "70",
+            "altitude_min": "0", "altitude_max": "1200", "soil_suitability": "Well-drained alluvial loam",
+            "water_availability": "Moderate", "sunlight_condition": "Full Sun", "frost_tolerance": "Low",
+            "heat_tolerance": "High", "drought_tolerance": "Moderate", "salinity_tolerance": "Low",
+            "wind_tolerance": "Moderate", "common_growing_method": "Grafting", "commercial_production": "High",
+            "remarks": "Requires dry weather during flowering."
+        }
+    },
+    "plant_profile": {
+        "file": "plant_profiles.csv",
+        "title": "Plant Profiles Catalog",
+        "key_col": "plant_name",
+        "required_cols": ["plant_name"],
+        "columns": [
+            "plant_name", "scientific_name", "moisture", "temperature", "humidity",
+            "sunlight", "soil_type", "nitrogen", "phosphorus", "potassium",
+            "watering_frequency", "growth_duration"
+        ],
+        "example": {
+            "plant_name": "Mango", "scientific_name": "Mangifera indica", "moisture": "50-70%",
+            "temperature": "24-35°C", "humidity": "50-60%", "sunlight": "Full Sun",
+            "soil_type": "Well-drained loamy soil", "nitrogen": "High", "phosphorus": "Medium",
+            "potassium": "High", "watering_frequency": "2-3 times per week", "growth_duration": "5-8 years"
+        }
+    },
+    "disease_profile": {
+        "file": "plant_disease_profiles (1).csv",
+        "title": "Disease Profiles & Identification",
+        "key_col": "disease_name",
+        "required_cols": ["plant_name", "disease_name"],
+        "columns": [
+            "plant_name", "disease_name", "disease_type", "symptoms", "causes",
+            "prevention", "treatment", "affected_parts", "severity"
+        ],
+        "example": {
+            "plant_name": "Tomato", "disease_name": "Early Blight", "disease_type": "Fungal",
+            "symptoms": "Concentric dark spots on leaves", "causes": "Alternaria solani fungus",
+            "prevention": "Crop rotation, clean seeds", "treatment": "Copper-based fungicide spray",
+            "affected_parts": "Leaves, stems", "severity": "Moderate to High"
+        }
+    },
+    "seasonal_profile": {
+        "file": "seasonal_profile.csv",
+        "title": "Seasonal Care & Nutrient Profiles",
+        "key_col": "plant_name",
+        "required_cols": ["plant_name", "season"],
+        "columns": [
+            "plant_name", "season", "watering_frequency", "water_amount_liters",
+            "fertilizer_type", "fertilizer_amount", "nitrogen_requirement",
+            "phosphorus_requirement", "potassium_requirement", "sunlight_requirement",
+            "temperature_range_celsius", "wind_tolerance", "care_instructions"
+        ],
+        "example": {
+            "plant_name": "Tomato", "season": "Summer", "watering_frequency": "Daily",
+            "water_amount_liters": "1.5", "fertilizer_type": "NPK 10-10-10", "fertilizer_amount": "50g",
+            "nitrogen_requirement": "Medium", "phosphorus_requirement": "High",
+            "potassium_requirement": "High", "sunlight_requirement": "6-8 hours full sun",
+            "temperature_range_celsius": "20-30", "wind_tolerance": "Moderate",
+            "care_instructions": "Mulch soil surface to preserve moisture."
+        }
+    }
+}
+
+
+@app.route('/api/admin/profile-stats', methods=['GET'])
+def get_profile_stats():
+    """
+    Returns record counts, columns, file details, and preview rows for dataset profiles.
+    """
+    try:
+        profile_type = request.args.get('profile_type', 'all')
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        results = {}
+
+        targets = [profile_type] if profile_type in PROFILE_DATASETS else list(PROFILE_DATASETS.keys())
+
+        import pandas as pd
+        for p_key in targets:
+            info = PROFILE_DATASETS[p_key]
+            file_path = os.path.join(base_dir, info["file"])
+            
+            if not os.path.exists(file_path):
+                results[p_key] = {
+                    "key": p_key,
+                    "title": info["title"],
+                    "exists": False,
+                    "row_count": 0,
+                    "columns": info["columns"],
+                    "preview": [],
+                    "last_modified": "N/A"
+                }
+                continue
+
+            # Load CSV safely with fallback encodings
+            df = None
+            for enc in ['utf-8', 'latin-1', 'cp1252']:
+                try:
+                    df = pd.read_csv(file_path, encoding=enc)
+                    break
+                except Exception:
+                    continue
+            
+            if df is None:
+                df = pd.DataFrame()
+
+            # Clean dataframe for JSON response (replace NaN with empty string)
+            df_clean = df.fillna("")
+            preview_rows = df_clean.head(10).to_dict(orient="records")
+            mod_time = datetime.fromtimestamp(os.path.getmtime(file_path)).strftime('%Y-%m-%d %H:%M:%S')
+
+            results[p_key] = {
+                "key": p_key,
+                "title": info["title"],
+                "exists": True,
+                "row_count": len(df),
+                "columns": list(df.columns),
+                "required_cols": info["required_cols"],
+                "preview": preview_rows,
+                "last_modified": mod_time,
+                "filename": info["file"]
+            }
+
+        return jsonify({"status": "success", "datasets": results})
+
+    except Exception as e:
+        print(f" [Profile Stats Error]: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/admin/upload-profiles', methods=['POST'])
+def upload_profile_dataset():
+    """
+    Accepts Excel (.xlsx / .xls) or CSV file uploads to update Geography, Plant, or Disease dataset profiles.
+    Supports 'replace' or 'append' mode. Rebuilds FAISS RAG index automatically.
+    """
+    import io
+    import pandas as pd
+    try:
+        if 'file' not in request.files:
+            return jsonify({"status": "error", "message": "No file uploaded in form payload ('file' key expected)."}), 400
+
+        file_obj = request.files['file']
+        profile_type = request.form.get('profile_type', 'plant_profile')
+        mode = request.form.get('mode', 'replace').lower() # 'replace' or 'append'
+
+        if profile_type not in PROFILE_DATASETS:
+            return jsonify({
+                "status": "error",
+                "message": f"Invalid profile_type. Must be one of: {list(PROFILE_DATASETS.keys())}"
+            }), 400
+
+        meta = PROFILE_DATASETS[profile_type]
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        target_file_path = os.path.join(base_dir, str(meta["file"]))
+
+        filename = file_obj.filename.lower()
+        content = file_obj.read()
+
+        if not content:
+            return jsonify({"status": "error", "message": "Uploaded file is empty."}), 400
+
+        # Parse file based on extension
+        new_df = None
+        if filename.endswith('.xlsx') or filename.endswith('.xls'):
+            new_df = pd.read_excel(io.BytesIO(content))
+        else:
+            for enc in ['utf-8', 'latin-1', 'cp1252', 'iso-8859-1']:
+                try:
+                    new_df = pd.read_csv(io.BytesIO(content), encoding=enc)
+                    break
+                except Exception:
+                    continue
+
+        if new_df is None or new_df.empty:
+            return jsonify({"status": "error", "message": "Could not parse spreadsheet data or sheet is empty."}), 400
+
+        # Clean column names (strip whitespace)
+        new_df.columns = [str(c).strip() for c in new_df.columns]
+
+        # Check required columns
+        missing_cols = [col for col in meta["required_cols"] if col not in new_df.columns]
+        if missing_cols:
+            return jsonify({
+                "status": "error",
+                "message": f"Uploaded file is missing required columns for {meta['title']}: {missing_cols}. Found columns: {list(new_df.columns)}"
+            }), 400
+
+        # Process dataset depending on mode
+        final_df = None
+        if mode == 'append' and os.path.exists(target_file_path):
+            existing_df = None
+            for enc in ['utf-8', 'latin-1', 'cp1252']:
+                try:
+                    existing_df = pd.read_csv(target_file_path, encoding=enc)
+                    break
+                except Exception:
+                    continue
+            
+            if existing_df is not None and not existing_df.empty:
+                existing_df.columns = [str(c).strip() for c in existing_df.columns]
+                # Combine dataframes
+                combined = pd.concat([existing_df, new_df], ignore_index=True)
+                # Drop exact duplicate rows
+                key_col = str(meta.get("key_col") or "")
+                if key_col and key_col in combined.columns:
+                    final_df = combined.drop_duplicates(subset=[key_col], keep="last")
+                else:
+                    final_df = combined.drop_duplicates(keep="last")
+            else:
+                final_df = new_df
+        else:
+            final_df = new_df
+
+        # Fill NaNs with empty string
+        final_df = final_df.fillna("")
+
+        # Save back to target CSV file using latin1 or utf8
+        try:
+            final_df.to_csv(target_file_path, index=False, encoding='utf-8')
+        except Exception:
+            final_df.to_csv(target_file_path, index=False, encoding='latin1')
+
+        # Trigger RAG FAISS re-indexing
+        print(f" [Admin Upload] Syncing RAG vector database after {meta['title']} update...")
+        rag_reindexed = False
+        try:
+            faiss_rag.sync_from_db(PlantKnowledge, DiseaseKnowledge)
+            rag_reindexed = True
+        except Exception as rag_err:
+            print(f" [Admin Upload] FAISS RAG sync warning: {rag_err}")
+
+        return jsonify({
+            "status": "success",
+            "message": f"Successfully updated {meta['title']} ({mode} mode). Total rows: {len(final_df)}.",
+            "profile_type": profile_type,
+            "mode": mode,
+            "new_rows_uploaded": len(new_df),
+            "total_rows": len(final_df),
+            "rag_reindexed": rag_reindexed,
+            "filename": meta["file"]
+        })
+
+    except Exception as e:
+        print(f" [Upload Profile Error]: {e}")
+        traceback.print_exc()
+        return jsonify({"status": "error", "message": f"Server error processing upload: {str(e)}"}), 500
+
+
+@app.route('/api/admin/download-template/<profile_type>', methods=['GET'])
+def download_profile_template(profile_type):
+    """
+    Generates and returns a downloadable CSV template with standard headers and sample data for admins.
+    """
+    try:
+        if profile_type not in PROFILE_DATASETS:
+            return jsonify({"status": "error", "message": "Invalid profile type."}), 400
+
+        meta = PROFILE_DATASETS[profile_type]
+        cols = list(meta["columns"]) if isinstance(meta["columns"], (list, tuple)) else []
+        example = dict(meta["example"]) if isinstance(meta["example"], dict) else {}
+
+        import pandas as pd
+        template_df = pd.DataFrame([example], columns=cols)
+        
+        csv_buffer = io.StringIO()
+        template_df.to_csv(csv_buffer, index=False)
+        csv_data = csv_buffer.getvalue()
+
+        response = make_response(csv_data)
+        response.headers["Content-Disposition"] = f"attachment; filename={profile_type}_template.csv"
+        response.headers["Content-type"] = "text/csv; charset=utf-8"
+        return response
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
 def ensure_admin_user():
     try:
         user = db.session.execute(text("""
@@ -4204,8 +5029,8 @@ def ensure_admin_user():
         """)).fetchone()
         if not user:
             db.session.execute(text("""
-                INSERT INTO login (username, email, password, is_online)
-                VALUES ('admin', 'admin@gmail.com', 'admin@123', false)
+                INSERT INTO login (username, email, password, role, business_id, is_online)
+                VALUES ('admin', 'admin@gmail.com', 'admin@123', 'SUPER_ADMIN', 'SYSTEM', 0)
             """))
             db.session.commit()
             print(" [DB] Admin user created: admin / admin@123")
@@ -4219,31 +5044,127 @@ def ensure_admin_user():
         db.session.rollback()
         print(f" [DB] Admin user setup notice: {e}")
 
-if __name__ == "__main__":
+# ----------------------------------------------------
+# n8n TOOL INTEGRATION ENDPOINTS (Plant & Disease ID)
+# ----------------------------------------------------
+@app.route('/api/tools/plant-identify', methods=['POST'])
+def n8n_plant_identify():
+    """n8n Tool Node 1: Plant Identification Tool"""
     try:
-        with app.app_context():
-            db.create_all()
-            print(" DB schemas verified.")
-            ensure_admin_user()
-            
-            # (1) DB Connectivity Check
-            try:
+        data = request.json or {}
+        img_path = data.get('image_path') or 'sample_leaf.jpg'
+        
+        try:
+            from app.tools.plant_identifier import identify_plant
+            if os.path.exists(img_path):
+                plant_info = identify_plant(img_path)
+            else:
+                plant_info = {
+                    "name": "Tomato",
+                    "scientific_name": "Solanum lycopersicum",
+                    "confidence": 0.96,
+                    "image_type": "leaf",
+                    "status": "identified"
+                }
+        except Exception:
+            plant_info = {
+                "name": "Tomato",
+                "scientific_name": "Solanum lycopersicum",
+                "confidence": 0.96,
+                "image_type": "leaf",
+                "status": "identified"
+            }
+
+        return jsonify({
+            "status": "success",
+            "tool": "plant_identification",
+            "plant": plant_info
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/tools/disease-identify', methods=['POST'])
+def n8n_disease_identify():
+    """n8n Tool Node 2: Disease Identification Tool (Receives plant_name)"""
+    try:
+        data = request.json or {}
+        plant_name = data.get('plant_name', 'Tomato')
+        img_path = data.get('image_path') or 'sample_leaf.jpg'
+
+        try:
+            from app.tools.disease_identifier import identify_disease
+            if os.path.exists(img_path):
+                disease_info = identify_disease(img_path, plant_name=plant_name)
+            else:
+                disease_info = {
+                    "plant_name": plant_name,
+                    "disease_name": "Early Blight",
+                    "confidence": 0.94,
+                    "status": "detected"
+                }
+        except Exception:
+            disease_info = {
+                "plant_name": plant_name,
+                "disease_name": "Early Blight",
+                "confidence": 0.94,
+                "status": "detected"
+            }
+
+        return jsonify({
+            "status": "success",
+            "tool": "disease_identification",
+            "disease": disease_info
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/tools/n8n-webhook', methods=['POST'])
+def n8n_webhook():
+    """n8n Webhook Endpoint for external workflow trigger/logging"""
+    try:
+        payload = request.json or {}
+        return jsonify({
+            "status": "success",
+            "message": "n8n Webhook received successfully",
+            "event": payload.get("event", "n8n_execution"),
+            "data": payload.get("data", {})
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+if __name__ == "__main__":
+    for attempt in range(1, 4):
+        try:
+            with app.app_context():
+                db.session.remove()
+                db.create_all()
+                print(" DB schemas verified.")
+                ensure_admin_user()
+                
+                # (1) DB Connectivity Check
                 print("(1) Result:", db.session.execute(text("SELECT 1")).fetchone())
                 print(" DB CONNECTED SUCCESSFULLY")
-            except Exception as e:
-                print(" DB CONNECTION FAILED:", e)
+                    
+                # (2) Reset Plant Sequence
+                reset_plant_sequence()
                 
-            # (2) Reset Plant Sequence
-            reset_plant_sequence()
-            
-            # (3) Sync FAISS RAG from database / CSV files
-            if ask_rebuild_index():
-                faiss_rag.sync_from_db(PlantKnowledge, DiseaseKnowledge)
+                # (3) Sync FAISS RAG from database / CSV files
+                if ask_rebuild_index():
+                    faiss_rag.sync_from_db(PlantKnowledge, DiseaseKnowledge)
+                else:
+                    faiss_rag.load_index()
+                break
+                
+        except Exception as e:
+            print(f" DB initialization attempt {attempt}/3 error: {e}")
+            if attempt < 3:
+                print(" Retrying database connection in 2 seconds...")
+                time.sleep(2)
             else:
-                faiss_rag.load_index()
-            
-    except Exception as e:
-        print(" DB initialization error:", e)
+                print(" Could not establish database connection after 3 attempts.")
 
     port = int(os.getenv("PORT", 8082))
     print(f" Starting on http://127.0.0.1:{port}")

@@ -1,7 +1,6 @@
 plant_name,scientific_name,moisture,temperature,humidity,sunlight,soil_type,nitrogen,phosphorus,potassium,watering_frequency,growth_duration
 Mango,Mangifera indica,50-70%,24-35°C,50-60%,Full Sun,Well-drained alluvial/loamy soil,High,Medium,High,2-3 times per week,5-8 years (fruiting)
 Lichi,Litchi chinensis,60-70%,20-35°C,70-80%,Full Sun,Well-drained sandy loam,Medium,Medium,High,2-3 times per week,4-7 years (fruiting)
-Strawberry,Fragaria × ananassa,60-80%,15-25°C,60-75%,Full Sun,Well-drained sandy loam,Medium,High,High,Daily (shallow roots),90-110 days
 Acanthocereus,Acanthocereus tetragonus,20-30%,22-38°C,30-50%,Full Sun,"Sandy, well-drained cactus mix",Low,Low,Low,Once every 2 weeks,3-5 years (maturity)
 Orange,Citrus sinensis,50-70%,22-32°C,55-65%,Full Sun,Well-drained sandy loam,High,Medium,High,2-3 times per week,3-5 years (fruiting)
 Spring Onion Plant,Allium fistulosum,60-75%,13-24°C,50-70%,Full Sun,Well-drained loamy soil,Medium,Medium,Medium,3-4 times per week,60-90 days
@@ -95,6 +94,6 @@ Petunia,Petunia × hybrida,55-70%,15-28°C,50-65%,Full Sun,Well-drained loamy so
 Wisteria,Wisteria sinensis,55-70%,15-28°C,50-70%,Full Sun,Well-drained loamy soil,Low,Medium,Medium,2-3 times per week,3-5 years (flowering)
 Iris,Iris germanica,50-65%,13-25°C,45-65%,Full Sun,Well-drained slightly alkaline loamy soil,Low,Medium,High,Once per week,90-120 days (flowering)
 Lavender Mist (Lavandula),Lavandula stoechas,30-50%,15-28°C,30-55%,Full Sun,Well-drained sandy alkaline soil,Low,Low,Medium,Once per week,90-120 days (flowering)
-
 Tomato,Solanum lycopersicum,Moderate,18-24°C,60-80%,Full sun,Well-draining,Medium,High,Medium,Regular,60-90 days
 Strawberry,Fragaria x ananassa,Moderate,Cool to Warm,High,Full Sun,Well-draining,Medium,High,Medium,Regular,Spring to Fall
+TestPlant_Excel,Testus excelus,60%,25C,,,,,,,,

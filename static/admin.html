@@ -60,8 +60,16 @@
                     <i class="fas fa-shopping-bag"></i> Sales Master
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('dataset-profiles',event)">
+                    <i class="fas fa-file-excel"></i> Dataset Uploads
+                </a>
+            </li>
         </ul>
-        <div class="sidebar-footer" style="padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+        <div class="sidebar-footer" style="padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="/superadmin.html" class="nav-link" style="color: #60a5fa; margin-bottom: 8px; font-weight: 500;">
+                <i class="fas fa-shield-halved"></i> Super Admin SaaS Portal
+            </a>
             <a href="/" class="nav-link" style="color: #999;">
                 <i class="fas fa-external-link-alt"></i> View Shop
             </a>
@@ -76,13 +84,52 @@
                 <p id="section-subtitle">Manage your core plant catalog and stock levels.</p>
             </div>
             <div class="user-profile" style="display: flex; align-items: center; gap: 15px;">
-                <span style="font-weight: 600; font-size: 0.9rem;">Administrator</span>
-                <div
-                    style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center;">
+                <div id="tenantBadgeContainer"
+                    style="display: flex; align-items: center; gap: 8px; background: rgba(39, 174, 96, 0.15); border: 1px solid #27ae60; padding: 6px 14px; border-radius: 20px; color: #27ae60; font-weight: 600; font-size: 0.85rem;">
+                    <i class="fas fa-building"></i> <span id="tenantBadgeText">Green Valley Nursery (NURS-0001)</span>
+                </div>
+                <span id="adminUserEmailDisplay" style="font-weight: 600; font-size: 0.9rem;">Administrator</span>
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;"
+                    onclick="openTenantLoginModal()" title="Switch Nursery / Login">
                     <i class="fas fa-user-shield"></i>
                 </div>
             </div>
         </header>
+
+        <!-- Nursery Tenant Login Modal -->
+        <div id="tenantLoginModal" class="modal-backdrop"
+            style="display: none; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 2000;">
+            <div class="modal" style="max-width: 420px; background: #fff; padding: 2rem; border-radius: 12px;">
+                <div class="modal-header"
+                    style="border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 1.3rem; color: #2c3e50;"><i class="fas fa-store" style="color: #27ae60;"></i>
+                        Nursery Admin Login</h2>
+                    <button class="close-btn" onclick="closeModal('tenantLoginModal')">&times;</button>
+                </div>
+                <form id="tenantLoginForm" onsubmit="handleTenantLogin(event)">
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label style="font-weight: 600; font-size: 0.85rem; color: #555;">Business ID (Nursery ID)
+                            *</label>
+                        <input type="text" id="tLogBusinessId" class="form-control" placeholder="e.g. NURS-0001"
+                            value="NURS-0001" required style="font-weight: bold; text-transform: uppercase;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label style="font-weight: 600; font-size: 0.85rem; color: #555;">Email Address *</label>
+                        <input type="email" id="tLogEmail" class="form-control" placeholder="admin@nursery.com"
+                            value="admin@plantapp.com" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label style="font-weight: 600; font-size: 0.85rem; color: #555;">Password *</label>
+                        <input type="password" id="tLogPassword" class="form-control" placeholder="Password"
+                            value="admin123" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; justify-content: center; padding: 12px; background: #27ae60; border: none; font-weight: 600;">
+                        <i class="fas fa-right-to-bracket"></i> Login to Nursery Portal
+                    </button>
+                </form>
+            </div>
+        </div>
 
         <!-- PLANT MASTER SECTION -->
         <section id="plant-master" class="section active">
@@ -557,6 +604,161 @@
                         </div>
                     </form>
                 </div>
+            </div>
+        </section>
+
+        <!-- DATASET PROFILES & EXCEL UPLOAD SECTION -->
+        <section id="dataset-profiles" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title"><i class="fas fa-file-excel"
+                                style="color: #27ae60; margin-right: 8px;"></i> Dataset Profiles & Excel Upload</h2>
+                        <p style="color: var(--gray-700); margin-top: 4px; font-size: 0.9rem;">
+                            Import and sync Excel (.xlsx/.xls) or CSV sheets for Geography, Plant Catalog, Disease
+                            Identification, and Seasonal profiles.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Sub-Navigation Tabs for Profile Datasets -->
+                <div class="profile-tabs-header"
+                    style="display: flex; gap: 10px; border-bottom: 2px solid var(--gray-200); margin-bottom: 1.5rem; flex-wrap: wrap;">
+                    <button class="profile-tab-btn active" onclick="switchProfileDatasetTab('geography', this)">
+                        <i class="fas fa-globe-americas"></i> Geography Profiles
+                    </button>
+                    <button class="profile-tab-btn" onclick="switchProfileDatasetTab('plant_profile', this)">
+                        <i class="fas fa-leaf"></i> Plant Profiles
+                    </button>
+                    <button class="profile-tab-btn" onclick="switchProfileDatasetTab('disease_profile', this)">
+                        <i class="fas fa-shield-virus"></i> Disease Profiles
+                    </button>
+                    <button class="profile-tab-btn" onclick="switchProfileDatasetTab('seasonal_profile', this)">
+                        <i class="fas fa-calendar-alt"></i> Seasonal Care
+                    </button>
+                </div>
+
+                <!-- Stats Summary Cards -->
+                <div class="form-grid"
+                    style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="padding: 1.2rem; background: #f4f9f5; border: 1px solid #c8e6c9; border-radius: 10px;">
+                        <span
+                            style="font-size: 0.8rem; color: #2e7d32; font-weight: 600; text-transform: uppercase;">Total
+                            Dataset Records</span>
+                        <h3 id="ds-stat-count"
+                            style="font-size: 1.8rem; font-weight: 700; color: #1b5e20; margin: 4px 0 0 0;">--</h3>
+                    </div>
+                    <div style="padding: 1.2rem; background: #f0f7ff; border: 1px solid #bbdefb; border-radius: 10px;">
+                        <span
+                            style="font-size: 0.8rem; color: #1565c0; font-weight: 600; text-transform: uppercase;">Last
+                            Modified File</span>
+                        <h4 id="ds-stat-modified"
+                            style="font-size: 0.95rem; font-weight: 600; color: #0d47a1; margin: 4px 0 0 0; word-break: break-all;">
+                            --</h4>
+                    </div>
+                    <div style="padding: 1.2rem; background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px;">
+                        <span
+                            style="font-size: 0.8rem; color: #f57f17; font-weight: 600; text-transform: uppercase;">Target
+                            Dataset File</span>
+                        <h4 id="ds-stat-file"
+                            style="font-size: 0.95rem; font-weight: 600; color: #e65100; margin: 4px 0 0 0; word-break: break-all;">
+                            --</h4>
+                    </div>
+                    <div
+                        style="padding: 1.2rem; background: #f3e5f5; border: 1px solid #e1bee7; border-radius: 10px; display: flex; flex-direction: column; justify-content: center;">
+                        <button class="btn btn-secondary"
+                            style="font-size: 0.85rem; padding: 8px 12px; background: white; color: #6a1b9a; border: 1px solid #ba68c8;"
+                            onclick="downloadSelectedProfileTemplate()">
+                            <i class="fas fa-file-download"></i> Download Template
+                        </button>
+                    </div>
+                </div>
+
+                <!-- File Dropzone & Mode Controls -->
+                <div style="background: var(--gray-100); padding: 1.5rem; border-radius: 12px; border: 2px dashed #a5d6a7; margin-bottom: 1.5rem;"
+                    id="ds-dropzone">
+                    <div
+                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px;">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2.5rem; color: #27ae60;"></i>
+                        <div>
+                            <strong style="font-size: 1.05rem;">Drag & drop your Excel (.xlsx, .xls) or CSV (.csv)
+                                file here</strong>
+                            <p style="font-size: 0.85rem; color: var(--gray-700); margin-top: 2px;">Supported
+                                formats: Microsoft Excel, CSV (UTF-8, Latin-1)</p>
+                        </div>
+                        <input type="file" id="ds-file-input" accept=".csv, .xlsx, .xls" style="display: none;"
+                            onchange="handleDatasetFileSelect(event)">
+                        <button class="btn btn-primary" style="padding: 8px 18px; font-size: 0.9rem;"
+                            onclick="document.getElementById('ds-file-input').click()">
+                            <i class="fas fa-folder-open"></i> Browse File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selected File Banner & Mode Selector -->
+                <div id="ds-file-selected-banner"
+                    style="display: none; background: #e8f5e9; border: 1px solid #a5d6a7; padding: 1rem 1.2rem; border-radius: 10px; margin-bottom: 1.5rem; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fas fa-file-csv" style="font-size: 1.8rem; color: #2e7d32;"></i>
+                        <div>
+                            <strong id="ds-selected-filename" style="color: #1b5e20;">file.csv</strong>
+                            <span id="ds-selected-filesize"
+                                style="font-size: 0.85rem; color: #388e3c; margin-left: 8px;">(12 KB)</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="font-size: 0.9rem; font-weight: 600; color: #2e7d32;">Upload Mode:</label>
+                            <select id="ds-upload-mode" class="form-control"
+                                style="padding: 5px 10px; font-size: 0.85rem; max-width: 180px;">
+                                <option value="replace">Replace Entire Dataset</option>
+                                <option value="append">Append / Update Rows</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary"
+                            style="padding: 8px 16px; font-size: 0.85rem; background: #27ae60;"
+                            id="ds-confirm-upload-btn" onclick="uploadDatasetProfile()">
+                            <i class="fas fa-sync-alt"></i> Upload & Sync to RAG
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live File Preview Table -->
+                <div id="ds-preview-container" style="display: none; margin-top: 1.5rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--gray-800);">File Preview (Top
+                            Parsed Rows)</h3>
+                        <span class="badge badge-success" id="ds-preview-count">0 rows detected</span>
+                    </div>
+                    <div class="table-container"
+                        style="max-height: 350px; overflow-y: auto; border: 1px solid var(--gray-300); border-radius: 8px;">
+                        <table style="font-size: 0.85rem;" id="ds-preview-table">
+                            <thead id="ds-preview-head"></thead>
+                            <tbody id="ds-preview-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Existing Dataset Preview Table -->
+                <div id="ds-existing-container" style="margin-top: 1.5rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--gray-800);">Current Knowledge
+                            Base Records</h3>
+                        <span style="font-size: 0.85rem; color: var(--gray-700);" id="ds-existing-badge">Sample
+                            View</span>
+                    </div>
+                    <div class="table-container"
+                        style="max-height: 380px; overflow-y: auto; border: 1px solid var(--gray-300); border-radius: 8px;">
+                        <table style="font-size: 0.85rem;" id="ds-existing-table">
+                            <thead id="ds-existing-head"></thead>
+                            <tbody id="ds-existing-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>

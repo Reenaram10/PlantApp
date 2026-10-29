@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin Portal | PlantApp Multi-Tenant SaaS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --bg-hover: #334155;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-red: #ef4444;
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-success {
+            background-color: var(--accent-green);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--accent-red);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--bg-hover);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .stat-lbl {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th,
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-active {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+        }
+
+        .badge-inactive {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 14px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        /* Login Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-badge"><i class="fa-solid fa-seedling"></i> PlantApp</div>
+            <h2 style="font-size: 1.2rem;">Super Admin SaaS Portal</h2>
+        </div>
+        <div class="user-menu" id="userMenu">
+            <span id="superAdminEmail" style="color: var(--text-muted); font-size: 0.9rem;">admin@system.com</span>
+            <button class="btn btn-outline" onclick="logoutSuperAdmin()"><i class="fa-solid fa-right-from-bracket"></i>
+                Logout</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(59, 130, 246, 0.2); color: var(--accent-blue);">
+                    <i class="fa-solid fa-store"></i>
+                </div>
+                <div>
+                    <div class="stat-val" id="statTotalNurseries">0</div>
+                    <div class="stat-lbl">Total Nurseries</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-green);">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <div class="stat-val" id="statActiveNurseries">0</div>
+                    <div class="stat-lbl">Active Nurseries</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(239, 68, 68, 0.2); color: var(--accent-red);">
+                    <i class="fa-solid fa-circle-pause"></i>
+                </div>
+                <div>
+                    <div class="stat-val" id="statInactiveNurseries">0</div>
+                    <div class="stat-lbl">Inactive Nurseries</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(139, 92, 246, 0.2); color: var(--accent-purple);">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div>
+                    <div class="stat-val" id="statTotalUsers">0</div>
+                    <div class="stat-lbl">Total Users</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <div>
+                    <div class="stat-val" id="statTotalPlants">0</div>
+                    <div class="stat-lbl">Total Plants</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('nurseriesTab')"><i class="fa-solid fa-building-user"></i>
+                Registered Nurseries</button>
+            <button class="tab-btn" onclick="switchTab('registerTab')"><i class="fa-solid fa-plus-circle"></i> Register
+                New Nursery</button>
+            <button class="tab-btn" onclick="switchTab('auditTab')"><i class="fa-solid fa-clock-rotate-left"></i>
+                Platform Audit Logs</button>
+        </div>
+
+        <!-- Tab 1: Registered Nurseries -->
+        <div id="nurseriesTab" class="tab-content active">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+                    <h3>All Nurseries</h3>
+                    <input type="text" id="nurserySearch" placeholder="Search nursery name or ID..."
+                        onkeyup="loadNurseries()"
+                        style="padding: 8px 14px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 6px; color: white; width: 280px;">
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Business ID</th>
+                                <th>Nursery Name</th>
+                                <th>Owner / Admin</th>
+                                <th>Contact Email</th>
+                                <th>Location</th>
+                                <th>Plants</th>
+                                <th>Orders</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nurseriesTableBody">
+                            <tr>
+                                <td colspan="9" style="text-align: center; color: var(--text-muted);">Loading
+                                    nurseries...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Register New Nursery -->
+        <div id="registerTab" class="tab-content">
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <h3 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-shop"></i> Onboard New Nursery Tenant</h3>
+                <form id="registerNurseryForm" onsubmit="handleRegisterNursery(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nursery / Business Name *</label>
+                            <input type="text" id="regBusinessName" placeholder="e.g. Sunrise Botanical Nursery"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>Owner Name</label>
+                            <input type="text" id="regOwnerName" placeholder="e.g. John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Business Email *</label>
+                            <input type="email" id="regEmail" placeholder="info@sunrisenursery.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" id="regPhone" placeholder="+1 555-0199">
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" id="regAddress" placeholder="123 Green Valley Way">
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="regCity" placeholder="California">
+                        </div>
+                        <div class="form-group">
+                            <label>State / Province</label>
+                            <input type="text" id="regState" placeholder="CA">
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" id="regCountry" placeholder="USA">
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 1.5rem 0 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;"><i
+                            class="fa-solid fa-user-gear"></i> Primary Nursery Admin Account</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Admin Name</label>
+                            <input type="text" id="regAdminName" placeholder="Admin Manager Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Admin Email *</label>
+                            <input type="email" id="regAdminEmail" placeholder="admin@sunrisenursery.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Admin Password *</label>
+                            <input type="password" id="regAdminPassword" placeholder="Default: admin123"
+                                value="admin123" required>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                        <button type="button" class="btn btn-outline"
+                            onclick="switchTab('nurseriesTab')">Cancel</button>
+                        <button type="submit" class="btn btn-success"><i class="fa-solid fa-check-circle"></i> Create
+                            Nursery & Generate Business ID</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab 3: Platform Audit Logs -->
+        <div id="auditTab" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 1.2rem;"><i class="fa-solid fa-list-check"></i> System Audit Trail</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Business ID</th>
+                                <th>User Email</th>
+                                <th>Action</th>
+                                <th>Module</th>
+                                <th>Record ID</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditLogsTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--text-muted);">Loading audit
+                                    logs...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Super Admin Login Modal -->
+    <div id="superAdminLoginModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <h2 style="text-align: center; margin-bottom: 0.5rem;"><i class="fa-solid fa-shield-halved"
+                    style="color: var(--accent-blue);"></i> Super Admin Login</h2>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Access
+                multi-tenant management panel</p>
+            <form id="saLoginForm" onsubmit="handleSuperAdminLogin(event)">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label>Super Admin Email</label>
+                    <input type="email" id="saEmail" value="admin@system.com" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label>Password</label>
+                    <input type="password" id="saPassword" value="admin123" required>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; justify-content: center; padding: 12px;"><i class="fa-solid fa-key"></i>
+                    Authenticate Super Admin</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let saToken = localStorage.getItem('saas_superadmin_token');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!saToken) {
+                document.getElementById('superAdminLoginModal').style.display = 'flex';
+            } else {
+                initSuperAdminDashboard();
+            }
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+
+            if (tabId === 'nurseriesTab') loadNurseries();
+            if (tabId === 'auditTab') loadAuditLogs();
+        }
+
+        async function handleSuperAdminLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('saEmail').value;
+            const password = document.getElementById('saPassword').value;
+
+            try {
+                const res = await fetch('/api/super-admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    saToken = data.token;
+                    localStorage.setItem('saas_superadmin_token', saToken);
+                    document.getElementById('superAdminLoginModal').style.display = 'none';
+                    initSuperAdminDashboard();
+                } else {
+                    alert('Login failed: ' + data.message);
+                }
+            } catch (err) {
+                alert('Connection error: ' + err.message);
+            }
+        }
+
+        function logoutSuperAdmin() {
+            localStorage.removeItem('saas_superadmin_token');
+            location.reload();
+        }
+
+        function getAuthHeaders(includeContentType = false) {
+            const headers = {};
+            if (includeContentType) {
+                headers['Content-Type'] = 'application/json';
+            }
+            if (saToken) {
+                headers['Authorization'] = `Bearer ${saToken}`;
+            }
+            return headers;
+        }
+
+        async function initSuperAdminDashboard() {
+            loadStats();
+            loadNurseries();
+        }
+
+        function checkAuthStatus(res) {
+            if (res.status === 401 || res.status === 403) {
+                document.getElementById('superAdminLoginModal').style.display = 'flex';
+                return false;
+            }
+            return true;
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/super-admin/stats', { headers: getAuthHeaders() });
+                if (!checkAuthStatus(res)) return;
+                const data = await res.json();
+                if (data.status === 'success') {
+                    const s = data.stats;
+                    document.getElementById('statTotalNurseries').textContent = s.total_nurseries;
+                    document.getElementById('statActiveNurseries').textContent = s.active_nurseries;
+                    document.getElementById('statInactiveNurseries').textContent = s.inactive_nurseries;
+                    document.getElementById('statTotalUsers').textContent = s.total_users;
+                    document.getElementById('statTotalPlants').textContent = s.total_plants;
+                }
+            } catch (err) {
+                console.error("Stats load error:", err);
+            }
+        }
+
+        async function loadNurseries() {
+            const search = document.getElementById('nurserySearch').value;
+            try {
+                const res = await fetch(`/api/super-admin/nurseries?search=${encodeURIComponent(search)}`, { headers: getAuthHeaders() });
+                const data = await res.json();
+                const tbody = document.getElementById('nurseriesTableBody');
+
+                if (data.status === 'success') {
+                    if (data.nurseries.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted);">No nurseries found.</td></tr>`;
+                        return;
+                    }
+                    tbody.innerHTML = data.nurseries.map(n => {
+                        const contactEmail = (n.admin_email && n.admin_email !== 'None') ? n.admin_email : (n.email || 'N/A');
+                        return `
+                        <tr>
+                            <td><strong style="color: var(--accent-blue);">${n.business_id}</strong></td>
+                            <td><strong>${n.business_name}</strong></td>
+                            <td>${n.owner_name || 'N/A'}</td>
+                            <td>${contactEmail}</td>
+                            <td>${n.city ? n.city + ', ' + (n.country || '') : 'N/A'}</td>
+                            <td>${n.plant_count}</td>
+                            <td>${n.order_count}</td>
+                            <td>
+                                <span class="badge ${n.status === 'Active' ? 'badge-active' : 'badge-inactive'}">${n.status}</span>
+                            </td>
+                            <td style="display: flex; gap: 6px;">
+                                <button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem;" onclick="toggleStatus('${n.business_id}', '${n.status === 'Active' ? 'Inactive' : 'Active'}')">
+                                    ${n.status === 'Active' ? '<i class="fa-solid fa-pause"></i> Deactivate' : '<i class="fa-solid fa-play"></i> Activate'}
+                                </button>
+                                ${n.business_id !== 'NURS-0001' ? `
+                                <button class="btn btn-danger" style="padding: 4px 10px; font-size: 0.8rem;" onclick="deleteNursery('${n.business_id}')">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </button>` : ''}
+                            </td>
+                        </tr>
+                    `}).join('');
+                }
+            } catch (err) {
+                console.error("Nurseries load error:", err);
+            }
+        }
+
+        async function toggleStatus(bizId, newStatus) {
+            if (!confirm(`Are you sure you want to change status of nursery ${bizId} to ${newStatus}?`)) return;
+            try {
+                const res = await fetch(`/api/super-admin/nurseries/${bizId}/status`, {
+                    method: 'PATCH',
+                    headers: getAuthHeaders(true),
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    loadNurseries();
+                    loadStats();
+                } else {
+                    alert('Action failed: ' + data.message);
+                }
+            } catch (err) {
+                alert('Connection error: ' + err.message);
+            }
+        }
+
+        async function deleteNursery(bizId) {
+            if (!confirm(`Are you sure you want to permanently delete nursery ${bizId}? This action cannot be undone.`)) return;
+            try {
+                const res = await fetch(`/api/super-admin/nurseries/${bizId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    loadNurseries();
+                    loadStats();
+                } else {
+                    alert('Delete failed: ' + data.message);
+                }
+            } catch (err) {
+                alert('Connection error: ' + err.message);
+            }
+        }
+
+        async function handleRegisterNursery(e) {
+            e.preventDefault();
+            const payload = {
+                business_name: document.getElementById('regBusinessName').value,
+                owner_name: document.getElementById('regOwnerName').value,
+                email: document.getElementById('regEmail').value,
+                phone: document.getElementById('regPhone').value,
+                address: document.getElementById('regAddress').value,
+                city: document.getElementById('regCity').value,
+                state: document.getElementById('regState').value,
+                country: document.getElementById('regCountry').value,
+                admin_name: document.getElementById('regAdminName').value,
+                admin_email: document.getElementById('regAdminEmail').value,
+                admin_password: document.getElementById('regAdminPassword').value
+            };
+
+            try {
+                const res = await fetch('/api/super-admin/nurseries', {
+                    method: 'POST',
+                    headers: getAuthHeaders(true),
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    alert(`✅ Nursery '${data.business_name}' registered successfully!\nAssigned Business ID: ${data.business_id}`);
+                    if (e && e.target && typeof e.target.reset === 'function') {
+                        e.target.reset();
+                    }
+                    const formEl = document.getElementById('registerNurseryForm');
+                    if (formEl) formEl.reset();
+
+                    // Explicitly clear all registration input values
+                    ['regBusinessName', 'regOwnerName', 'regEmail', 'regPhone', 'regAddress', 'regCity', 'regState', 'regCountry', 'regAdminName', 'regAdminEmail'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.value = '';
+                    });
+                    const passEl = document.getElementById('regAdminPassword');
+                    if (passEl) passEl.value = 'admin123';
+
+                    switchTab('nurseriesTab');
+                    loadStats();
+                } else {
+                    alert('Registration failed: ' + data.message);
+                }
+            } catch (err) {
+                alert('Connection error: ' + err.message);
+            }
+        }
+
+        async function loadAuditLogs() {
+            try {
+                const res = await fetch('/api/super-admin/audit-logs', { headers: getAuthHeaders() });
+                const data = await res.json();
+                const tbody = document.getElementById('auditLogsTableBody');
+                if (data.status === 'success') {
+                    tbody.innerHTML = data.audit_logs.map(l => `
+                        <tr>
+                            <td>${new Date(l.timestamp).toLocaleString()}</td>
+                            <td><span style="color: var(--accent-blue); font-weight: 600;">${l.business_id || 'SYSTEM'}</span></td>
+                            <td>${l.user_email || 'System/Guest'}</td>
+                            <td><strong>${l.action}</strong></td>
+                            <td>${l.module}</td>
+                            <td>${l.record_id || 'N/A'}</td>
+                            <td style="color: var(--text-muted); font-size: 0.85rem;">${l.details || ''}</td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error("Audit log error:", err);
+            }
+        }
+    </script>
+</body>
+
+</html>

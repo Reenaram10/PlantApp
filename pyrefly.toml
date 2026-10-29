@@ -1,0 +1,6 @@
+# Pyrefly Configuration for PlantApp
+search-path = ["."]
+python-interpreter-path = "C:/Users/Reena/AppData/Local/Programs/Python/Python313/python.exe"
+site-package-path = [
+    "C:/Users/Reena/AppData/Local/Programs/Python/Python313/Lib/site-packages"
+]

@@ -1,5 +1,23 @@
 const API_BASE = window.location.origin;
 let currentSection = 'plant-master';
+
+function getAuthHeaders() {
+    const token = localStorage.getItem('saas_tenant_token');
+    const headers = {};
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+}
+
+async function authFetch(url, options = {}) {
+    options.headers = {
+        ...getAuthHeaders(),
+        ...(options.headers || {})
+    };
+    return fetch(url, options);
+}
+
 const fixImageUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
@@ -7,8 +25,51 @@ const fixImageUrl = (url) => {
     return `${API_BASE}${url.startsWith('/') ? '' : '/'}${url}`;
 };
 
+function updateTenantBadgeDisplay() {
+    const bizId = localStorage.getItem('saas_tenant_biz_id') || 'NURS-0001';
+    const bizName = localStorage.getItem('saas_tenant_biz_name') || 'Green Valley Nursery';
+    const badgeText = document.getElementById('tenantBadgeText');
+    if (badgeText) {
+        badgeText.textContent = `${bizName} (${bizId})`;
+    }
+}
+
+function openTenantLoginModal() {
+    document.getElementById('tenantLoginModal').style.display = 'flex';
+}
+
+async function handleTenantLogin(e) {
+    e.preventDefault();
+    const business_id = document.getElementById('tLogBusinessId').value.trim();
+    const email = document.getElementById('tLogEmail').value.trim();
+    const password = document.getElementById('tLogPassword').value;
+
+    try {
+        const res = await fetch(`${API_BASE}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ business_id, email, password })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            localStorage.setItem('saas_tenant_token', data.token);
+            localStorage.setItem('saas_tenant_biz_id', data.user.business_id);
+            localStorage.setItem('saas_tenant_biz_name', data.user.business_name);
+            showToast(`Logged in to ${data.user.business_name} (${data.user.business_id})`, 'success');
+            closeModal('tenantLoginModal');
+            updateTenantBadgeDisplay();
+            loadInventory();
+        } else {
+            showToast(data.message || 'Login failed', 'error');
+        }
+    } catch (err) {
+        showToast('Login server error', 'error');
+    }
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    updateTenantBadgeDisplay();
     loadCategories();
     loadInventory();
     loadSuppliers();
@@ -30,7 +91,8 @@ function showSection(sectionId, event) {
         'supplier-master': 'Supplier Master',
         'category-master': 'Category Master',
         'customer-master': 'Customer Master',
-        'sales-master': 'Sales Master'
+        'sales-master': 'Sales Master',
+        'dataset-profiles': 'Dataset Profiles & Excel Upload'
     };
     const subtitles = {
         'plant-master': 'Manage your core plant catalog and stock levels.',
@@ -39,7 +101,8 @@ function showSection(sectionId, event) {
         'supplier-master': 'Maintain global directory of your business suppliers.',
         'category-master': 'Create and manage plant categories.',
         'customer-master': 'View registered customers and their activity.',
-        'sales-master': 'Track customer orders, update delivery status, and view invoices.'
+        'sales-master': 'Track customer orders, update delivery status, and view invoices.',
+        'dataset-profiles': 'Import and sync Excel or CSV sheets for Geography, Plant, Disease, and Seasonal profiles.'
     };
 
     document.getElementById('section-title').textContent = titles[sectionId];
@@ -51,6 +114,7 @@ function showSection(sectionId, event) {
     if (sectionId === 'customer-master') loadCustomers();
     if (sectionId === 'sales-master') loadOrders();
     if (sectionId === 'purchase-master') loadPurchases();
+    if (sectionId === 'dataset-profiles') loadProfileStats(currentSelectedProfileType);
     if (sectionId === 'inventory') {
         loadSuppliers();
         loadInventory();
@@ -85,7 +149,7 @@ async function openPlantModal() {
 
 async function editPlant(id) {
     try {
-        const res = await fetch(`${API_BASE}/api/admin/get-plant/${id}`);
+        const res = await authFetch(`${API_BASE}/api/admin/get-plant/${id}`);
         const data = await res.json();
         if (data.status === 'success') {
             const plant = data.plant;
@@ -97,7 +161,7 @@ async function editPlant(id) {
             document.getElementById('m-plant-stock').value = plant.stock;
             document.getElementById('plant-modal-title').textContent = 'Edit Plant Details';
 
-            const catIds = plant.categories.map(c => c.category_id);
+            const catIds = plant.categories ? plant.categories.map(c => c.category_id) : [];
             renderCategoryCheckboxes(catIds);
             openModal('add-plant-modal');
         }
@@ -147,7 +211,7 @@ document.getElementById('plant-form').addEventListener('submit', async (e) => {
     }
 
     try {
-        const res = await fetch(url, {
+        const res = await authFetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -182,7 +246,7 @@ async function searchPlants() {
     }
 
     try {
-        const res = await fetch(`${API_BASE}/api/admin/search-plants?q=${query}`);
+        const res = await authFetch(`${API_BASE}/api/admin/search-plants?q=${query}`);
         const data = await res.json();
 
         if (data.status === 'success') {
@@ -195,7 +259,7 @@ async function searchPlants() {
 
 async function loadInventory() {
     try {
-        const res = await fetch(`${API_BASE}/api/admin/inventory`);
+        const res = await authFetch(`${API_BASE}/api/admin/inventory`);
         const data = await res.json();
         if (data.status === 'success') {
             displayInventory(data.plants);
@@ -208,6 +272,11 @@ async function loadInventory() {
 function displayInventory(plants) {
     const tbody = document.getElementById('inventoryBody');
     tbody.innerHTML = '';
+
+    if (!plants || plants.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: var(--gray-700);">No plants found for this nursery yet. Click "+ Add New Plant" above to add your first plant.</td></tr>';
+        return;
+    }
 
     plants.forEach(p => {
         const stockBadge = p.stock <= 5 ? 'badge-danger' : (p.stock < 20 ? 'badge-warning' : 'badge-success');
@@ -247,7 +316,7 @@ async function deletePlant(id, name) {
     if (!confirm(`Are you sure you want to PERMANENTLY remove ${name}? This will delete all varieties and order history.`)) return;
 
     try {
-        const res = await fetch(`${API_BASE}/api/admin/remove-plant/${id}`, { method: 'DELETE' });
+        const res = await authFetch(`${API_BASE}/api/admin/delete-plant/${id}`, { method: 'DELETE' });
         const data = await res.json();
         if (data.status === 'success') {
             showToast(data.message, "success");
@@ -1235,5 +1304,190 @@ document.getElementById('salesPaymentForm')?.addEventListener('submit', async (e
         }
     } catch (err) {
         showToast("Server error recording sales payment", "error");
+    }
+});
+
+// ==============================================================================
+// DATASET PROFILES & EXCEL/CSV UPLOADS LOGIC
+// ==============================================================================
+
+let currentSelectedProfileType = 'geography';
+let selectedProfileFile = null;
+
+async function loadProfileStats(profileType = 'geography') {
+    try {
+        const res = await fetch(`${API_BASE}/api/admin/profile-stats?profile_type=${profileType}`);
+        const data = await res.json();
+        if (data.status === 'success' && data.datasets && data.datasets[profileType]) {
+            const info = data.datasets[profileType];
+
+            document.getElementById('ds-stat-count').textContent = info.row_count || '0';
+            document.getElementById('ds-stat-modified').textContent = info.last_modified || 'N/A';
+            document.getElementById('ds-stat-file').textContent = info.filename || 'N/A';
+
+            // Render existing database/CSV preview table
+            renderDatasetTable('ds-existing-head', 'ds-existing-body', info.columns, info.preview);
+            document.getElementById('ds-existing-badge').textContent = `Showing Top ${info.preview.length} of ${info.row_count} Records`;
+        }
+    } catch (err) {
+        showToast("Failed to load dataset statistics", "error");
+    }
+}
+
+function switchProfileDatasetTab(profileType, btnElem) {
+    document.querySelectorAll('.profile-tab-btn').forEach(b => b.classList.remove('active'));
+    if (btnElem) btnElem.classList.add('active');
+
+    currentSelectedProfileType = profileType;
+    selectedProfileFile = null;
+    document.getElementById('ds-file-input').value = '';
+    document.getElementById('ds-file-selected-banner').style.display = 'none';
+    document.getElementById('ds-preview-container').style.display = 'none';
+
+    loadProfileStats(profileType);
+}
+
+function handleDatasetFileSelect(event) {
+    const file = event.target.files ? event.target.files[0] : (event.dataTransfer ? event.dataTransfer.files[0] : null);
+    if (!file) return;
+
+    selectedProfileFile = file;
+    document.getElementById('ds-selected-filename').textContent = file.name;
+    document.getElementById('ds-selected-filesize').textContent = `(${(file.size / 1024).toFixed(1)} KB)`;
+    document.getElementById('ds-file-selected-banner').style.display = 'flex';
+
+    // Parse preview on client side
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const text = e.target.result;
+        parseCSVPreviewClient(text);
+    };
+    reader.readAsText(file);
+}
+
+function parseCSVPreviewClient(csvText) {
+    try {
+        const lines = csvText.split(/\r\n|\n/).filter(line => line.trim().length > 0);
+        if (lines.length === 0) return;
+
+        const headers = lines[0].split(',').map(h => h.replace(/^["']|["']$/g, '').trim());
+        const previewRows = [];
+
+        for (let i = 1; i < Math.min(lines.length, 11); i++) {
+            const rowVals = lines[i].split(',').map(v => v.replace(/^["']|["']$/g, '').trim());
+            const rowObj = {};
+            headers.forEach((h, idx) => {
+                rowObj[h] = rowVals[idx] || '';
+            });
+            previewRows.push(rowObj);
+        }
+
+        renderDatasetTable('ds-preview-head', 'ds-preview-body', headers, previewRows);
+        document.getElementById('ds-preview-count').textContent = `${lines.length - 1} total rows detected`;
+        document.getElementById('ds-preview-container').style.display = 'block';
+    } catch (err) {
+        console.warn("Client side preview parse note:", err);
+    }
+}
+
+function renderDatasetTable(headId, bodyId, columns, rows) {
+    const thead = document.getElementById(headId);
+    const tbody = document.getElementById(bodyId);
+
+    if (!columns || columns.length === 0) {
+        thead.innerHTML = '<tr><th>No Data</th></tr>';
+        tbody.innerHTML = '<tr><td>No records found.</td></tr>';
+        return;
+    }
+
+    // Display max 8 columns for clean UI table view
+    const displayCols = columns.slice(0, 8);
+
+    thead.innerHTML = `<tr>${displayCols.map(c => `<th>${c}</th>`).join('')}</tr>`;
+
+    if (!rows || rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${displayCols.length}" style="text-align:center; color:var(--gray-700);">No dataset rows available.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = rows.map(r => {
+        return `<tr>${displayCols.map(c => `<td>${r[c] !== undefined ? String(r[c]) : ''}</td>`).join('')}</tr>`;
+    }).join('');
+}
+
+async function uploadDatasetProfile() {
+    if (!selectedProfileFile) {
+        showToast("Please select an Excel or CSV file first.", "error");
+        return;
+    }
+
+    const mode = document.getElementById('ds-upload-mode').value;
+    const btn = document.getElementById('ds-confirm-upload-btn');
+    const originalBtnHTML = btn.innerHTML;
+
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Uploading & Syncing RAG...`;
+
+    const formData = new FormData();
+    formData.append('file', selectedProfileFile);
+    formData.append('profile_type', currentSelectedProfileType);
+    formData.append('mode', mode);
+
+    try {
+        const res = await fetch(`${API_BASE}/api/admin/upload-profiles`, {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            showToast(data.message, "success");
+            selectedProfileFile = null;
+            document.getElementById('ds-file-input').value = '';
+            document.getElementById('ds-file-selected-banner').style.display = 'none';
+            document.getElementById('ds-preview-container').style.display = 'none';
+
+            loadProfileStats(currentSelectedProfileType);
+        } else {
+            showToast(data.message || "Upload failed", "error");
+        }
+    } catch (err) {
+        showToast("Server error during dataset upload.", "error");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalBtnHTML;
+    }
+}
+
+function downloadSelectedProfileTemplate() {
+    window.location.href = `${API_BASE}/api/admin/download-template/${currentSelectedProfileType}`;
+}
+
+// Drag and drop event listeners for ds-dropzone
+document.addEventListener('DOMContentLoaded', () => {
+    const dropzone = document.getElementById('ds-dropzone');
+    if (dropzone) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => dropzone.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => dropzone.classList.remove('dragover'), false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files && files.length > 0) {
+                handleDatasetFileSelect({ target: { files: files } });
+            }
+        }, false);
     }
 });

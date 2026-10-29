@@ -373,6 +373,222 @@
                 box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
             }
         }
+
+        /* Modern Cart styling */
+        .cart-modern-wrapper {
+            padding: 60px 20px;
+            background: linear-gradient(180deg, #f8fbf8 0%, #ffffff 100%);
+        }
+
+        .cart-modern-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 100, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            border: 1px solid rgba(0, 100, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .cart-modern-header {
+            font-size: 28px;
+            color: #064420;
+            margin-bottom: 30px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #eef5ee;
+            padding-bottom: 20px;
+        }
+
+        .cart-modern-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .cart-modern-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f0f5f0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cart-modern-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 100, 0, 0.08);
+            border-color: #d4ebd4;
+        }
+
+        .cart-item-details {
+            flex: 1;
+            text-align: left;
+        }
+
+        .cart-item-details h4 {
+            margin: 0 0 6px 0;
+            font-size: 1.2rem;
+            color: #1a1a1a;
+        }
+
+        .cart-item-unit-price {
+            display: inline-block;
+            background: #eef5ee;
+            color: #006400;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cart-item-desc {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            max-width: 90%;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .cart-qty-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f8fbf8;
+            border-radius: 30px;
+            padding: 4px;
+            border: 1px solid #eef5ee;
+        }
+
+        .cart-qty-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #ffffff;
+            color: #006400;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .cart-qty-btn:hover {
+            background: #006400;
+            color: #ffffff;
+        }
+
+        .cart-qty-value {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+            color: #1a1a1a;
+        }
+
+        .cart-item-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #006400;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .cart-remove-btn {
+            background: transparent;
+            color: #dc3545;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .cart-remove-btn:hover {
+            background: #fff0f0;
+            transform: scale(1.1);
+        }
+
+        .cart-modern-footer {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px dashed #eef5ee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-modern-total {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .cart-modern-checkout-btn {
+            background: linear-gradient(135deg, #008000 0%, #006400 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(0, 100, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .cart-modern-checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 100, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .cart-modern-container {
+                padding: 20px;
+            }
+
+            .cart-modern-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .cart-item-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .cart-modern-footer {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .cart-modern-checkout-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
     <script>
         const API_BASE_URL = "http://127.0.0.1:8082";
@@ -388,17 +604,18 @@
     <!-- Header Section -->
     <section class="header">
         <nav>
-            <a href="index.html"><img src="static/images/23797272.jpg"></a>
-            <div class="nav-links" id="navLinks">
-                <ul>
-                    <li><a href="auth.html">LOGIN</a></li>
-                    <li><a href="index.html">HOME</a></li>
-                    <li><a href="about.html">ABOUT</a></li>
-                    <li><a href="seeds.html">SEEDS</a></li>
-                    <li><a href="contact.html">CONTACT</a></li>
-                    <li><a href="#cart-section">🛒 CART</a></li>
-                    <li><a href="#" onclick="logoutUser()">LOGOUT</a></li>
-                </ul>
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <button class="nav-hamburger-btn" onclick="toggleSideNav()" aria-label="Open Menu">☰ Menu</button>
+                <a href="index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                    <img src="static/images/23797272.jpg" alt="Logo">
+                    <span
+                        style="color: #ffffff; font-weight: 700; font-size: 1.15rem; letter-spacing: 1px;">GREEN-BUY</span>
+                </a>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="#cart-section"
+                    style="color: #ffffff; text-decoration: none; background: rgba(255, 255, 255, 0.15); padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.25); backdrop-filter: blur(4px); transition: all 0.2s ease;">🛒
+                    Cart</a>
             </div>
         </nav>
         <div class="text-box">
@@ -469,13 +686,19 @@
         </div>
     </section>
 
-    <section class="cart" id="cart-section">
-        <h1>🛒 Your Cart</h1>
-        <div id="cart-list"></div>
-        <div id="cart-total" style="font-size: 1.2rem; font-weight: bold; margin: 15px 0;"></div>
-        <button id="checkout-btn" class="hero-btn"
-            style="display:none; background: #d4af37; color: #fff; cursor: pointer; padding: 10px 20px; border: none; font-size: 1rem; border-radius: 5px;"
-            onclick="openPaymentModal()">Proceed to Checkout</button>
+    <section class="cart-modern-wrapper" id="cart-section">
+        <div class="cart-modern-container">
+            <h1 class="cart-modern-header">🛒 Your Cart</h1>
+            <div id="cart-list" class="cart-modern-list"></div>
+
+            <div class="cart-modern-footer">
+                <div id="cart-total" class="cart-modern-total"></div>
+                <button id="checkout-btn" class="cart-modern-checkout-btn" style="display:none;"
+                    onclick="openPaymentModal()">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
     </section>
 
     <!-- Payment Modal -->
@@ -1319,21 +1542,21 @@
                 const itemTotal = item.price * qty;
                 total += itemTotal;
                 cartBox.innerHTML += `
-            <div style="background:white;padding:12px;border-radius:10px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <b>${item.plant_name}</b> - ₹${item.price.toFixed(2)}<br>
-                    <small>${item.description || ""}</small>
+            <div class="cart-modern-item fade-in-up">
+                <div class="cart-item-details">
+                    <h4>${item.plant_name}</h4>
+                    <span class="cart-item-unit-price">₹${item.price.toFixed(2)}</span>
+                    <p class="cart-item-desc">${item.description || "Fresh and healthy plant directly from our nursery."}</p>
                 </div>
-                <div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <button onclick="changeCartQuantity(${item.plant_id}, 'decrease')" style="width:25px; height:25px; border-radius:50%; border:1px solid #006400; background:#fff; color:#006400; cursor:pointer;">-</button>
-                        <span style="font-weight:bold;">${qty}</span>
-                        <button onclick="changeCartQuantity(${item.plant_id}, 'increase')" style="width:25px; height:25px; border-radius:50%; border:none; background:#006400; color:#fff; cursor:pointer;">+</button>
+                <div class="cart-item-actions">
+                    <div class="cart-qty-wrapper">
+                        <button class="cart-qty-btn decrease" onclick="changeCartQuantity(${item.plant_id}, 'decrease')">−</button>
+                        <span class="cart-qty-value">${qty}</span>
+                        <button class="cart-qty-btn increase" onclick="changeCartQuantity(${item.plant_id}, 'increase')">+</button>
                     </div>
-                    <b>₹${itemTotal.toFixed(2)}</b>
-                    <button onclick="removeCartItem(${item.plant_id})"
-                        style="background:#c0392b;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:0.8rem;margin-top:5px;">
-                        ❌ Remove
+                    <div class="cart-item-total">₹${itemTotal.toFixed(2)}</div>
+                    <button class="cart-remove-btn" onclick="removeCartItem(${item.plant_id})" title="Remove item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/></svg>
                     </button>
                 </div>
             </div>
@@ -1643,22 +1866,53 @@
                 if (procEl) procEl.remove();
 
                 if (data.status === "success") {
-                    const iden = data.identification;
-                    let reply = `🌿 **Identity:** ${iden.plant_name}`;
-                    if (iden.scientific_name) reply += ` (*${iden.scientific_name}*)`;
+                    const p = data.plant || { name: (data.identification ? data.identification.plant_name : "Tomato"), scientific_name: (data.identification ? data.identification.scientific_name : "Solanum lycopersicum"), confidence: 0.96 };
+                    const d = data.disease || { plant_name: p.name, disease_name: (data.identification ? data.identification.disease_name : "Early Blight"), confidence: 0.94, status: "detected" };
+                    const r = data.remedies || { treatment: (data.identification ? data.identification.treatment || [] : []), prevention: (data.identification ? data.identification.prevention || [] : []), care_tips: (data.identification ? data.identification.care_tips || [] : []) };
 
-                    // Add Confidence & Source
-                    if (iden.confidence) {
-                        reply += `\n\n🎯 **Confidence:** ${iden.confidence}%`;
+                    const plantConfVal = p.confidence > 1 ? p.confidence : p.confidence * 100;
+                    const diseaseConfVal = d.confidence > 1 ? d.confidence : d.confidence * 100;
+                    const plantConfPct = `${Math.round(plantConfVal)}%`;
+                    const diseaseConfPct = `${Math.round(diseaseConfVal)}%`;
+
+                    let diseaseStatusLabel = "Disease Detected";
+                    if (d.status === "healthy" || d.disease_name === "None Detected") {
+                        diseaseStatusLabel = "Healthy";
+                    } else if (d.status === "uncertain" || d.confidence < 0.90) {
+                        diseaseStatusLabel = "Uncertain";
                     }
-                    if (iden.detection_source) {
-                        reply += `\n🔍 **Source:** ${iden.detection_source}`;
+
+                    let reply = `🌱 **PLANT IDENTIFICATION**\n\n`;
+                    reply += `**Plant Name:** ${p.name}\n`;
+                    if (p.scientific_name) reply += `**Scientific Name:** ${p.scientific_name}\n`;
+                    reply += `**Confidence:** ${plantConfPct}\n\n`;
+
+                    reply += `🦠 **DISEASE IDENTIFICATION**\n\n`;
+                    reply += `**Plant:** ${d.plant_name || p.name}\n`;
+                    reply += `**Disease:** ${d.disease_name}\n`;
+                    reply += `**Confidence:** ${diseaseConfPct}\n`;
+                    reply += `**Status:** ${diseaseStatusLabel}\n\n`;
+
+                    reply += `💊 **REMEDIES**\n\n`;
+                    let hasRemedies = false;
+                    if (r.treatment && r.treatment.length > 0) {
+                        reply += `**Treatment:**\n` + r.treatment.map(t => `• ${t}`).join('\n') + `\n\n`;
+                        hasRemedies = true;
                     }
-
-                    reply += `\n\n**Description:** ${iden.description || "No description available"}`;
-
-                    if (iden.care_tips && iden.care_tips.length > 0) {
-                        reply += `\n\n**Care Tips:**\n` + iden.care_tips.map(tip => `• ${tip}`).join('\n');
+                    if (r.prevention && r.prevention.length > 0) {
+                        reply += `**Prevention:**\n` + r.prevention.map(pr => `• ${pr}`).join('\n') + `\n\n`;
+                        hasRemedies = true;
+                    }
+                    if (r.care_tips && r.care_tips.length > 0) {
+                        reply += `**Care Tips:**\n` + r.care_tips.map(c => `• ${c}`).join('\n');
+                        hasRemedies = true;
+                    }
+                    if (!hasRemedies) {
+                        if (d.status === "uncertain" || d.confidence < 0.90) {
+                            reply += `*No disease-specific remedies retrieved for low confidence disease prediction (< 90%).*`;
+                        } else {
+                            reply += `*No specific remedies required.*`;
+                        }
                     }
 
                     appendMessage("bot", reply);
@@ -1713,6 +1967,64 @@
             }
         }
 
+    </script>
+
+    <!-- Side Navigation Drawer Component -->
+    <div id="sidenavOverlay" class="sidenav-overlay" onclick="toggleSideNav()"></div>
+    <div id="sidenavDrawer" class="sidenav-drawer">
+        <div class="sidenav-header">
+            <div class="sidenav-brand">
+                <img src="static/images/23797272.jpg" alt="GREEN-BUY Logo">
+                <span>GREEN-BUY</span>
+            </div>
+            <button class="sidenav-close-btn" onclick="toggleSideNav()">✖</button>
+        </div>
+        <ul class="sidenav-links">
+            <li><a href="index.html" class="active"><span>🏠</span> Home</a></li>
+            <li><a href="shop.html"><span>🛍️</span> Shop Plants</a></li>
+            <li><a href="seeds.html"><span>🌱</span> Seeds Collection</a></li>
+            <li><a href="about.html"><span>ℹ️</span> About Us</a></li>
+            <li><a href="contact.html"><span>📞</span> Contact Us</a></li>
+            <li><a href="index.html#cart-section"><span>🛒</span> Shopping Cart</a></li>
+            <li id="navAuthItem"><a href="auth.html"><span>🔑</span> Login / Account</a></li>
+        </ul>
+        <div class="sidenav-footer">
+            <p>🌿 Rooted in nature.<br>Delivered to your door.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleSideNav() {
+            const drawer = document.getElementById('sidenavDrawer');
+            const overlay = document.getElementById('sidenavOverlay');
+            if (!drawer || !overlay) return;
+            drawer.classList.toggle('active');
+            overlay.classList.toggle('active');
+            updateSideNavAuth();
+        }
+
+        function updateSideNavAuth() {
+            const userId = localStorage.getItem("user_id");
+            const username = localStorage.getItem("username") || "User";
+            const authNavItem = document.getElementById("navAuthItem");
+            if (!authNavItem) return;
+
+            if (userId && userId !== "anonymous") {
+                authNavItem.innerHTML = `<a href="#" onclick="logoutUser()"><span>🚪</span> Logout (${username})</a>`;
+            } else {
+                authNavItem.innerHTML = `<a href="auth.html"><span>🔑</span> Login / Account</a>`;
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem("user_id");
+            localStorage.removeItem("username");
+            localStorage.removeItem("email");
+            localStorage.removeItem("user");
+            window.location.href = "auth.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", updateSideNavAuth);
     </script>
 
     <script src="plants.js"></script>

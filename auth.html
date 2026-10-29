@@ -149,17 +149,6 @@
     <div id="loginBox">
       <h3>Login</h3>
 
-      <!-- Admin Credentials Display Box -->
-      <div
-        style="margin: 10px 0; padding: 10px; background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 8px; font-size: 13px;">
-        <strong style="color: #2e7d32; display: block; margin-bottom: 4px;">🔑 Admin Credentials</strong>
-        <div>Username: <b>admin</b></div>
-        <div>Password: <b>admin@123</b></div>
-        <button type="button" onclick="fillAdminCredentials()"
-          style="margin-top: 6px; padding: 6px; font-size: 12px; background: #2e7d32; color: white; border: none; border-radius: 6px; cursor: pointer; width: 100%;">Quick
-          Fill Admin Credentials</button>
-      </div>
-
       <input type="text" id="loginEmail" placeholder="Email or Username" required>
       <input type="password" id="loginPass" placeholder="Password" required>
 
@@ -196,12 +185,6 @@
   <script>
     // ✅ Dynamic API Base URL
     const API_BASE_URL = window.location.origin;
-
-    function fillAdminCredentials() {
-      document.getElementById("loginEmail").value = "admin";
-      document.getElementById("loginPass").value = "admin@123";
-      clearMsg();
-    }
 
     function showMsg(message, type = "error") {
       const msgEl = document.getElementById("msg");
@@ -244,6 +227,27 @@
         loginLoader.classList.add("active");
         clearMsg();
 
+        // Check if Super Admin login
+        if (email.toLowerCase() === "admin@system.com") {
+          const saResponse = await fetch(`${API_BASE_URL}/api/super-admin/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+          const saData = await saResponse.json();
+          if (saData.status === "success") {
+            localStorage.setItem("saas_superadmin_token", saData.token);
+            showMsg("✅ Super Admin Authenticated! Redirecting to SaaS Portal...", "success");
+            setTimeout(() => {
+              window.location.href = "superadmin.html";
+            }, 800);
+            return;
+          } else {
+            showMsg(`❌ ${saData.message || "Super Admin Login failed!"}`, "error");
+            return;
+          }
+        }
+
         console.log("Attempting login with:", { email, API_BASE_URL });
 
         const response = await fetch(`${API_BASE_URL}/login`, {
@@ -275,16 +279,31 @@
             email: data.email
           }));
 
-          const isAdmin = (data.username && data.username.toLowerCase() === "admin") ||
+          if (data.role === "SUPER_ADMIN") {
+            if (data.token) localStorage.setItem("saas_superadmin_token", data.token);
+            showMsg("✅ Super Admin Login successful! Redirecting...", "success");
+            setTimeout(() => {
+              window.location.href = "superadmin.html";
+            }, 800);
+            return;
+          }
+
+          const isLocalAdmin = data.role === "NURSERY_ADMIN" ||
+            data.role === "ADMIN" ||
+            data.role === "STAFF" ||
+            (data.username && data.username.toLowerCase() === "admin") ||
             (data.email && data.email.toLowerCase().includes("admin"));
 
-          if (isAdmin) {
-            showMsg("✅ Admin Login successful! Redirecting to Admin Dashboard...", "success");
+          if (isLocalAdmin) {
+            if (data.token) localStorage.setItem("saas_tenant_token", data.token);
+            if (data.business_id) localStorage.setItem("saas_tenant_biz_id", data.business_id);
+            if (data.business_name) localStorage.setItem("saas_tenant_biz_name", data.business_name);
+            showMsg("✅ Local Admin Login successful! Redirecting to Admin Dashboard...", "success");
             setTimeout(() => {
-              window.location.href = "admin.html";
+              window.location.href = "static/admin.html";
             }, 800);
           } else {
-            showMsg("✅ Login successful! Redirecting...", "success");
+            showMsg("✅ Customer Login successful! Redirecting...", "success");
             setTimeout(() => {
               window.location.href = "index.html";
             }, 800);

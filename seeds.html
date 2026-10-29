@@ -1,110 +1,175 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width,iniial-scale=1.0">
-        <title>GREEN-BUY-website</title>
-        <link rel="stylesheet" href="style.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/fontawesome.min.css">
-</head>
-    <body>
-        <section class="sub-header">
-            <nav>
-                <a href="index.html"><img src="./images/23797272.jpg"></a>
-                <div class="nav-links"id="navLinks">
-                    
-                    <ul>
-                        <li><a href="index.html">HOME</a></li>
-                        <li><a href="about.html">ABOUT</a></li>
-                        <li><a href="seeds.html">SEEDS</a></li>
-                        <li><a href="contact.html">CONTACT</a></li>
-                    </ul>
-                </div>
-                
-            </nav>
-       <h1>SEEDS</h1>
-        </section>
-<section class="seeds">
-    <h1>SEEDS WE SELL</h1>
-    <p>High Quality seeds</p>
-    <div class="row">
-                            <div class="seeds1-col">
-                            <img src="static/images/cherry.jpg">
-                            <h3>Cherry Tomatoes</h3>
-                            <p>Rs.35/-</p>
-                        </div>
-                            <div class="seeds1-col">
-                            <img src="static/images/carrot.jpg">
-                            <h3>Carrot</h3>
-                            <p>Rs.35/-</p>
-                        </div>
-                            <div class="seeds1-col">
-                            <img src="static/images/radish.jpg">
-                            <h3>Radish</h3>
-                            <p>Rs.35/-</p>
-                        </div>
-                         <div class="seeds1-col">
-                            <img src="static/images/greenchilli.jpg">
-                            <h3>Green Chilli</h3>
-                            <p>Rs.25/-</p>
-                        </div>
-    </div>
-    <div class="row">
-        <div class="seeds2-col">
-                            <img src="static/images/chrysanthemum.jpg">
-                            <h3>Chrysanthemum</h3>
-                            <p>Rs.50/-</p>
-                        </div>
-                            <div class="seeds2-col">
-                            <img src="static/images/dianthus.jpg">
-                            <h3>Dianthus</h3>
-                            <p>Rs.50/-</p>
-                        </div>
-                            <div class="seeds2-col">
-                            <img src="static/images/morning glory.jpg">
-                            <h3>Morning Glory</h3>
-                            <p>Rs.45/-</p>
-                        </div>
-                         <div class="seeds2-col">
-                            <img src="static/images/zinnia.jpg">
-                            <h3>Zinnia</h3>
-                            <p>Rs.45/-</p>
-                        </div>
-    </div>
-    <div class="row">
-        <div class="seeds3-col">
-                            <img src="static/images/tulsi.jpg">
-                            <h3>Tulsi</h3>
-                            <p>Rs.35/-</p>
-                        </div>
-                            <div class="seeds3-col">
-                            <img src="static/images/spinach.jpg">
-                            <h3>Spinach</h3>
-                            <p>Rs.40/-</p>
-                        </div>
-                            <div class="seeds3-col">
-                            <img src="static/images/brinjal.jpg">
-                            <h3>Brinjal</h3>
-                            <p>Rs.35/-</p>
-                        </div>
-                         <div class="seeds3-col">
-                            <img src="static/images/balsam.jpg">
-                            <h3>Balsam</h3>
-                            <p>Rs.50/-</p>
-                        </div>
-    
-</section>
 
-<section class="footer">
-    <h3>About us</h3>
-    <p>
-        At GREEN-BUY, we bring fresh, healthy plants to your doorstep—making it easy to green up your home, office, or balcony.<br>
-From low-maintenance indoor plants to fragrant herbs and flowering beauties, we carefully select and pack each plant with love.<br> Whether you're a beginner or a plant lover, we're here to help you grow with confidence.
-<br>
-🌱 Green living starts here.
-    </p>
-    
-    </body>
+<head>
+    <meta name="viewport" content="width=device-width,iniial-scale=1.0">
+    <title>GREEN-BUY-website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/fontawesome.min.css">
+</head>
+
+<body>
+    <section class="sub-header">
+        <nav>
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <button class="nav-hamburger-btn" onclick="toggleSideNav()" aria-label="Open Menu">☰ Menu</button>
+                <a href="index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                    <img src="static/images/23797272.jpg" alt="Logo">
+                    <span
+                        style="color: #ffffff; font-weight: 700; font-size: 1.15rem; letter-spacing: 1px;">GREEN-BUY</span>
+                </a>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="index.html#cart-section"
+                    style="color: #ffffff; text-decoration: none; background: rgba(255, 255, 255, 0.15); padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.25); backdrop-filter: blur(4px); transition: all 0.2s ease;">🛒
+                    Cart</a>
+            </div>
+        </nav>
+        <h1>SEEDS</h1>
+    </section>
+    <section class="seeds">
+        <h1>SEEDS WE SELL</h1>
+        <p>High Quality seeds</p>
+        <div class="row">
+            <div class="seeds1-col">
+                <img src="static/images/cherry.jpg">
+                <h3>Cherry Tomatoes</h3>
+                <p>Rs.35/-</p>
+            </div>
+            <div class="seeds1-col">
+                <img src="static/images/carrot.jpg">
+                <h3>Carrot</h3>
+                <p>Rs.35/-</p>
+            </div>
+            <div class="seeds1-col">
+                <img src="static/images/radish.jpg">
+                <h3>Radish</h3>
+                <p>Rs.35/-</p>
+            </div>
+            <div class="seeds1-col">
+                <img src="static/images/greenchilli.jpg">
+                <h3>Green Chilli</h3>
+                <p>Rs.25/-</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="seeds2-col">
+                <img src="static/images/chrysanthemum.jpg">
+                <h3>Chrysanthemum</h3>
+                <p>Rs.50/-</p>
+            </div>
+            <div class="seeds2-col">
+                <img src="static/images/dianthus.jpg">
+                <h3>Dianthus</h3>
+                <p>Rs.50/-</p>
+            </div>
+            <div class="seeds2-col">
+                <img src="static/images/morning glory.jpg">
+                <h3>Morning Glory</h3>
+                <p>Rs.45/-</p>
+            </div>
+            <div class="seeds2-col">
+                <img src="static/images/zinnia.jpg">
+                <h3>Zinnia</h3>
+                <p>Rs.45/-</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="seeds3-col">
+                <img src="static/images/tulsi.jpg">
+                <h3>Tulsi</h3>
+                <p>Rs.35/-</p>
+            </div>
+            <div class="seeds3-col">
+                <img src="static/images/spinach.jpg">
+                <h3>Spinach</h3>
+                <p>Rs.40/-</p>
+            </div>
+            <div class="seeds3-col">
+                <img src="static/images/brinjal.jpg">
+                <h3>Brinjal</h3>
+                <p>Rs.35/-</p>
+            </div>
+            <div class="seeds3-col">
+                <img src="static/images/balsam.jpg">
+                <h3>Balsam</h3>
+                <p>Rs.50/-</p>
+            </div>
+
+    </section>
+
+    <section class="footer">
+        <h3>About us</h3>
+        <p>
+            At GREEN-BUY, we bring fresh, healthy plants to your doorstep—making it easy to green up your home, office,
+            or balcony.<br>
+            From low-maintenance indoor plants to fragrant herbs and flowering beauties, we carefully select and pack
+            each plant with love.<br> Whether you're a beginner or a plant lover, we're here to help you grow with
+            confidence.
+            <br>
+            <!-- Side Navigation Drawer Component -->
+        <div id="sidenavOverlay" class="sidenav-overlay" onclick="toggleSideNav()"></div>
+        <div id="sidenavDrawer" class="sidenav-drawer">
+            <div class="sidenav-header">
+                <div class="sidenav-brand">
+                    <img src="static/images/23797272.jpg" alt="GREEN-BUY Logo">
+                    <span>GREEN-BUY</span>
+                </div>
+                <button class="sidenav-close-btn" onclick="toggleSideNav()">✖</button>
+            </div>
+            <ul class="sidenav-links">
+                <li><a href="index.html"><span>🏠</span> Home</a></li>
+                <li><a href="shop.html"><span>🛍️</span> Shop Plants</a></li>
+                <li><a href="seeds.html" class="active"><span>🌱</span> Seeds Collection</a></li>
+                <li><a href="about.html"><span>ℹ️</span> About Us</a></li>
+                <li><a href="contact.html"><span>📞</span> Contact Us</a></li>
+                <li><a href="index.html#cart-section"><span>🛒</span> Shopping Cart</a></li>
+                <li id="navAuthItem"><a href="auth.html"><span>🔑</span> Login / Account</a></li>
+            </ul>
+            <div class="sidenav-footer">
+                <p>🌿 Rooted in nature.<br>Delivered to your door.</p>
+            </div>
+        </div>
+
+        <script>
+            function toggleSideNav() {
+                const drawer = document.getElementById('sidenavDrawer');
+                const overlay = document.getElementById('sidenavOverlay');
+                if (!drawer || !overlay) return;
+                drawer.classList.toggle('active');
+                overlay.classList.toggle('active');
+                updateSideNavAuth();
+            }
+
+            function updateSideNavAuth() {
+                const userId = localStorage.getItem("user_id");
+                const username = localStorage.getItem("username") || "User";
+                const authNavItem = document.getElementById("navAuthItem");
+                if (!authNavItem) return;
+
+                if (userId && userId !== "anonymous") {
+                    authNavItem.innerHTML = `<a href="#" onclick="logoutUser()"><span>🚪</span> Logout (${username})</a>`;
+                } else {
+                    authNavItem.innerHTML = `<a href="auth.html"><span>🔑</span> Login / Account</a>`;
+                }
+            }
+
+            function logoutUser() {
+                localStorage.removeItem("user_id");
+                localStorage.removeItem("username");
+                localStorage.removeItem("email");
+                localStorage.removeItem("user");
+                window.location.href = "auth.html";
+            }
+
+            document.addEventListener("DOMContentLoaded", updateSideNavAuth);
+        </script>
+</body>
+
 </html>
