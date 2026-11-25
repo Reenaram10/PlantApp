@@ -1,107 +1,158 @@
+
 import os
+import json
+import numpy as np
+import tensorflow as tf
+
+from keras.preprocessing import image
+from keras.applications.mobilenet_v2 import preprocess_input
+
+BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
+
+MODEL_DIR = os.path.join(
+    BASE_DIR, "plant_disease_detection", "model"
+)
+
+CONFIDENCE_THRESHOLD = 0.90
+
+# Load both trained disease models once
+potato_model = tf.keras.models.load_model(
+    os.path.join(MODEL_DIR, "potato_disease_model.h5")
+)
+
+tomato_model = tf.keras.models.load_model(
+    os.path.join(MODEL_DIR, "tomato_disease_model.h5")
+)
+
+with open(os.path.join(MODEL_DIR, "potato_indices.json"), encoding="utf-8") as f:
+    potato_indices = json.load(f)
+
+with open(os.path.join(MODEL_DIR, "tomato_indices.json"), encoding="utf-8") as f:
+    tomato_indices = json.load(f)
+
 
 def format_disease_card(disease_info: dict) -> str:
-    """
-    Formats disease identification result as an ASCII card box matching exact UI specification.
-    """
+
     plant_name = disease_info.get("plant_name", "Unknown")
     disease_name = disease_info.get("disease_name", "Unknown Disease")
     confidence_pct = f"{int(round(disease_info.get('confidence', 0.0) * 100))}%"
     status = disease_info.get("status", "uncertain")
 
     if status == "healthy":
-        header_title = "🟢 DISEASE STATUS"
         status_display = "Healthy"
     elif status == "uncertain":
-        header_title = "🦠 DISEASE IDENTIFICATION"
         status_display = "Uncertain"
+    elif status == "not_applicable":
+        status_display = "Not Applicable"
     else:
-        header_title = "🦠 DISEASE IDENTIFICATION"
         status_display = "Disease Detected"
 
-    card = (
-        f"╔════════════════════════════════════╗\n"
-        f"║        {header_title:<19} ║\n"
-        f"╠════════════════════════════════════╣\n"
-        f"║ Plant Name      : {plant_name:<17} ║\n"
-        f"║ Disease         : {disease_name:<17} ║\n"
-        f"║ Confidence      : {confidence_pct:<17} ║\n"
-        f"║ Status          : {status_display:<17} ║\n"
-        f"╚════════════════════════════════════╝"
+    return (
+        "\n========== DISEASE IDENTIFICATION ==========\n"
+        f"Plant Name  : {plant_name}\n"
+        f"Disease     : {disease_name}\n"
+        f"Confidence  : {confidence_pct}\n"
+        f"Status      : {status_display}\n"
+        "============================================"
     )
-    return card
 
 
 def identify_disease(image_path: str, plant_name: str) -> dict:
     """
-    Predicts plant disease given an image path and the identified plant_name.
-    
-    IMPORTANT PIPELINE RULE:
-    - The Plant Identification Tool is the source of truth for plant_name.
-    - This tool receives plant_name and uses it in its output.
-    - Do NOT independently guess or generate a different plant name inside this tool.
-    
-    Args:
-        image_path: Path to the image file.
-        plant_name: Identified plant name from Plant Identification Tool (e.g. "Tomato").
-        
-    Returns:
-        dict containing plant_name, disease_name, confidence, and status.
+    Identifies disease using the trained Potato or Tomato model.
+
+    The plant name is received from the plant identification tool.
     """
-    if not os.path.exists(image_path):
-        raise FileNotFoundError(f"Image not found at path: {image_path}")
 
-    filename_lower = os.path.basename(image_path).lower()
+    if not os.path.isfile(image_path):
+        raise FileNotFoundError(
+            f"Image not found: {image_path}"
+        )
 
-    # Determine disease diagnosis and raw confidence from filename or model prediction logic
-    if "healthy" in filename_lower:
-        raw_disease = "None Detected"
-        raw_confidence = 0.96
-        raw_status = "healthy"
-    elif "early_blight" in filename_lower or "blight" in filename_lower:
-        raw_disease = "Early Blight"
-        raw_confidence = 0.94
-        raw_status = "detected"
-    elif "late_blight" in filename_lower:
-        raw_disease = "Late Blight"
-        raw_confidence = 0.92
-        raw_status = "detected"
-    elif "uncertain" in filename_lower or "low_conf" in filename_lower:
-        raw_disease = "Spot Disease"
-        raw_confidence = 0.82  # Below 90% threshold
-        raw_status = "detected"
+    plant_name = plant_name.strip().title()
+
+    if plant_name == "Potato":
+        model = potato_model
+        labels = potato_indices
+
+    elif plant_name == "Tomato":
+        model = tomato_model
+        labels = tomato_indices
+
     else:
-        # Default disease prediction for demonstration / test
-        raw_disease = "Early Blight"
-        raw_confidence = 0.94
-        raw_status = "detected"
+        raise ValueError(
+            f"Disease model is not available for {plant_name}"
+        )
 
-    # Enforce 90% confidence rule (< 0.90 -> status = "uncertain", disease_name = "Unknown Disease")
-    if raw_confidence < 0.90:
-        disease_name = "Unknown Disease"
-        confidence = raw_confidence
-        status = "uncertain"
-    elif raw_status == "healthy":
+    # Image preprocessing
+    img = image.load_img(
+        image_path,
+        target_size=(224, 224)
+    )
+
+    arr = preprocess_input(
+        image.img_to_array(img)
+    )
+
+    img_batch = np.expand_dims(arr, axis=0)
+
+    # Actual trained model prediction
+    predictions = model.predict(
+        img_batch,
+        verbose=0
+    )[0]
+
+    predicted_index = int(np.argmax(predictions))
+
+    result_label = labels.get(str(predicted_index))
+
+    if not result_label:
+        raise ValueError("Unable to map disease prediction")
+
+    confidence = float(np.max(predictions))
+
+    # Extract the predicted class
+    clean_label = result_label.split("___")[-1]
+
+    clean_label = clean_label.replace("_", " ").title()
+
+    # Identify image type
+    if clean_label.lower() == "flower":
+        image_type = "flower"
+        disease_name = "Flower"
+        status = "not_applicable"
+
+    elif clean_label.lower() == "fruit":
+        image_type = "fruit"
+        disease_name = "Fruit"
+        status = "not_applicable"
+
+    elif clean_label.lower() == "healthy":
+        image_type = "leaf"
         disease_name = "None Detected"
-        confidence = raw_confidence
         status = "healthy"
+
+    elif confidence < CONFIDENCE_THRESHOLD:
+        image_type = "leaf"
+        disease_name = "Unknown Disease"
+        status = "uncertain"
+
     else:
-        disease_name = raw_disease
-        confidence = raw_confidence
+        image_type = "leaf"
+        disease_name = clean_label
         status = "detected"
 
     disease_result = {
         "plant_name": plant_name,
         "disease_name": disease_name,
-        "confidence": confidence,
-        "status": status
+        "confidence": round(confidence, 4),
+        "status": status,
+        "image_type": image_type,
+        "predicted_class": result_label
     }
 
-    # Format and print the ASCII card box output
-    card_str = format_disease_card(disease_result)
-    try:
-        print(card_str)
-    except UnicodeEncodeError:
-        print(card_str.encode('ascii', errors='replace').decode('ascii'))
+    print(format_disease_card(disease_result))
 
     return disease_result

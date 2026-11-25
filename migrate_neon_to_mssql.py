@@ -398,7 +398,8 @@ def run_migration(pg_conn, ms_conn, batch_size=1000):
         tbl = item["name"]
         pk = item["pk"]
         has_id = item["has_identity"]
-        candidate_cols = item["cols"]
+        cols_val = item["cols"]
+        candidate_cols = cols_val if isinstance(cols_val, (list, tuple)) else []
 
         # Intersect with actual PG columns
         pg_actual_cols = get_pg_columns(pg_cur, tbl)

@@ -1,57 +1,84 @@
-import os
-import cv2
-import numpy as np
 
-# Map crop names to scientific names
+import os
+import json
+import numpy as np
+import tensorflow as tf
+
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+
+BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
+
+MODEL_DIR = os.path.join(
+    BASE_DIR, "plant_disease_detection", "model"
+)
+
+MODEL_PATH = os.path.join(MODEL_DIR, "crop_type_model.h5")
+LABEL_PATH = os.path.join(MODEL_DIR, "crop_indices.json")
+
 SCIENTIFIC_NAMES = {
     "Tomato": "Solanum lycopersicum",
-    "Potato": "Solanum tuberosum",
-    "Guava": "Psidium guajava",
-    "Orange": "Citrus sinensis",
-    "Corn": "Zea mays",
-    "Apple": "Malus domestica"
+    "Potato": "Solanum tuberosum"
 }
 
-def identify_plant(image_path: str) -> dict:
-    """
-    Identifies the plant species from an image file.
-    This tool is the SINGLE SOURCE OF TRUTH for the plant name.
-    
-    Args:
-        image_path: Absolute path to the leaf/plant image.
-        
-    Returns:
-        dict containing plant name, scientific name, confidence score, image_type, and status.
-    """
-    if not os.path.exists(image_path):
-        raise FileNotFoundError(f"Image not found at path: {image_path}")
-        
-    # Analyze filename or image features for plant identification
-    filename_lower = os.path.basename(image_path).lower()
-    
-    if "potato" in filename_lower:
-        plant_name = "Potato"
-        confidence = 0.95
-    elif "guava" in filename_lower:
-        plant_name = "Guava"
-        confidence = 0.93
-    elif "orange" in filename_lower:
-        plant_name = "Orange"
-        confidence = 0.94
-    elif "corn" in filename_lower:
-        plant_name = "Corn"
-        confidence = 0.92
-    else:
-        # Default identified plant name (e.g. Tomato)
-        plant_name = "Tomato"
-        confidence = 0.96
+# Load trained crop model once
+crop_model = tf.keras.models.load_model(MODEL_PATH)
 
-    scientific_name = SCIENTIFIC_NAMES.get(plant_name, "Solanum lycopersicum")
-    
+with open(LABEL_PATH, "r", encoding="utf-8") as f:
+    crop_indices = json.load(f)
+
+
+def identify_plant(image_path: str) -> dict:
+
+    if not os.path.isfile(image_path):
+        raise FileNotFoundError(
+            f"Image not found: {image_path}"
+        )
+
+    img = image.load_img(
+        image_path,
+        target_size=(224, 224)
+    )
+
+    arr = preprocess_input(
+        image.img_to_array(img)
+    )
+
+    img_batch = np.expand_dims(arr, axis=0)
+
+    predictions = crop_model.predict(
+        img_batch,
+        verbose=0
+    )[0]
+
+    predicted_index = int(np.argmax(predictions))
+
+    plant_name = crop_indices.get(
+        str(predicted_index)
+    )
+
+    confidence = float(np.max(predictions))
+
+    if not plant_name:
+        raise ValueError("Unknown crop prediction")
+
+    if confidence < 0.90:
+        return {
+            "name": "Unknown Plant",
+            "scientific_name": "Unknown",
+            "confidence": round(confidence, 4),
+            "image_type": "unknown",
+            "status": "uncertain"
+        }
+
     return {
         "name": plant_name,
-        "scientific_name": scientific_name,
-        "confidence": confidence,
-        "image_type": "leaf",
+        "scientific_name": SCIENTIFIC_NAMES.get(
+            plant_name, "Unknown"
+        ),
+        "confidence": round(confidence, 4),
+        "image_type": "unknown",
         "status": "identified"
     }
