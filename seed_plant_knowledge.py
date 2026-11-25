@@ -1,7 +1,11 @@
 import os
 import json
-from app import app, db, PlantKnowledge
+from create_app import create_app
+from extensions import db
+from models.catalog import PlantKnowledge
 from sqlalchemy import text
+
+app = create_app()
 
 def seed_data():
     with app.app_context():

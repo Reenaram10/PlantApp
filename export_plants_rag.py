@@ -1,6 +1,9 @@
-from app import app, db, Plant
+from create_app import create_app
+from models.catalog import Plant
 import json
 import os
+
+app = create_app()
 
 def export_plants():
     with app.app_context():

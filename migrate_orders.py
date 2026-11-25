@@ -1,4 +1,8 @@
-from app import app, db, text
+from sqlalchemy import text
+from create_app import create_app
+from extensions import db
+
+app = create_app()
 with app.app_context():
     try:
         db.session.execute(text("ALTER TABLE orders ADD COLUMN amount_paid FLOAT DEFAULT 0.0;"))

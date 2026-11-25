@@ -2,10 +2,17 @@
   "include": [
     "."
   ],
+  "exclude": [
+    "app_legacy.py",
+    "app_backup.py",
+    "scratch",
+    "**/__pycache__"
+  ],
   "extraPaths": [
     "C:/Users/Reena/AppData/Local/Programs/Python/Python313/Lib/site-packages"
   ],
   "pythonPath": "C:/Users/Reena/AppData/Local/Programs/Python/Python313/python.exe",
   "pythonVersion": "3.13",
-  "pythonPlatform": "Windows"
+  "pythonPlatform": "Windows",
+  "exclude": ["app_legacy.py", "app_backup.py", "scratch", "**/__pycache__"]
 }

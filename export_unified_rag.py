@@ -1,6 +1,9 @@
-from app import app, db, Plant, Category
+from create_app import create_app
+from models.catalog import Plant, Category
 import json
 import os
+
+app = create_app()
 
 def export_unified_knowledge():
     with app.app_context():
