@@ -1,7 +1,7 @@
 import os
 import tempfile
 from fastapi import APIRouter, File, UploadFile, HTTPException
-from pydantic import BaseModel
+from pydantic.main import BaseModel
 from typing import Optional
 
 from app.tools.orchestrator import run_pipeline
@@ -15,6 +15,8 @@ class RemedyRequest(BaseModel):
     plant_name: str
     disease_name: str
     disease_confidence: Optional[float] = 1.0
+    status: Optional[str] = None
+    image_type: Optional[str] = None
 
 from app.history.history_retriever import (
     answer_from_history,
@@ -91,13 +93,70 @@ async def identify_image(file: UploadFile = File(...)):
 
 @router.post("/api/get-remedies")
 def get_remedies_endpoint(payload: RemedyRequest):
-    """
-    Retrieves remedies for a given plant and disease name.
-    """
+
     p_name = payload.plant_name
     d_name = payload.disease_name
-    conf = payload.disease_confidence or 1.0
-    status = "healthy" if d_name.lower() in ["healthy", "none detected"] else "detected"
+    conf = (
+        payload.disease_confidence
+        if payload.disease_confidence is not None
+        else 1.0
+    )
+
+    status = payload.status.lower() if payload.status else ""
+
+    from app.tools.plant_identifier import SCIENTIFIC_NAMES
+    sci_name = SCIENTIFIC_NAMES.get(p_name, "")
+
+    # Handle flower and fruit images
+    if (payload.image_type and payload.image_type.lower() in ["flower", "fruit"]) or d_name.lower() in ["flower", "fruit"]:
+        return {
+            "found": False,
+            "plant_name": p_name,
+            "scientific_name": sci_name,
+            "disease_name": d_name,
+            "confidence": conf,
+            "status": "not_applicable",
+            "message": "Disease detection is not applicable to flower or fruit images.",
+            "treatment": [],
+            "prevention": [],
+            "care_tips": []
+        }
+
+    # Handle unsupported plants
+    if p_name not in ["Tomato", "Potato"] or status == "unsupported" or d_name.lower() in ["not supported", "not applicable"]:
+        return {
+            "found": False,
+            "plant_name": p_name,
+            "scientific_name": sci_name,
+            "disease_name": d_name,
+            "confidence": conf,
+            "status": "unsupported",
+            "message": f"Disease detection is currently only supported for Potato and Tomato plants.",
+            "treatment": [],
+            "prevention": [],
+            "care_tips": []
+        }
+
+    # Handle uncertain predictions
+    if status == "uncertain" or conf < 0.90 or d_name.lower() in ["unknown disease", "unknown"]:
+        return {
+            "found": False,
+            "plant_name": p_name,
+            "scientific_name": sci_name,
+            "disease_name": d_name,
+            "confidence": conf,
+            "status": "uncertain",
+            "message": "Disease prediction is uncertain. Please upload a clearer image.",
+            "treatment": [],
+            "prevention": [],
+            "care_tips": []
+        }
+
+    # Handle healthy plants
+    if status == "healthy" or d_name.lower() in ["healthy", "none detected"]:
+        status = "healthy"
+    else:
+        status = "detected"
 
     remedies = get_remedies(
         plant_name=p_name,
@@ -109,7 +168,9 @@ def get_remedies_endpoint(payload: RemedyRequest):
     return {
         "found": True,
         "plant_name": p_name,
+        "scientific_name": sci_name,
         "disease_name": d_name,
+        "confidence": conf,
         "status": status,
         "treatment": remedies.get("treatment", []),
         "prevention": remedies.get("prevention", []),
@@ -129,7 +190,7 @@ def add_profile_history_endpoint(payload: PlantProfileHistoryRequest):
     """
     Adds a new plant profile history version if constant parameters changed.
     """
-    res = history_manager.add_plant_profile_version(payload.dict())
+    res = history_manager.add_plant_profile_version(payload.model_dump())
     return {"status": "success", "profile": res}
 
 @router.post("/api/history/variable")
@@ -137,7 +198,7 @@ def update_variable_state_endpoint(payload: VariableUpdateRequest):
     """
     Updates current variable metrics without creating a profile history version.
     """
-    updates = {k: v for k, v in payload.dict().items() if k != "plant_name" and v is not None}
+    updates = {k: v for k, v in payload.model_dump().items() if k != "plant_name" and v is not None}
     res = history_manager.update_variable_state(payload.plant_name, updates)
     return {"status": "success", "variables": res}
 
@@ -149,8 +210,8 @@ def record_analysis_history_endpoint(payload: AnalysisHistoryRequest):
     res = history_manager.add_analysis_history(
         plant_name=payload.plant_name,
         disease_name=payload.disease_name,
-        plant_confidence=payload.plant_confidence,
-        disease_confidence=payload.disease_confidence,
+        plant_confidence=payload.plant_confidence if payload.plant_confidence is not None else 1.0,
+        disease_confidence=payload.disease_confidence if payload.disease_confidence is not None else 1.0,
         timestamp=payload.timestamp
     )
     return {"status": "success", "analysis": res}

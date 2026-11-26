@@ -589,6 +589,170 @@
                 justify-content: center;
             }
         }
+
+        /* Cart Enhanced Thumbnail & Layout */
+        .cart-item-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .cart-item-thumb {
+            width: 72px;
+            height: 72px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid #d4ebd4;
+            background: #f0f7f0;
+            flex-shrink: 0;
+        }
+
+        /* Order Status Pills */
+        .status-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .status-placed { background: #e3f2fd; color: #1565c0; }
+        .status-confirmed { background: #e8f5e9; color: #2e7d32; }
+        .status-processing { background: #fff8e1; color: #f57f17; }
+        .status-packed { background: #ede7f6; color: #512da8; }
+        .status-shipped { background: #e0f2f1; color: #00695c; }
+        .status-out-for-delivery { background: #fff3e0; color: #e65100; }
+        .status-delivered { background: #e8f5e9; color: #1b5e20; }
+        .status-cancelled { background: #ffebee; color: #c62828; }
+
+        /* PlantApp Modals */
+        .plantapp-modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+            animation: fadeIn 0.25s ease;
+        }
+        .plantapp-modal-dialog {
+            background: #ffffff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 580px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+            padding: 28px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* Tracking Stepper */
+        .tracking-stepper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 20px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        .tracking-stepper::before {
+            content: '';
+            position: absolute;
+            left: 31px;
+            top: 14px;
+            bottom: 14px;
+            width: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        .tracking-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        .tracking-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #bdbdbd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .tracking-step.completed .tracking-dot {
+            background: #006400;
+            border-color: #006400;
+        }
+        .tracking-step.current .tracking-dot {
+            background: #ff9800;
+            border-color: #ff9800;
+            box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.25);
+            animation: pulse-orange 1.5s infinite;
+        }
+        .tracking-step.cancelled .tracking-dot {
+            background: #d32f2f;
+            border-color: #d32f2f;
+        }
+        .tracking-step-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #424242;
+        }
+        .tracking-step.completed .tracking-step-label {
+            color: #006400;
+            font-weight: 600;
+        }
+        .tracking-step.current .tracking-step-label {
+            color: #e65100;
+            font-weight: 700;
+        }
+        @keyframes pulse-orange {
+            0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 152, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
+        }
+
+        /* Floating WhatsApp Button */
+        #whatsapp-floating-btn {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: #25D366;
+            color: white;
+            border: none;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #whatsapp-floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 24px rgba(37, 211, 102, 0.55);
+        }
     </style>
     <script>
         const API_BASE_URL = "http://127.0.0.1:8082";
@@ -612,10 +776,19 @@
                         style="color: #ffffff; font-weight: 700; font-size: 1.15rem; letter-spacing: 1px;">GREEN-BUY</span>
                 </a>
             </div>
-            <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <button onclick="openOrdersModal()"
+                    style="color: #ffffff; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px); transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;">
+                    <span>📦</span> My Orders
+                </button>
+                <button onclick="openWhatsAppModal()"
+                    style="color: #ffffff; background: rgba(37, 211, 102, 0.35); border: 1px solid rgba(37, 211, 102, 0.6); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px); transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;">
+                    <span>💬</span> WhatsApp
+                </button>
                 <a href="#cart-section"
-                    style="color: #ffffff; text-decoration: none; background: rgba(255, 255, 255, 0.15); padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.25); backdrop-filter: blur(4px); transition: all 0.2s ease;">🛒
-                    Cart</a>
+                    style="color: #ffffff; text-decoration: none; background: rgba(255, 255, 255, 0.18); padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(4px); transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;">
+                    <span>🛒</span> Cart
+                </a>
             </div>
         </nav>
         <div class="text-box">
@@ -694,12 +867,234 @@
             <div class="cart-modern-footer">
                 <div id="cart-total" class="cart-modern-total"></div>
                 <button id="checkout-btn" class="cart-modern-checkout-btn" style="display:none;"
-                    onclick="openPaymentModal()">
+                    onclick="openCheckoutModal()">
                     Proceed to Checkout
                 </button>
             </div>
         </div>
     </section>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="plantapp-modal-backdrop">
+        <div class="plantapp-modal-dialog">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e0e0e0; padding-bottom: 12px;">
+                <h2 style="color: #006400; margin: 0; font-size: 1.35rem; display: flex; align-items: center; gap: 8px;">
+                    🛍️ Checkout & Delivery
+                </h2>
+                <button onclick="closeCheckoutModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #666;">✖</button>
+            </div>
+
+            <form id="checkout-form" onsubmit="event.preventDefault(); submitCheckout();">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #333;">Customer Name *</label>
+                        <input type="text" id="checkout-name" required placeholder="e.g. John Doe"
+                            style="width: 100%; padding: 10px 12px; border: 1.5px solid #d4ebd4; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #333;">Mobile / WhatsApp No *</label>
+                        <input type="tel" id="checkout-phone" required placeholder="e.g. +91 98765 43210"
+                            style="width: 100%; padding: 10px 12px; border: 1.5px solid #d4ebd4; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 14px;">
+                    <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #333;">Delivery Street Address *</label>
+                    <textarea id="checkout-address" rows="2" required placeholder="Flat / House No, Building, Street, Landmark"
+                        style="width: 100%; padding: 10px 12px; border: 1.5px solid #d4ebd4; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; font-family: inherit;"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #333;">City *</label>
+                        <input type="text" id="checkout-city" required placeholder="City"
+                            style="width: 100%; padding: 10px 12px; border: 1.5px solid #d4ebd4; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #333;">State *</label>
+                        <input type="text" id="checkout-state" required placeholder="State"
+                            style="width: 100%; padding: 10px 12px; border: 1.5px solid #d4ebd4; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #333;">Pincode *</label>
+                        <input type="text" id="checkout-pincode" required placeholder="Pincode"
+                            style="width: 100%; padding: 10px 12px; border: 1.5px solid #d4ebd4; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none;">
+                    </div>
+                </div>
+
+                <!-- Payment Method Selection -->
+                <div style="margin-bottom: 16px; background: #f9fbf9; border: 1px solid #e1efe1; border-radius: 12px; padding: 14px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 700; font-size: 13px; color: #2e7d32;">
+                        💳 Select Payment Method
+                    </label>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                            <input type="radio" name="checkout-payment-method" value="Cash on Delivery" checked>
+                            💵 Cash on Delivery (COD)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                            <input type="radio" name="checkout-payment-method" value="Online Payment">
+                            💳 Online Payment (UPI / Cards)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Order Summary Breakdown -->
+                <div id="checkout-summary-box" style="background: #ffffff; border: 1px dashed #c8e6c9; border-radius: 12px; padding: 14px; margin-bottom: 18px;">
+                    <div style="font-weight: 700; font-size: 13px; color: #333; margin-bottom: 8px;">Order Summary</div>
+                    <div id="checkout-items-preview" style="max-height: 120px; overflow-y: auto; margin-bottom: 8px; font-size: 13px; color: #555;"></div>
+                    <div style="border-top: 1px solid #f0f0f0; padding-top: 8px; display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Subtotal:</span>
+                            <span id="checkout-subtotal">₹0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Delivery Charges:</span>
+                            <span id="checkout-delivery" style="color: #2e7d32; font-weight: 600;">FREE</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; color: #006400; border-top: 1px solid #e0e0e0; padding-top: 6px; margin-top: 4px;">
+                            <span>Total Payable:</span>
+                            <span id="checkout-total">₹0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button type="submit" id="checkout-submit-btn"
+                        style="flex: 2; padding: 13px; background: #006400; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s ease;">
+                        Confirm & Place Order
+                    </button>
+                    <button type="button" onclick="closeCheckoutModal()"
+                        style="flex: 1; padding: 13px; background: #f0f0f0; color: #333; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Orders History Modal -->
+    <div id="orders-modal" class="plantapp-modal-backdrop">
+        <div class="plantapp-modal-dialog" style="max-width: 680px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e0e0e0; padding-bottom: 12px;">
+                <div>
+                    <h2 style="color: #006400; margin: 0; font-size: 1.35rem; display: flex; align-items: center; gap: 8px;">
+                        📦 My Orders
+                    </h2>
+                    <p style="margin: 4px 0 0; font-size: 13px; color: #666;">Track your past plant orders and delivery updates</p>
+                </div>
+                <button onclick="closeOrdersModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #666;">✖</button>
+            </div>
+
+            <div id="orders-container" style="display: flex; flex-direction: column; gap: 14px; max-height: 65vh; overflow-y: auto; padding-right: 4px;">
+                <!-- Populated dynamically -->
+            </div>
+
+            <div style="margin-top: 18px; text-align: right;">
+                <button onclick="closeOrdersModal()"
+                    style="padding: 10px 22px; background: #f0f0f0; color: #333; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Tracking Modal -->
+    <div id="tracking-modal" class="plantapp-modal-backdrop">
+        <div class="plantapp-modal-dialog" style="max-width: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #e0e0e0; padding-bottom: 12px;">
+                <div>
+                    <h2 style="color: #006400; margin: 0; font-size: 1.35rem; display: flex; align-items: center; gap: 8px;">
+                        🚚 Live Order Tracking
+                    </h2>
+                    <p id="tracking-order-subtitle" style="margin: 4px 0 0; font-size: 13px; color: #666;">Order #</p>
+                </div>
+                <button onclick="closeTrackingModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #666;">✖</button>
+            </div>
+
+            <!-- Order Tracking Summary Banner -->
+            <div id="tracking-info-banner" style="background: #f1f8f1; border: 1px solid #c8e6c9; border-radius: 12px; padding: 14px; margin-bottom: 16px; font-size: 13px;">
+                <!-- Populated dynamically -->
+            </div>
+
+            <h4 style="margin: 12px 0 8px; color: #333; font-size: 14px;">Shipment Progress Timeline</h4>
+            <div id="tracking-stepper-container" class="tracking-stepper">
+                <!-- 8-stage Stepper rendered dynamically -->
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 14px;">
+                <span style="font-size: 12px; color: #666;">🌱 Updates synchronized with PlantApp delivery dispatch</span>
+                <button onclick="closeTrackingModal()"
+                    style="padding: 9px 20px; background: #006400; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Preview & Phone Linking Modal -->
+    <div id="whatsapp-modal" class="plantapp-modal-backdrop">
+        <div class="plantapp-modal-dialog" style="max-width: 520px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #e0e0e0; padding-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white;">
+                        💬
+                    </div>
+                    <div>
+                        <h2 style="color: #128C7E; margin: 0; font-size: 1.25rem;">WhatsApp Shopping</h2>
+                        <span style="font-size: 12px; color: #666;">Direct n8n Automated Plant Assistance</span>
+                    </div>
+                </div>
+                <button onclick="closeWhatsAppModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #666;">✖</button>
+            </div>
+
+            <p style="font-size: 13.5px; color: #444; line-height: 1.5; margin-bottom: 16px;">
+                PlantApp is preparing WhatsApp shopping powered by n8n workflows. Link your mobile number to enjoy seamless plant ordering directly inside WhatsApp!
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px;">
+                <div style="background: #f7faf7; border: 1px solid #e0ede0; border-radius: 10px; padding: 12px; font-size: 12.5px;">
+                    <strong>🛒 Sync Cart</strong>
+                    <div style="color: #666; margin-top: 4px;">Inspect and modify plant items directly in chat.</div>
+                </div>
+                <div style="background: #f7faf7; border: 1px solid #e0ede0; border-radius: 10px; padding: 12px; font-size: 12.5px;">
+                    <strong>⚡ 1-Tap Checkout</strong>
+                    <div style="color: #666; margin-top: 4px;">Approve cart & place orders via quick reply buttons.</div>
+                </div>
+                <div style="background: #f7faf7; border: 1px solid #e0ede0; border-radius: 10px; padding: 12px; font-size: 12.5px;">
+                    <strong>🚚 Live Tracking</strong>
+                    <div style="color: #666; margin-top: 4px;">Receive instant dispatch & doorstep alerts.</div>
+                </div>
+                <div style="background: #f7faf7; border: 1px solid #e0ede0; border-radius: 10px; padding: 12px; font-size: 12.5px;">
+                    <strong>🌿 AI Remedies</strong>
+                    <div style="color: #666; margin-top: 4px;">Send leaf photos for instant diagnosis via n8n.</div>
+                </div>
+            </div>
+
+            <!-- Phone linking -->
+            <div style="background: #edf7ed; border: 1px solid #c8e6c9; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                <label style="display: block; font-weight: 700; font-size: 13px; color: #1b5e20; margin-bottom: 6px;">
+                    📱 Link Your WhatsApp Mobile Number
+                </label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="tel" id="whatsapp-link-phone" placeholder="e.g. +91 98765 43210"
+                        style="flex: 1; padding: 10px 12px; border: 1.5px solid #81c784; border-radius: 8px; font-size: 14px; outline: none; background: #fff;">
+                    <button type="button" onclick="saveWhatsAppPhone()"
+                        style="padding: 10px 16px; background: #25D366; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;">
+                        Link Number
+                    </button>
+                </div>
+                <div id="whatsapp-link-status" style="margin-top: 8px; font-size: 12px; font-weight: 500;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+                <button onclick="closeWhatsAppModal()"
+                    style="padding: 9px 20px; background: #f0f0f0; color: #333; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Payment Modal -->
     <div id="payment-modal"
@@ -769,6 +1164,11 @@
             🌱 Green living starts here.
         </p>
     </section>
+
+    <!-- Floating WhatsApp Entry Point -->
+    <button id="whatsapp-floating-btn" onclick="openWhatsAppModal()" title="WhatsApp Shopping & Updates" aria-label="WhatsApp Shopping">
+        💬
+    </button>
 
     <!-- Floating Chat Launcher Button -->
     <button id="chatbot-launcher" onclick="toggleChatbot()" title="Open Green - Buy Assistant">
@@ -1518,74 +1918,162 @@
                 });
         }
 
+        let currentCartItems = [];
+        let cartSubtotal = 0;
+        let cartDeliveryCharge = 0;
         let cartTotalAmount = 0;
 
         async function loadCart() {
             const userId = localStorage.getItem("user_id") || "anonymous";
 
-            const res = await fetch(`${API_BASE_URL}/api/cart?user_id=${userId}`);
-            const data = await res.json();
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/cart?user_id=${userId}`);
+                const data = await res.json();
 
-            const cartBox = document.getElementById("cart-list");
-            cartBox.innerHTML = "";
+                const cartBox = document.getElementById("cart-list");
+                cartBox.innerHTML = "";
 
-            if (!data.cart || data.cart.length === 0) {
-                cartBox.innerHTML = "<p>🛒 Cart is empty</p>";
-                document.getElementById('cart-total').textContent = '';
-                document.getElementById('checkout-btn').style.display = 'none';
+                if (!data.cart || data.cart.length === 0) {
+                    currentCartItems = [];
+                    cartSubtotal = 0;
+                    cartDeliveryCharge = 0;
+                    cartTotalAmount = 0;
+                    cartBox.innerHTML = `
+                        <div style="text-align: center; padding: 40px 20px; color: #666;">
+                            <div style="font-size: 3rem; margin-bottom: 10px;">🛒</div>
+                            <h3 style="color: #333; margin-bottom: 8px;">Your cart is empty</h3>
+                            <p style="margin-bottom: 16px;">Looks like you haven't added any green companions yet.</p>
+                            <a href="shop.html" class="hero-btn" style="display: inline-block; color: white;">Explore Plants</a>
+                        </div>
+                    `;
+                    document.getElementById('cart-total').innerHTML = '';
+                    document.getElementById('checkout-btn').style.display = 'none';
+                    return;
+                }
+
+                currentCartItems = data.cart;
+                cartSubtotal = data.subtotal !== undefined ? Number(data.subtotal) : data.cart.reduce((s, i) => s + (i.price * (i.quantity || 1)), 0);
+                cartDeliveryCharge = data.delivery_charge !== undefined ? Number(data.delivery_charge) : (cartSubtotal >= 500 ? 0 : 50);
+                cartTotalAmount = data.total_amount !== undefined ? Number(data.total_amount) : (cartSubtotal + cartDeliveryCharge);
+
+                data.cart.forEach(item => {
+                    const qty = item.quantity || 1;
+                    const itemTotal = item.price * qty;
+                    const imgUrl = item.image_url ? fixImageUrl(item.image_url) : 'static/images/indoor.jpg';
+
+                    cartBox.innerHTML += `
+                        <div class="cart-modern-item fade-in-up">
+                            <div class="cart-item-left">
+                                <img src="${imgUrl}" alt="${item.plant_name}" class="cart-item-thumb" onerror="this.src='static/images/indoor.jpg'">
+                                <div class="cart-item-details">
+                                    <h4 style="margin: 0 0 4px; color: #1b5e20; font-size: 1.05rem;">${item.plant_name}</h4>
+                                    <span class="cart-item-unit-price" style="font-weight: 600; color: #2e7d32;">₹${item.price.toFixed(2)} each</span>
+                                    <p class="cart-item-desc" style="margin: 4px 0 0; font-size: 12.5px; color: #666;">
+                                        ${item.description || "Fresh and healthy plant directly from our nursery."}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="cart-item-actions">
+                                <div class="cart-qty-wrapper">
+                                    <button class="cart-qty-btn decrease" onclick="changeCartQuantity(${item.plant_id}, 'decrease')" title="Decrease">−</button>
+                                    <span class="cart-qty-value">${qty}</span>
+                                    <button class="cart-qty-btn increase" onclick="changeCartQuantity(${item.plant_id}, 'increase')" title="Increase">+</button>
+                                </div>
+                                <div class="cart-item-total" style="font-size: 1.1rem; font-weight: 700; color: #1b5e20;">₹${itemTotal.toFixed(2)}</div>
+                                <button class="cart-remove-btn" onclick="removeCartItem(${item.plant_id})" title="Remove item">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Update summary footer
+                const freeDeliveryNote = cartSubtotal < 500 
+                    ? `<div style="font-size: 12px; color: #e65100; margin-top: 4px;">🚚 Add ₹${(500 - cartSubtotal).toFixed(2)} more for FREE Delivery!</div>`
+                    : `<div style="font-size: 12px; color: #2e7d32; font-weight: 600; margin-top: 4px;">🎉 You qualified for FREE Delivery!</div>`;
+
+                document.getElementById('cart-total').innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 3px; text-align: right;">
+                        <div style="font-size: 14px; color: #555;">Subtotal: <strong style="color: #333;">₹${cartSubtotal.toFixed(2)}</strong></div>
+                        <div style="font-size: 14px; color: #555;">Delivery: ${cartDeliveryCharge === 0 ? '<strong style="color: #2e7d32;">FREE</strong>' : '<strong>₹' + cartDeliveryCharge.toFixed(2) + '</strong>'}</div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: #006400; border-top: 1px dashed #c8e6c9; padding-top: 6px; margin-top: 4px;">
+                            Total: ₹${cartTotalAmount.toFixed(2)}
+                        </div>
+                        ${freeDeliveryNote}
+                    </div>
+                `;
+                document.getElementById('checkout-btn').style.display = 'inline-flex';
+            } catch (err) {
+                console.error("Cart loading error:", err);
+            }
+        }
+
+        // ======================================================================
+        // CHECKOUT & PAYMENT MODAL HANDLERS
+        // ======================================================================
+        function openCheckoutModal() {
+            if (!currentCartItems || currentCartItems.length === 0) {
+                alert("Your cart is empty. Add plants before proceeding to checkout!");
                 return;
             }
 
-            let total = 0;
-            data.cart.forEach(item => {
-                const qty = item.quantity || 1;
-                const itemTotal = item.price * qty;
-                total += itemTotal;
-                cartBox.innerHTML += `
-            <div class="cart-modern-item fade-in-up">
-                <div class="cart-item-details">
-                    <h4>${item.plant_name}</h4>
-                    <span class="cart-item-unit-price">₹${item.price.toFixed(2)}</span>
-                    <p class="cart-item-desc">${item.description || "Fresh and healthy plant directly from our nursery."}</p>
+            const username = localStorage.getItem("username");
+            const phone = localStorage.getItem("user_phone");
+
+            if (username && username !== "User") {
+                document.getElementById('checkout-name').value = username;
+            }
+            if (phone) {
+                document.getElementById('checkout-phone').value = phone;
+            }
+
+            // Render order summary preview
+            const previewEl = document.getElementById('checkout-items-preview');
+            previewEl.innerHTML = currentCartItems.map(item => `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span>🌱 ${item.plant_name} × ${item.quantity || 1}</span>
+                    <strong>₹${((item.price) * (item.quantity || 1)).toFixed(2)}</strong>
                 </div>
-                <div class="cart-item-actions">
-                    <div class="cart-qty-wrapper">
-                        <button class="cart-qty-btn decrease" onclick="changeCartQuantity(${item.plant_id}, 'decrease')">−</button>
-                        <span class="cart-qty-value">${qty}</span>
-                        <button class="cart-qty-btn increase" onclick="changeCartQuantity(${item.plant_id}, 'increase')">+</button>
-                    </div>
-                    <div class="cart-item-total">₹${itemTotal.toFixed(2)}</div>
-                    <button class="cart-remove-btn" onclick="removeCartItem(${item.plant_id})" title="Remove item">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"/></svg>
-                    </button>
-                </div>
-            </div>
-        `;
-            });
+            `).join('');
 
-            cartTotalAmount = total;
-            document.getElementById('cart-total').textContent = `Total: ₹${total.toFixed(2)}`;
-            document.getElementById('checkout-btn').style.display = 'inline-block';
+            document.getElementById('checkout-subtotal').textContent = `₹${cartSubtotal.toFixed(2)}`;
+            document.getElementById('checkout-delivery').innerHTML = cartDeliveryCharge === 0 ? '<span style="color:#2e7d32; font-weight:700;">FREE</span>' : `₹${cartDeliveryCharge.toFixed(2)}`;
+            document.getElementById('checkout-total').textContent = `₹${cartTotalAmount.toFixed(2)}`;
+
+            document.getElementById('checkout-modal').style.display = 'flex';
         }
 
-        function openPaymentModal() {
-            document.getElementById('payment-amount').value = cartTotalAmount.toFixed(2);
-            document.getElementById('payment-amount').max = cartTotalAmount;
-            document.getElementById('payment-modal').style.display = 'flex';
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').style.display = 'none';
         }
 
-        function closePaymentModal() {
-            document.getElementById('payment-modal').style.display = 'none';
-        }
-
-        async function processPayment() {
+        async function submitCheckout() {
             const userId = localStorage.getItem("user_id") || "anonymous";
-            const btn = document.querySelector('#payment-modal button');
-            const shippingAddress = document.getElementById('shipping-address').value.trim() || 'Not Provided';
-            const paymentAmount = document.getElementById('payment-amount').value;
+            const name = document.getElementById('checkout-name').value.trim();
+            const phone = document.getElementById('checkout-phone').value.trim();
+            const address = document.getElementById('checkout-address').value.trim();
+            const city = document.getElementById('checkout-city').value.trim();
+            const state = document.getElementById('checkout-state').value.trim();
+            const pincode = document.getElementById('checkout-pincode').value.trim();
 
-            btn.textContent = "Redirecting to Gateway...";
-            btn.disabled = true;
+            const paymentRadio = document.querySelector('input[name="checkout-payment-method"]:checked');
+            const paymentMethod = paymentRadio ? paymentRadio.value : "Cash on Delivery";
+
+            if (!name || !phone || !address || !city || !state || !pincode) {
+                alert("Please fill in all delivery details (Name, Phone, Address, City, State, Pincode).");
+                return;
+            }
+
+            const digitsOnly = phone.replace(/[^0-9]/g, '');
+            if (digitsOnly.length < 10) {
+                alert("Please enter a valid 10-digit mobile number.");
+                return;
+            }
+
+            const submitBtn = document.getElementById('checkout-submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Processing Order...";
 
             try {
                 const res = await fetch(`${API_BASE_URL}/api/checkout`, {
@@ -1593,61 +2081,258 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         user_id: userId,
-                        payment_info: {
-                            method: 'CCAvenue',
-                            address: shippingAddress,
-                            amount: parseFloat(paymentAmount)
-                        }
+                        customer_name: name,
+                        phone: phone,
+                        shipping_address: address,
+                        city: city,
+                        state: state,
+                        pincode: pincode,
+                        payment_method: paymentMethod
                     })
                 });
 
                 const data = await res.json();
 
                 if (data.status === 'success') {
-                    // Create a hidden form to post to CCAvenue
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = data.payment_url;
-                    form.target = '_blank'; // Open in new tab or iframe
+                    // Remember phone for future orders & WhatsApp link
+                    localStorage.setItem("user_phone", phone);
 
-                    const encInput = document.createElement('input');
-                    encInput.type = 'hidden';
-                    encInput.name = 'encRequest';
-                    encInput.value = data.enc_request;
-                    form.appendChild(encInput);
+                    closeCheckoutModal();
 
-                    const accessInput = document.createElement('input');
-                    accessInput.type = 'hidden';
-                    accessInput.name = 'access_code';
-                    accessInput.value = data.access_code;
-                    form.appendChild(accessInput);
+                    // Display bill invoice
+                    showInvoice({
+                        order_id: data.order_group_id,
+                        date: new Date().toLocaleDateString(),
+                        total: data.total_amount,
+                        payment_status: data.payment_status,
+                        items: data.items.map(i => ({
+                            name: i.plant_name,
+                            quantity: i.quantity,
+                            price: i.price
+                        }))
+                    });
 
-                    document.body.appendChild(form);
-                    form.submit();
-                    document.body.removeChild(form);
-
-                    // Listen for success message from the new window
-                    window.addEventListener('message', function (event) {
-                        if (event.data === 'payment_success') {
-                            showToast("Payment Successful!", "success");
-                            closePaymentModal();
-                            loadCart();
-                            // Optionally show a final success modal or redirect
-                            appendMessage("bot", "🎉 Thank you! Your order has been placed successfully.");
-                        }
-                    }, { once: true });
-
+                    // Reload cart and notify chatbot
+                    loadCart();
+                    appendMessage("bot", `🎉 Order **#${data.order_group_id}** placed successfully! Tracking #: \`${data.tracking_number}\`. Payment method: ${paymentMethod}.`);
                 } else {
-                    alert(data.error || "Checkout initiation failed");
+                    alert(data.error || data.message || "Failed to complete checkout.");
                 }
             } catch (err) {
-                console.error(err);
-                alert("Error connecting to payment server");
+                console.error("Checkout error:", err);
+                alert("Error connecting to server. Please try again.");
             } finally {
-                btn.textContent = "Pay Now";
-                btn.disabled = false;
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Confirm & Place Order";
             }
         }
+
+        // ======================================================================
+        // ORDER HISTORY & DETAILS MODAL HANDLERS
+        // ======================================================================
+        function openOrdersModal() {
+            document.getElementById('orders-modal').style.display = 'flex';
+            loadCustomerOrders();
+        }
+
+        function closeOrdersModal() {
+            document.getElementById('orders-modal').style.display = 'none';
+        }
+
+        async function loadCustomerOrders() {
+            const userId = localStorage.getItem("user_id") || "anonymous";
+            const container = document.getElementById("orders-container");
+            container.innerHTML = "<p style='color:#666; text-align:center; padding: 20px;'>⏳ Loading your orders...</p>";
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/orders/${userId}`);
+                const data = await res.json();
+
+                const orders = data.orders || [];
+                if (orders.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px 20px; color: #666;">
+                            <div style="font-size: 2.5rem; margin-bottom: 8px;">📦</div>
+                            <h3 style="color: #333; margin-bottom: 6px;">No Orders Yet</h3>
+                            <p style="margin-bottom: 14px; font-size: 13.5px;">You have not placed any plant orders yet.</p>
+                            <button onclick="closeOrdersModal();" class="hero-btn" style="padding: 8px 20px; font-size: 13px;">Shop Plants</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = orders.map(ord => {
+                    const statusClass = `status-${(ord.order_status || 'placed').toLowerCase().replace(/\s+/g, '-')}`;
+                    const itemsHtml = (ord.items || []).map(it => `
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; color: #444; padding: 3px 0;">
+                            <span>🌱 ${it.plant_name} <span style="color:#777;">(×${it.quantity})</span></span>
+                            <strong>₹${it.total_amount.toFixed(2)}</strong>
+                        </div>
+                    `).join('');
+
+                    return `
+                        <div style="background: #ffffff; border: 1px solid #d4ebd4; border-radius: 14px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;">
+                                <div>
+                                    <span style="font-weight: 700; font-size: 14px; color: #006400;">Order #${ord.order_group_id}</span>
+                                    <div style="font-size: 12px; color: #777;">Placed on ${ord.order_date}</div>
+                                </div>
+                                <span class="status-pill ${statusClass}">${ord.order_status}</span>
+                            </div>
+
+                            <div style="background: #f9fbf9; border-radius: 8px; padding: 10px; margin-bottom: 10px;">
+                                ${itemsHtml}
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 10px;">
+                                <div>
+                                    <span style="color: #666;">Payment:</span> <strong>${ord.payment_method}</strong>
+                                    <span style="display: inline-block; margin-left: 6px; font-size: 11px; padding: 2px 8px; border-radius: 10px; background: ${ord.payment_status === 'Paid' ? '#e8f5e9' : '#fff8e1'}; color: ${ord.payment_status === 'Paid' ? '#2e7d32' : '#f57f17'};">${ord.payment_status}</span>
+                                </div>
+                                <div style="font-size: 15px; font-weight: 800; color: #006400;">
+                                    Total: ₹${ord.total_amount.toFixed(2)}
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #e0e0e0; padding-top: 10px;">
+                                <div style="font-size: 12px; color: #666;">
+                                    Tracking: <code>${ord.tracking_number}</code>
+                                </div>
+                                <button onclick="openTrackingModal('${ord.order_group_id}')"
+                                    style="padding: 6px 14px; background: #006400; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                                    🚚 Track Shipment
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error("Order history error:", err);
+                container.innerHTML = "<p style='color:#d32f2f; text-align:center;'>❌ Failed to load order history. Please try again.</p>";
+            }
+        }
+
+        // ======================================================================
+        // ORDER TRACKING MODAL HANDLERS (8 MILESTONES)
+        // ======================================================================
+        function openTrackingModal(orderGroupId) {
+            document.getElementById('tracking-modal').style.display = 'flex';
+            trackOrder(orderGroupId);
+        }
+
+        function closeTrackingModal() {
+            document.getElementById('tracking-modal').style.display = 'none';
+        }
+
+        async function trackOrder(orderGroupId) {
+            document.getElementById('tracking-order-subtitle').textContent = `Order #${orderGroupId}`;
+            const banner = document.getElementById('tracking-info-banner');
+            const stepper = document.getElementById('tracking-stepper-container');
+
+            banner.innerHTML = "⏳ Fetching live tracking information...";
+            stepper.innerHTML = "";
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/orders/track/${orderGroupId}`);
+                const data = await res.json();
+
+                if (data.status !== 'success') {
+                    banner.innerHTML = `<span style="color:#d32f2f;">${data.message || 'Tracking details not found.'}</span>`;
+                    return;
+                }
+
+                banner.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div>
+                            <strong>Status:</strong> <span class="status-pill status-${(data.current_status || '').toLowerCase().replace(/\s+/g, '-')}">${data.current_status}</span>
+                        </div>
+                        <div>
+                            <strong>Estimated Delivery:</strong> <span style="color: #006400; font-weight: 600;">${data.estimated_delivery}</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 12px; color: #555;">
+                        <strong>Tracking Number:</strong> <code>${data.tracking_number}</code>
+                    </div>
+                `;
+
+                // Render 8 Milestone Stepper
+                stepper.innerHTML = (data.timeline || []).map((step, idx) => {
+                    const stepClasses = [
+                        'tracking-step',
+                        step.completed ? 'completed' : '',
+                        step.current ? 'current' : '',
+                        step.cancelled ? 'cancelled' : ''
+                    ].filter(Boolean).join(' ');
+
+                    const dotContent = step.completed ? '✓' : (step.cancelled ? '✖' : (step.current ? '●' : (idx + 1)));
+
+                    return `
+                        <div class="${stepClasses}">
+                            <div class="tracking-dot">${dotContent}</div>
+                            <div class="tracking-step-label">${step.stage}</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error("Track order error:", err);
+                banner.innerHTML = "<span style='color:#d32f2f;'>Error retrieving order tracking information.</span>";
+            }
+        }
+
+        // ======================================================================
+        // WHATSAPP PREVIEW & PHONE LINKING HANDLERS
+        // ======================================================================
+        function openWhatsAppModal() {
+            const phone = localStorage.getItem("user_phone") || "";
+            document.getElementById('whatsapp-link-phone').value = phone;
+            document.getElementById('whatsapp-link-status').textContent = "";
+            document.getElementById('whatsapp-modal').style.display = 'flex';
+        }
+
+        function closeWhatsAppModal() {
+            document.getElementById('whatsapp-modal').style.display = 'none';
+        }
+
+        async function saveWhatsAppPhone() {
+            const phoneInput = document.getElementById('whatsapp-link-phone');
+            const statusEl = document.getElementById('whatsapp-link-status');
+            const phone = phoneInput.value.trim();
+            const userId = localStorage.getItem("user_id") || "anonymous";
+
+            if (!phone || phone.replace(/[^0-9]/g, '').length < 10) {
+                statusEl.style.color = "#d32f2f";
+                statusEl.textContent = "⚠️ Please enter a valid 10-digit mobile number.";
+                return;
+            }
+
+            statusEl.style.color = "#555";
+            statusEl.textContent = "⏳ Linking phone number...";
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/user/phone`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, phone: phone })
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem("user_phone", phone);
+                    statusEl.style.color = "#2e7d32";
+                    statusEl.textContent = `✅ Mobile number ${phone} linked successfully to your account!`;
+                } else {
+                    // Save locally for guest users
+                    localStorage.setItem("user_phone", phone);
+                    statusEl.style.color = "#2e7d32";
+                    statusEl.textContent = `✅ Number ${phone} saved for your WhatsApp shopping session!`;
+                }
+            } catch (err) {
+                localStorage.setItem("user_phone", phone);
+                statusEl.style.color = "#2e7d32";
+                statusEl.textContent = `✅ Number ${phone} saved for your WhatsApp shopping session!`;
+            }
+        }
+
 
         function showInvoice(bill) {
             const modal = document.getElementById('invoice-modal');
@@ -1838,15 +2523,18 @@
             const file = e.target.files[0];
             if (!file) return;
 
+            // Reset input so user can re-upload the same file if needed
+            e.target.value = "";
+
             const userId = localStorage.getItem("user_id") || "anonymous";
-            appendMessage("user", `📸 Sent image for enquiry: ${file.name}`);
+            appendMessage("user", `📸 Sent image for diagnosis: ${file.name}`);
 
             // Show processing
             const processingId = "proc-" + Date.now();
             const processingMsg = document.createElement("div");
             processingMsg.className = "message bot-message";
             processingMsg.id = processingId;
-            processingMsg.textContent = "⏳ Identifying plant for enquiry...";
+            processingMsg.textContent = "⏳ Diagnosing plant via n8n workflow...";
             chatBox.appendChild(processingMsg);
             chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -1854,89 +2542,135 @@
             formData.append("image", file);
 
             try {
-                const res = await fetch(`${API_BASE_URL}/api/identify`, {
+                const res = await fetch(`${API_BASE_URL}/api/plant-diagnosis`, {
                     method: "POST",
                     body: formData
                 });
 
-                if (!res.ok) throw new Error("Server error");
-
-                const data = await res.json();
+                const data = await res.json().catch(() => ({}));
                 const procEl = document.getElementById(processingId);
                 if (procEl) procEl.remove();
 
+                if (!res.ok || data.status === "error") {
+                    appendMessage("bot", `❌ ${data.message || "Plant diagnosis failed"}`, true);
+                    return;
+                }
+
                 if (data.status === "success") {
-                    const p = data.plant || { name: (data.identification ? data.identification.plant_name : "Tomato"), scientific_name: (data.identification ? data.identification.scientific_name : "Solanum lycopersicum"), confidence: 0.96 };
-                    const d = data.disease || { plant_name: p.name, disease_name: (data.identification ? data.identification.disease_name : "Early Blight"), confidence: 0.94, status: "detected" };
-                    const r = data.remedies || { treatment: (data.identification ? data.identification.treatment || [] : []), prevention: (data.identification ? data.identification.prevention || [] : []), care_tips: (data.identification ? data.identification.care_tips || [] : []) };
+                    // Extract fields safely with NO hardcoded fake fallbacks
+                    const plantName = (data.plant && data.plant.name) || data.plant_name || "Unknown Plant";
+                    const scientificName = (data.plant && data.plant.scientific_name) || data.scientific_name || "";
+                    const plantConf = data.plant ? data.plant.confidence : null;
 
-                    const plantConfVal = p.confidence > 1 ? p.confidence : p.confidence * 100;
-                    const diseaseConfVal = d.confidence > 1 ? d.confidence : d.confidence * 100;
-                    const plantConfPct = `${Math.round(plantConfVal)}%`;
-                    const diseaseConfPct = `${Math.round(diseaseConfVal)}%`;
+                    const diseaseName = (data.disease && data.disease.disease_name) || data.disease_name || "Unknown";
+                    const rawConf = (data.disease && data.disease.confidence !== undefined) ? data.disease.confidence : data.confidence;
+                    const diseaseConfVal = (rawConf !== undefined && rawConf !== null) ? (rawConf > 1 ? rawConf : rawConf * 100) : null;
+                    const diseaseConfPct = diseaseConfVal !== null ? `${Math.round(diseaseConfVal)}%` : "N/A";
 
-                    let diseaseStatusLabel = "Disease Detected";
-                    if (d.status === "healthy" || d.disease_name === "None Detected") {
-                        diseaseStatusLabel = "Healthy";
-                    } else if (d.status === "uncertain" || d.confidence < 0.90) {
-                        diseaseStatusLabel = "Uncertain";
-                    }
+                    const status = ((data.disease && data.disease.status) || data.status_code || "").toLowerCase();
+                    const remedies = data.remedies || {};
+                    const treatment = remedies.treatment || data.treatment || [];
+                    const prevention = remedies.prevention || data.prevention || [];
+                    const careTips = remedies.care_tips || data.care_tips || [];
 
                     let reply = `🌱 **PLANT IDENTIFICATION**\n\n`;
-                    reply += `**Plant Name:** ${p.name}\n`;
-                    if (p.scientific_name) reply += `**Scientific Name:** ${p.scientific_name}\n`;
-                    reply += `**Confidence:** ${plantConfPct}\n\n`;
+                    reply += `**Plant Name:** ${plantName}\n`;
+                    if (scientificName && scientificName !== "Unknown") {
+                        reply += `**Scientific Name:** *${scientificName}*\n`;
+                    }
+                    if (plantConf !== null && plantConf !== undefined) {
+                        const pConfVal = plantConf > 1 ? plantConf : plantConf * 100;
+                        reply += `**Confidence:** ${Math.round(pConfVal)}%\n`;
+                    }
+                    reply += `\n`;
 
-                    reply += `🦠 **DISEASE IDENTIFICATION**\n\n`;
-                    reply += `**Plant:** ${d.plant_name || p.name}\n`;
-                    reply += `**Disease:** ${d.disease_name}\n`;
-                    reply += `**Confidence:** ${diseaseConfPct}\n`;
-                    reply += `**Status:** ${diseaseStatusLabel}\n\n`;
+                    // Handle Special Case: Flower or Fruit
+                    if (status === "not_applicable" || ["flower", "fruit"].includes(diseaseName.toLowerCase())) {
+                        reply += `🌸 **IMAGE CLASSIFICATION**\n\n`;
+                        reply += `**Category:** ${diseaseName}\n`;
+                        reply += `**Note:** Disease detection is specialized for foliage (leaf) images. No disease remedies are needed for flowers or fruits.\n`;
+                    }
+                    // Handle Special Case: Unsupported Plant
+                    else if (status === "unsupported" || ["not supported", "not applicable"].includes(diseaseName.toLowerCase())) {
+                        reply += `⚠️ **DISEASE DETECTION NOT SUPPORTED**\n\n`;
+                        reply += `**Plant:** ${plantName}\n`;
+                        reply += `**Note:** Automated disease detection is currently trained specifically for Potato and Tomato crops.\n`;
+                    }
+                    // Handle Special Case: Uncertain Disease Prediction
+                    else if (status === "uncertain" || (diseaseConfVal !== null && diseaseConfVal < 90) || diseaseName.toLowerCase() === "unknown disease") {
+                        reply += `❓ **DISEASE IDENTIFICATION**\n\n`;
+                        reply += `**Status:** Uncertain\n`;
+                        if (diseaseConfVal !== null) reply += `**Confidence:** ${diseaseConfPct}\n`;
+                        reply += `**Note:** Disease prediction confidence is below the reliable threshold. Please upload a clearer, well-lit photo of the leaf.\n`;
+                    }
+                    // Handle Special Case: Healthy Leaf
+                    else if (status === "healthy" || ["none detected", "healthy"].includes(diseaseName.toLowerCase())) {
+                        reply += `🌿 **DISEASE IDENTIFICATION**\n\n`;
+                        reply += `**Condition:** Healthy Leaf\n`;
+                        if (diseaseConfVal !== null) reply += `**Confidence:** ${diseaseConfPct}\n`;
+                        reply += `**Status:** No Disease Detected\n\n`;
 
-                    reply += `💊 **REMEDIES**\n\n`;
-                    let hasRemedies = false;
-                    if (r.treatment && r.treatment.length > 0) {
-                        reply += `**Treatment:**\n` + r.treatment.map(t => `• ${t}`).join('\n') + `\n\n`;
-                        hasRemedies = true;
+                        if (prevention.length > 0 || careTips.length > 0) {
+                            reply += `✨ **PLANT CARE & MAINTENANCE**\n\n`;
+                            if (prevention.length > 0) {
+                                reply += `**Preventative Care:**\n` + prevention.map(pr => `• ${pr}`).join('\n') + `\n\n`;
+                            }
+                            if (careTips.length > 0) {
+                                reply += `**Care Tips:**\n` + careTips.map(c => `• ${c}`).join('\n') + `\n`;
+                            }
+                        }
                     }
-                    if (r.prevention && r.prevention.length > 0) {
-                        reply += `**Prevention:**\n` + r.prevention.map(pr => `• ${pr}`).join('\n') + `\n\n`;
-                        hasRemedies = true;
-                    }
-                    if (r.care_tips && r.care_tips.length > 0) {
-                        reply += `**Care Tips:**\n` + r.care_tips.map(c => `• ${c}`).join('\n');
-                        hasRemedies = true;
-                    }
-                    if (!hasRemedies) {
-                        if (d.status === "uncertain" || d.confidence < 0.90) {
-                            reply += `*No disease-specific remedies retrieved for low confidence disease prediction (< 90%).*`;
-                        } else {
+                    // Handle Disease Detected
+                    else {
+                        reply += `🦠 **DISEASE IDENTIFICATION**\n\n`;
+                        reply += `**Plant:** ${plantName}\n`;
+                        reply += `**Disease:** ${diseaseName}\n`;
+                        if (diseaseConfVal !== null) reply += `**Confidence:** ${diseaseConfPct}\n`;
+                        reply += `**Status:** Disease Detected\n\n`;
+
+                        reply += `💊 **REMEDIES & TREATMENT**\n\n`;
+                        let hasRemedies = false;
+                        if (treatment.length > 0) {
+                            reply += `**Treatment:**\n` + treatment.map(t => `• ${t}`).join('\n') + `\n\n`;
+                            hasRemedies = true;
+                        }
+                        if (prevention.length > 0) {
+                            reply += `**Prevention:**\n` + prevention.map(pr => `• ${pr}`).join('\n') + `\n\n`;
+                            hasRemedies = true;
+                        }
+                        if (careTips.length > 0) {
+                            reply += `**Care Tips:**\n` + careTips.map(c => `• ${c}`).join('\n');
+                            hasRemedies = true;
+                        }
+                        if (!hasRemedies) {
                             reply += `*No specific remedies required.*`;
                         }
                     }
 
                     appendMessage("bot", reply);
 
-                    // Add Action Button for Enquiry
-                    const actionDiv = document.createElement("div");
-                    actionDiv.className = "bot-message message";
-                    actionDiv.style.background = "transparent";
-                    actionDiv.style.padding = "0";
-                    actionDiv.innerHTML = `
-                        <button type="button" onclick="submitEnquiry(event, '${iden.plant_name.replace(/'/g, "\\'")}', ${iden.plant_id || 0})" 
-                                style="background:#d4af37; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-weight:bold; width: 100%; margin-top: 5px;">
-                            📊 Submit Enquiry for ${iden.plant_name}
-                        </button>
-                    `;
-                    chatBox.appendChild(actionDiv);
-                    chatBox.scrollTop = chatBox.scrollHeight;
+                    // Add Action Button for Enquiry if plant is known
+                    if (plantName && plantName !== "Unknown Plant") {
+                        const actionDiv = document.createElement("div");
+                        actionDiv.className = "bot-message message";
+                        actionDiv.style.background = "transparent";
+                        actionDiv.style.padding = "0";
+                        actionDiv.innerHTML = `
+                            <button type="button" onclick="submitEnquiry(event, '${plantName.replace(/'/g, "\\'")}', 0)" 
+                                    style="background:#d4af37; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-weight:bold; width: 100%; margin-top: 5px;">
+                                📊 Submit Enquiry for ${plantName}
+                            </button>
+                        `;
+                        chatBox.appendChild(actionDiv);
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }
                 } else {
                     appendMessage("bot", "❌ " + (data.message || "Identification failed"), true);
                 }
             } catch (err) {
                 const procEl = document.getElementById(processingId);
                 if (procEl) procEl.remove();
-                appendMessage("bot", "❌ Vision server connection error", true);
+                appendMessage("bot", `❌ Diagnosis connection error: ${err.message || "Failed to reach server"}`, true);
             }
         }
 
@@ -1984,8 +2718,9 @@
             <li><a href="shop.html"><span>🛍️</span> Shop Plants</a></li>
             <li><a href="seeds.html"><span>🌱</span> Seeds Collection</a></li>
             <li><a href="about.html"><span>ℹ️</span> About Us</a></li>
-            <li><a href="contact.html"><span>📞</span> Contact Us</a></li>
-            <li><a href="index.html#cart-section"><span>🛒</span> Shopping Cart</a></li>
+            <li><a href="index.html#cart-section" onclick="toggleSideNav()"><span>🛒</span> Shopping Cart</a></li>
+            <li><a href="javascript:void(0)" onclick="toggleSideNav(); openOrdersModal();"><span>📦</span> My Orders & Tracking</a></li>
+            <li><a href="javascript:void(0)" onclick="toggleSideNav(); openWhatsAppModal();"><span>💬</span> WhatsApp Shopping</a></li>
             <li id="navAuthItem"><a href="auth.html"><span>🔑</span> Login / Account</a></li>
         </ul>
         <div class="sidenav-footer">

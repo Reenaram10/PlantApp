@@ -312,7 +312,7 @@ def extract_plant_name_from_query(query: str) -> Optional[str]:
     return None
 
 
-def retrieve_history(query: str, plant_name: str = None, k: int = 5) -> List[Document]:
+def retrieve_history(query: str, plant_name: Optional[str] = None, k: int = 5) -> List[Document]:
     """
     Searches the History FAISS Vector Store for documents relevant to the query.
     Filters/ranks documents matching plant_name if specified.

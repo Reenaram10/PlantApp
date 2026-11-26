@@ -1,5 +1,6 @@
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic.main import BaseModel
+from pydantic import Field
 
 class PlantInfo(BaseModel):
     name: str = Field(..., description="Common name of the identified plant")

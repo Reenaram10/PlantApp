@@ -1,4 +1,8 @@
-from app import app, faiss_rag, PlantKnowledge, DiseaseKnowledge
+from create_app import create_app
+from services.rag_service import faiss_rag
+from models.catalog import PlantKnowledge, DiseaseKnowledge
+
+app = create_app()
 
 def force_sync():
     with app.app_context():

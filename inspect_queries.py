@@ -1,6 +1,9 @@
-from app import app, db, Query
+from create_app import create_app
+from models.chat import Query
 import sqlite3
 import os
+
+app = create_app()
 
 def inspect_queries():
     with app.app_context():
