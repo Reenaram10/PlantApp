@@ -1,0 +1,126 @@
+{
+  "total_legacy_functions": 128,
+  "identical_after_normalization": 111,
+  "missing": [],
+  "differing": [
+    {
+      "name": "encrypt",
+      "legacy_line": 72,
+      "new_path": "services\\payment.py",
+      "new_line": 8,
+      "diff": "--- app_legacy.py:72 (encrypt)\n+++ services\\payment.py:8 (encrypt)\n@@ -1,3 +1,4 @@\n+'\\n    Encrypts plaintext using AES-CBC with MD5-derived 16-byte key and static IV.\\n    Returns hex-encoded ciphertext.\\n    '\n iv = b'\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\x0c\\r\\x0e\\x0f'\n key = working_key.encode('utf-8')\n byte_key = hashlib.md5(key).digest()\n"
+    },
+    {
+      "name": "decrypt",
+      "legacy_line": 82,
+      "new_path": "services\\payment.py",
+      "new_line": 22,
+      "diff": "--- app_legacy.py:82 (decrypt)\n+++ services\\payment.py:22 (decrypt)\n@@ -1,3 +1,4 @@\n+'\\n    Decrypts hex-encoded ciphertext using AES-CBC with MD5-derived 16-byte key and static IV.\\n    Returns unpadded plaintext string.\\n    '\n iv = b'\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\x0c\\r\\x0e\\x0f'\n key = working_key.encode('utf-8')\n byte_key = hashlib.md5(key).digest()\n"
+    },
+    {
+      "name": "serve_admin_dashboard",
+      "legacy_line": 151,
+      "new_path": "server\\routes\\admin_routes.py",
+      "new_line": 34,
+      "diff": "--- app_legacy.py:151 (serve_admin_dashboard)\n+++ server\\routes\\admin_routes.py:34 (serve_admin_dashboard)\n@@ -1 +1 @@\n-return app.send_static_file('admin.html')+return current_app.send_static_file('admin.html')"
+    },
+    {
+      "name": "ask_rebuild_index",
+      "legacy_line": 162,
+      "new_path": "services\\rag_service.py",
+      "new_line": 16,
+      "diff": "--- app_legacy.py:162 (ask_rebuild_index)\n+++ services\\rag_service.py:16 (ask_rebuild_index)\n@@ -1,6 +1,5 @@\n-'Ask the user in the terminal whether to rebuild the FAISS index, with a 5s timeout.'\n-import threading, os\n-index_path = 'local_faiss_index'\n+'\\n    Ask the user in the terminal whether to rebuild the FAISS index, with a 5s timeout.\\n    Only executed in the __main__ startup path.\\n    '\n+index_path = os.path.join(APP_ROOT, 'local_faiss_index')\n if not os.path.exists(index_path):\n     print(' [FAISS Startup] No existing index found. Building fresh index from CSV files...')\n     return True\n"
+    },
+    {
+      "name": "load_json_mapping",
+      "legacy_line": 210,
+      "new_path": "services\\disease_models.py",
+      "new_line": 17,
+      "diff": "--- app_legacy.py:210 (load_json_mapping)\n+++ services\\disease_models.py:17 (load_json_mapping)\n@@ -1,6 +1,7 @@\n+'Load JSON class index mapping safely.'\n if os.path.exists(path):\n     try:\n-        with open(path, 'r') as f:\n+        with open(path, 'r', encoding='utf-8') as f:\n             return json.load(f)\n     except Exception as e:\n         print(f' [Model] Error loading {path}: {e}')\n"
+    },
+    {
+      "name": "llm_call",
+      "legacy_line": 256,
+      "new_path": "services\\llm_service.py",
+      "new_line": 51,
+      "diff": "--- app_legacy.py:256 (llm_call)\n+++ services\\llm_service.py:51 (llm_call)\n@@ -1,5 +1,6 @@\n-global LLM_OPTION\n-if runtime_settings.llm_option == 'groq':\n+'\\n    Unified LLM caller routing to Groq, DeepSeek, Gemini, SLM, or local failsafe.\\n    Accepts explicit provider parameter or defaults to runtime_settings.llm_option.\\n    '\n+opt = (provider or runtime_settings.llm_option).lower()\n+if opt == 'groq':\n     try:\n         groq_client = Groq(api_key=os.getenv('GROQ_API_KEY'))\n         response = groq_client.chat.completions.create(model='llama-3.1-8b-instant', messages=[{'role': 'system', 'content': 'You are a helpful plant assistant.'}, {'role': 'user', 'content': prompt}], temperature=0.2, max_tokens=200)\n@@ -7,7 +8,7 @@\n     except Exception as e:\n         print(f' Groq error: {e}')\n         return groq_call_failsafe(prompt)\n-elif runtime_settings.llm_option == 'deepseek':\n+elif opt == 'deepseek':\n     try:\n         deepseek_client = OpenAI(api_key=os.getenv('DEEPSEEK_API_KEY'), base_url='https://api.deepseek.com')\n         response = deepseek_client.chat.completions.create(model='deepseek-chat', messages=[{'role': 'system', 'content': 'You are a helpful plant assistant.'}, {'role': 'user', 'content': prompt}], temperature=0.2, max_tokens=200)\n@@ -15,7 +16,7 @@\n     except Exception as e:\n         print(f' DeepSeek error: {e}')\n         return groq_call_failsafe(prompt)\n-elif runtime_settings.llm_option == 'gemini':\n+elif opt == 'gemini':\n     try:\n         genai.configure(api_key=os.getenv('GEMINI_API_KEY'))\n         model = genai.GenerativeModel('gemini-1.5-flash')\n@@ -24,10 +25,10 @@\n     except Exception as e:\n         print(f' Gemini error: {e}')\n         return groq_call_failsafe(prompt)\n-elif runtime_settings.llm_option == 'slm':\n+elif opt == 'slm':\n     return slm_call(prompt)\n-elif runtime_settings.llm_option == 'local':\n+elif opt == 'local':\n     return groq_call_failsafe(prompt)\n else:\n-    print(f' Unknown LLM option: {runtime_settings.llm_option}')\n+    print(f' Unknown LLM option: {opt}')\n     return groq_call_failsafe(prompt)"
+    },
+    {
+      "name": "slm_call",
+      "legacy_line": 330,
+      "new_path": "services\\llm_service.py",
+      "new_line": 120,
+      "diff": "--- app_legacy.py:330 (slm_call)\n+++ services\\llm_service.py:120 (slm_call)\n@@ -1,4 +1,4 @@\n-'\\n    Calls a specialized Small Language Model (Phi mini) via Local Ollama API.\\n    '\n+'\\n    Calls a specialized Small Language Model (Phi-3) via Local Ollama API.\\n    Falls back gracefully without mutating runtime settings or global variables.\\n    '\n api_url = 'http://127.0.0.1:11434/api/generate'\n model_id = 'phi3'\n system_instr = 'You are a plant-based expert specialized in botanical advice and nursery assistance.'\n@@ -21,10 +21,6 @@\n print(' [SLM] Falling back to Groq for better quality...')\n try:\n     expert_prompt = f'Expert Advice Needed: {prompt}. Please answer as a botanical expert.'\n-    temp_option = runtime_settings.llm_option\n-    globals()['LLM_OPTION'] = 'groq'\n-    fallback_resp = llm_call(expert_prompt)\n-    globals()['LLM_OPTION'] = temp_option\n-    return fallback_resp\n-except:\n+    return llm_call(expert_prompt, provider=fallback_provider)\n+except Exception:\n     return groq_call_failsafe(prompt)"
+    },
+    {
+      "name": "groq_call_failsafe",
+      "legacy_line": 383,
+      "new_path": "services\\llm_service.py",
+      "new_line": 28,
+      "diff": "--- app_legacy.py:383 (groq_call_failsafe)\n+++ services\\llm_service.py:28 (groq_call_failsafe)\n@@ -1,4 +1,4 @@\n-'\\n    Failsafe method using simple keyword matching.\\n    Works without external API calls.\\n    '\n+'\\n    Failsafe method using simple botanical keyword matching.\\n    Works without external API calls or network connectivity.\\n    '\n print(' Using failsafe LLM (keyword matching)...')\n prompt_lower = prompt.lower()\n if any((word in prompt_lower for word in ['indoor', 'bedroom', 'house', 'apartment'])):\n"
+    },
+    {
+      "name": "verify_jwt",
+      "legacy_line": 822,
+      "new_path": "auth\\jwt_utils.py",
+      "new_line": 32,
+      "diff": "--- app_legacy.py:822 (verify_jwt)\n+++ auth\\jwt_utils.py:32 (verify_jwt)\n@@ -16,5 +16,5 @@\n     if payload.get('exp') and time.time() > payload['exp']:\n         return None\n     return payload\n-except Exception as e:\n+except Exception:\n     return None"
+    },
+    {
+      "name": "fuzzy_resolve_plant",
+      "legacy_line": 1589,
+      "new_path": "server\\services\\chat_service.py",
+      "new_line": 274,
+      "diff": "--- app_legacy.py:1589 (fuzzy_resolve_plant)\n+++ server\\services\\chat_service.py:274 (fuzzy_resolve_plant)\n@@ -11,7 +11,7 @@\n         return []\n from flask import has_app_context\n if not has_app_context():\n-    with current_app.app_context():\n+    with app_context_guard():\n         rows = _fetch_rows()\n         direct = resolve_plant_synonym(user_message)\n else:\n"
+    },
+    {
+      "name": "process_message",
+      "legacy_line": 1772,
+      "new_path": "server\\services\\chat_service.py",
+      "new_line": 516,
+      "diff": "--- app_legacy.py:1772 (process_message)\n+++ server\\services\\chat_service.py:516 (process_message)\n@@ -80,7 +80,7 @@\n                     print(f'Error adding to Cart DB: {e}')\n             from flask import has_app_context\n             if not has_app_context():\n-                with current_app.app_context():\n+                with app_context_guard():\n                     _add_cart()\n             else:\n                 _add_cart()\n@@ -106,7 +106,7 @@\n         return cart_reply\n     from flask import has_app_context\n     if not has_app_context():\n-        with current_app.app_context():\n+        with app_context_guard():\n             cart_reply = _fetch_cart_reply()\n     else:\n         cart_reply = _fetch_cart_reply()\n"
+    },
+    {
+      "name": "list_plant_images",
+      "legacy_line": 3287,
+      "new_path": "server\\routes\\chat_routes.py",
+      "new_line": 88,
+      "diff": "--- app_legacy.py:3287 (list_plant_images)\n+++ server\\routes\\chat_routes.py:88 (list_plant_images)\n@@ -4,4 +4,4 @@\n files = []\n if os.path.exists(plants_dir):\n     files = os.listdir(plants_dir)\n-return jsonify({'static_dir': static_dir, 'plants_dir': plants_dir, 'exists': os.path.exists(plants_dir), 'file_count': len(files), 'files_sample': files[:20], 'root_path': app.root_path})+return jsonify({'static_dir': static_dir, 'plants_dir': plants_dir, 'exists': os.path.exists(plants_dir), 'file_count': len(files), 'files_sample': files[:20], 'root_path': current_app.root_path})"
+    },
+    {
+      "name": "serve_root_files",
+      "legacy_line": 3317,
+      "new_path": "server\\routes\\store_routes.py",
+      "new_line": 40,
+      "diff": "--- app_legacy.py:3317 (serve_root_files)\n+++ server\\routes\\store_routes.py:40 (serve_root_files)\n@@ -1,4 +1,4 @@\n from flask import send_from_directory\n-if os.path.exists(os.path.join(app.root_path, filename)):\n+if os.path.exists(os.path.join(current_app.root_path, filename)):\n     return send_from_directory('.', filename)\n return send_from_directory('static', filename)"
+    },
+    {
+      "name": "manage_config",
+      "legacy_line": 3957,
+      "new_path": "server\\routes\\admin_routes.py",
+      "new_line": 1232,
+      "diff": "--- app_legacy.py:3957 (manage_config)\n+++ server\\routes\\admin_routes.py:1232 (manage_config)\n@@ -1,20 +1,19 @@\n 'Get or update configuration options'\n-global LLM_OPTION, STT_OPTION, TTS_OPTION\n try:\n     if request.method == 'GET':\n-        return jsonify({'status': 'success', 'config': {'LLM_OPTION': runtime_settings.llm_option, 'STT_OPTION': runtime_settings.stt_option, 'TTS_OPTION': runtime_settings.tts_option, 'LLM_FAILSAFE': LLM_FAILSAFE, 'STT_FAILSAFE': STT_FAILSAFE, 'TTS_FAILSAFE': TTS_FAILSAFE}})\n+        return jsonify({'status': 'success', 'config': {'LLM_OPTION': config.LLM_OPTION, 'STT_OPTION': config.STT_OPTION, 'TTS_OPTION': config.TTS_OPTION, 'LLM_FAILSAFE': LLM_FAILSAFE, 'STT_FAILSAFE': STT_FAILSAFE, 'TTS_FAILSAFE': TTS_FAILSAFE}})\n     elif request.method == 'POST':\n         data = request.json\n         if 'LLM_OPTION' in data:\n-            LLM_OPTION = data['LLM_OPTION']\n+            config.LLM_OPTION = data['LLM_OPTION']\n             print(f' LLM changed to: {runtime_settings.llm_option}')\n         if 'STT_OPTION' in data:\n-            STT_OPTION = data['STT_OPTION']\n+            config.STT_OPTION = data['STT_OPTION']\n             print(f' STT changed to: {runtime_settings.stt_option}')\n         if 'TTS_OPTION' in data:\n-            TTS_OPTION = data['TTS_OPTION']\n+            config.TTS_OPTION = data['TTS_OPTION']\n             print(f' TTS changed to: {runtime_settings.tts_option}')\n-        return jsonify({'status': 'success', 'message': 'Configuration updated', 'config': {'LLM_OPTION': runtime_settings.llm_option, 'STT_OPTION': runtime_settings.stt_option, 'TTS_OPTION': runtime_settings.tts_option}})\n+        return jsonify({'status': 'success', 'message': 'Configuration updated', 'config': {'LLM_OPTION': config.LLM_OPTION, 'STT_OPTION': config.STT_OPTION, 'TTS_OPTION': config.TTS_OPTION}})\n except Exception as e:\n     print(f'Config API error: {str(e)}')\n     return (jsonify({'status': 'error', 'message': str(e)}), 500)"
+    },
+    {
+      "name": "payment_response",
+      "legacy_line": 4453,
+      "new_path": "server\\routes\\store_routes.py",
+      "new_line": 394,
+      "diff": "--- app_legacy.py:4453 (payment_response)\n+++ server\\routes\\store_routes.py:394 (payment_response)\n@@ -12,7 +12,7 @@\n     total_order_amount = float(resp_dict.get('merchant_param2', 0))\n     amount_paid = float(resp_dict.get('amount', 0))\n     if order_status == 'Success':\n-        with current_app.app_context():\n+        with app_context_guard():\n             rows = db.session.execute(text('SELECT plant_id, quantity FROM cart_new WHERE user_id = :u'), {'u': user_id}).fetchall()\n             remaining_paid = amount_paid\n             remaining_total = total_order_amount\n"
+    },
+    {
+      "name": "generate_speech",
+      "legacy_line": 5352,
+      "new_path": "services\\speech_service.py",
+      "new_line": 27,
+      "diff": "--- app_legacy.py:5352 (generate_speech)\n+++ services\\speech_service.py:27 (generate_speech)\n@@ -1,2 +1,5 @@\n-'\\n    Generate speech wrapper for gTTS failsafe\\n    '\n+'\\n    Generate speech wrapper for TTS with runtime options and failsafe fallback.\\n    '\n+tts_opt = runtime_settings.tts_option\n+if tts_opt == 'none':\n+    return None\n return tts_failsafe(text)"
+    },
+    {
+      "name": "ensure_admin_user",
+      "legacy_line": 5693,
+      "new_path": "app.py",
+      "new_line": 35,
+      "diff": "--- app_legacy.py:5693 (ensure_admin_user)\n+++ app.py:35 (ensure_admin_user)\n@@ -1,3 +1,4 @@\n+'Ensure the default super admin user exists with valid credentials.'\n try:\n     user = db.session.execute(text(\"\\n            SELECT id FROM login WHERE LOWER(username) = 'admin' OR LOWER(email) = 'admin' OR LOWER(email) = 'admin@gmail.com'\\n        \")).fetchone()\n     if not user:\n"
+    }
+  ]
+}

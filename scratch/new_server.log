@@ -1,0 +1,86 @@
+ [Langfuse] Telemetry & logging client initialized.
+ [RAG] Indexed 119 knowledge chunks.
+ [FAISS] Initializing embeddings with sentence-transformers/all-MiniLM-L6-v2...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1650.51it/s]
+ [History FAISS] Initializing embeddings with sentence-transformers/all-MiniLM-L6-v2...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1765.61it/s]
+ [History FAISS] Loaded history index from disk.
+D:\PlantApp\services\llm_service.py:13: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+ [FAISS] Loaded index from disk.
+ DB schemas verified.
+ [DB] Admin user credentials verified: admin / admin@123
+(1) Result: (1,)
+ DB CONNECTED SUCCESSFULLY
+ Reseeded plant identity to 135
+
+============================================================
+ [FAISS Startup] Existing FAISS index found.
+ Type 'y' + Enter to REBUILD from CSVs, or press Enter / wait 5s to use cached index.
+============================================================
+>  [FAISS Startup] Using cached FAISS index.
+ [FAISS] Loaded index from disk.
+ Starting on http://127.0.0.1:8082
+ * Serving Flask app 'create_app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:8082
+Press CTRL+C to quit
+127.0.0.1 - - [25/Nov/2026 11:24:28] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:57] "POST /register HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /login HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /login HTTP/1.1" 401 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/admin/add-plant HTTP/1.1" 403 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/admin/add-plant HTTP/1.1" 403 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/admin/add-plant HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "GET /api/admin/inventory HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "GET /api/admin/inventory HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/admin/restock/137 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "GET /api/shop/plants HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/cart/update HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "GET /api/cart?user_id=32 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/cart/remove HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/checkout HTTP/1.1" 201 -
+127.0.0.1 - - [25/Nov/2026 11:24:59] "GET /api/orders/32 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:24:59] "GET /api/orders/track/ORD-1795586098-2106 HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+127.0.0.1 - - [25/Nov/2026 11:25:04] "POST /api/chat HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+127.0.0.1 - - [25/Nov/2026 11:25:05] "POST /api/chat HTTP/1.1" 200 -
+D:\PlantApp\services\chat\intent.py:65: LangChainDeprecationWarning: The class `Ollama` was deprecated in LangChain 0.3.1 and will be removed in 1.0.0. An updated version of the class exists in the `langchain-ollama package and should be used instead. To use it run `pip install -U `langchain-ollama` and import as `from `langchain_ollama import OllamaLLM``.
+  affirmation_chain = affirmation_prompt | Ollama(model="phi3", temperature=0) | StrOutputParser()
+ Using failsafe TTS (gTTS)...
+127.0.0.1 - - [25/Nov/2026 11:25:21] "POST /api/chat HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+127.0.0.1 - - [25/Nov/2026 11:25:28] "POST /api/chat HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+127.0.0.1 - - [25/Nov/2026 11:25:37] "POST /api/chat HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+127.0.0.1 - - [25/Nov/2026 11:25:47] "POST /api/chat HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:25:47] "GET /api/whatsapp/cart?phone=9876543210 HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:25:47] "POST /api/whatsapp/checkout HTTP/1.1" 400 -
+127.0.0.1 - - [25/Nov/2026 11:25:47] "POST /api/super-admin/login HTTP/1.1" 401 -
+127.0.0.1 - - [25/Nov/2026 11:25:47] "POST /api/super-admin/login HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:25:47] "GET /api/super-admin/stats HTTP/1.1" 200 -
+2026-11-25 11:25:55.589940: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-25 11:26:07.161554: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-25 11:26:13.155516: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+127.0.0.1 - - [25/Nov/2026 11:26:23] "POST /api/tools/plant-identify HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:26:23] "POST /api/tools/plant-identify HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:26:23] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:26:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:26:23] "GET /admin HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:26:23] "GET /admin HTTP/1.1" 200 -
+127.0.0.1 - - [25/Nov/2026 11:26:23] "GET /static/images/plants/plant_19_rose.jpeg HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:26:23] "GET /static/images/plants/plant_19_rose.jpeg HTTP/1.1" 200 -

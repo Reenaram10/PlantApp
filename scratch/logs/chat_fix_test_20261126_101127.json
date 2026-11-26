@@ -1,0 +1,138 @@
+[
+  {
+    "test": "fuzzy_resolve",
+    "query": "tell me about rose",
+    "result": {
+      "plant_id": 19,
+      "plant_name": "Rose",
+      "price": 300.0,
+      "image_url": "/static/images/plants/plant_19_rose.jpeg",
+      "score": 1.0,
+      "is_exact": true,
+      "raw_query": "rose"
+    }
+  },
+  {
+    "test": "fuzzy_resolve",
+    "query": "price of rose",
+    "result": {
+      "plant_id": 19,
+      "plant_name": "Rose",
+      "price": 300.0,
+      "image_url": "/static/images/plants/plant_19_rose.jpeg",
+      "score": 1.0,
+      "is_exact": true,
+      "raw_query": "rose"
+    }
+  },
+  {
+    "test": "fuzzy_resolve",
+    "query": "buy rose",
+    "result": {
+      "plant_id": 19,
+      "plant_name": "Rose",
+      "price": 300.0,
+      "image_url": "/static/images/plants/plant_19_rose.jpeg",
+      "score": 1.0,
+      "is_exact": true,
+      "raw_query": "rose"
+    }
+  },
+  {
+    "test": "fuzzy_resolve",
+    "query": "rose mallow",
+    "result": {
+      "plant_id": 16,
+      "plant_name": "Rose Mallow",
+      "price": 300.0,
+      "image_url": "/static/images/plants/plant_16_rose_mallow.jpeg",
+      "score": 1.0,
+      "is_exact": true,
+      "raw_query": "rose mallow"
+    }
+  },
+  {
+    "test": "phonetic_resolve",
+    "query": "rase nuh",
+    "result": {
+      "plant_id": 19,
+      "plant_name": "Rose",
+      "price": 300.0,
+      "image_url": "/static/images/plants/plant_19_rose.jpeg",
+      "score": 0.95,
+      "is_exact": false,
+      "raw_query": "rase nuh"
+    }
+  },
+  {
+    "test": "phonetic_resolve",
+    "query": "roz",
+    "result": {
+      "plant_id": 19,
+      "plant_name": "Rose",
+      "price": 300.0,
+      "image_url": "/static/images/plants/plant_19_rose.jpeg",
+      "score": 0.95,
+      "is_exact": false,
+      "raw_query": "roz"
+    }
+  },
+  {
+    "test": "phonetic_resolve",
+    "query": "hibiscs",
+    "result": {
+      "plant_id": 10,
+      "plant_name": "Hibiscus",
+      "price": 300.0,
+      "image_url": "/static/images/plants/plant_10_hibiscus.jpeg",
+      "score": 0.95,
+      "is_exact": false,
+      "raw_query": "hibiscs"
+    }
+  },
+  {
+    "test": "chat_rose",
+    "query": "price of rose",
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "💵 The price of **Rose** in our database is **₹300.00**.\n📦 **Stock**: **0** in stock (**Status**: Out of Stock). 🪴"
+    }
+  },
+  {
+    "test": "chat_rose",
+    "query": "buy rose",
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "How many **Rose** plants (Price: ₹300.0 each) would you like to add to your cart?"
+    }
+  },
+  {
+    "test": "varieties_rose",
+    "query": "available varieties of rose",
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "🌿 Currently, there are no specific varieties listed for **Rose** in our catalog."
+    }
+  },
+  {
+    "test": "varieties_hibiscus",
+    "query": "available varieties of hibiscus",
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "🌿 Available varieties of **Hibiscus** in our catalog:\n• Red Rose\n• Pink Rose\n• White Rose"
+    }
+  },
+  {
+    "test": "stock_rose",
+    "query": "how many rose do you have",
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "📦 We currently have **0** **Rose** plant(s) in stock in our database catalog (**Status**: Out of Stock, **Price**: ₹300.00). 🪴"
+    }
+  }
+]

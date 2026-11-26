@@ -1,0 +1,362 @@
+ [Langfuse] Telemetry & logging client initialized.
+ [RAG] Indexed 119 knowledge chunks.
+ [FAISS] Initializing embeddings with sentence-transformers/all-MiniLM-L6-v2...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8370.08it/s]
+ [History FAISS] Initializing embeddings with sentence-transformers/all-MiniLM-L6-v2...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 6452.20it/s]
+ [History FAISS] Loaded history index from disk.
+D:\PlantApp\services\llm_service.py:13: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+ [FAISS] Loaded index from disk.
+ DB schemas verified.
+ [DB] Admin user credentials verified: admin / admin@123
+(1) Result: (1,)
+ DB CONNECTED SUCCESSFULLY
+ Reseeded plant identity to 135
+
+============================================================
+ [FAISS Startup] Existing FAISS index found.
+ Type 'y' + Enter to REBUILD from CSVs, or press Enter / wait 5s to use cached index.
+============================================================
+>  [FAISS Startup] Using cached FAISS index.
+ [FAISS] Loaded index from disk.
+ Starting on http://127.0.0.1:8082
+ * Serving Flask app 'create_app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:8082
+Press CTRL+C to quit
+127.0.0.1 - - [24/Nov/2026 21:58:12] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET /nonexistent_file.txt HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET /nonexistent_file.txt HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET /admin HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET /admin HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET /admin.html HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET /admin.html HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "POST /api/admin/add-plant HTTP/1.1" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "POST /api/admin/add-plant HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "POST /api/admin/add-varieties HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "POST /api/admin/add-varieties HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET /api/admin/categories HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET /api/admin/categories HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "POST /api/admin/categories HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "POST /api/admin/categories HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "DELETE /api/admin/categories/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "DELETE /api/admin/categories/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:20] "GET /api/admin/categories/999999/plants HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/categories/999999/plants HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/customers HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/customers HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "DELETE /api/admin/delete-plant/999999 HTTP/1.1" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "DELETE /api/admin/delete-plant/999999 HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/download-template/nonexistent_profile HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/download-template/nonexistent_profile HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/get-plant/999999 HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/get-plant/999999 HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/inventory HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/inventory HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "POST /api/admin/inventory/add HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "POST /api/admin/inventory/add HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "POST /api/admin/inventory/remove HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "POST /api/admin/inventory/remove HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/inventory/transactions HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/inventory/transactions HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/orders HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/orders HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/orders/ORD-NONEXISTENT-999999 HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "GET /api/admin/orders/ORD-NONEXISTENT-999999 HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:21] "PUT /api/admin/orders/ORD-NONEXISTENT-999999 HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "PUT /api/admin/orders/ORD-NONEXISTENT-999999 HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/orders/record-payment HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/orders/record-payment HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/profile-stats HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/profile-stats HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/purchases HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/purchases HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/purchases HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/purchases HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/purchases/record-payment HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/purchases/record-payment HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/restock/999999 HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/restock/999999 HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/search-plants HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/search-plants HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/suggest-varieties HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/suggest-varieties HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/suppliers HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/suppliers HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/suppliers HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/suppliers HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/update-plant-image/999999 HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/update-plant-image/999999 HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "PUT /api/admin/update-plant/999999 HTTP/1.1" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "PUT /api/admin/update-plant/999999 HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/upload-profiles HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/admin/upload-profiles HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/varieties/existing/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "GET /api/admin/varieties/existing/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:22] "POST /api/auth/login HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/auth/login HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/auth/register HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/auth/register HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/auth/super-admin/login HTTP/1.1" 401 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/auth/super-admin/login HTTP/1.1" 401 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "GET /api/cart HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/cart HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/cart HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/cart/remove HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/cart/remove HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/cart/update HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/cart/update HTTP/1.1" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "DELETE /api/category_synonyms HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "DELETE /api/category_synonyms HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "GET /api/category_synonyms HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "GET /api/category_synonyms HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/category_synonyms HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/category_synonyms HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/chat HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/chat HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/checkout HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/checkout HTTP/1.1" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "GET /api/config HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "GET /api/config HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/config HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "POST /api/config HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "GET /api/debug/list-plant-images HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:23] "GET /api/debug/list-plant-images HTTP/1.1" 200 -
+2026-11-24 21:58:24.659623: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-24 21:58:27.030504: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-24 21:58:28.115210: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+ [Tomato OpenCV] Deep Learning model loaded from D:\PlantApp\plant_disease_detection\model\plant_disease_model.h5
+127.0.0.1 - - [24/Nov/2026 21:58:29] "POST /api/detect-tomato-disease HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:29] "[31m[1mPOST /api/detect-tomato-disease HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:29] "POST /api/detect-tomato-disease HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:29] "[31m[1mPOST /api/detect-tomato-disease HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:29] "GET /api/history/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:29] "GET /api/history/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:29] "GET /api/history/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:29] "GET /api/history/999999 HTTP/1.1" 200 -
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3774.00it/s]
+ [HistoryManager] Loaded FAISS history index.
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/history/analysis HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/history/analysis HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/history/analysis HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/history/analysis HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/history/profile HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/history/profile HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/history/profile HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/history/profile HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/history/query HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/history/query HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/history/query HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/history/query HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/history/variable HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/history/variable HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/history/variable HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/history/variable HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/identify HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/identify HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/identify HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/identify HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/details/ORD-NONEXISTENT-999999 HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mGET /api/orders/details/ORD-NONEXISTENT-999999 HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/details/ORD-NONEXISTENT-999999 HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mGET /api/orders/details/ORD-NONEXISTENT-999999 HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/track/ORD-NONEXISTENT-999999 HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mGET /api/orders/track/ORD-NONEXISTENT-999999 HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/track/ORD-NONEXISTENT-999999 HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mGET /api/orders/track/ORD-NONEXISTENT-999999 HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/user/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/user/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/user/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/orders/user/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/plant-diagnosis HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/plant-diagnosis HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/plant-diagnosis HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/plant-diagnosis HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "DELETE /api/plant/999999/image HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mDELETE /api/plant/999999/image HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "DELETE /api/plant/999999/image HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mDELETE /api/plant/999999/image HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/plant/999999/image HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mGET /api/plant/999999/image HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/plant/999999/image HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mGET /api/plant/999999/image HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/plant/999999/image HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mPOST /api/plant/999999/image HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/plant/999999/image HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[33mPOST /api/plant/999999/image HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/queries HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/queries HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/queries HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "GET /api/queries HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/queries HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/queries HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:30] "POST /api/queries HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:30] "[31m[1mPOST /api/queries HTTP/1.1[0m" 400 -
+Query Results API error: Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with QueryResult.query has an attribute 'filter_by'
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/query_results HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "[35m[1mGET /api/query_results HTTP/1.1[0m" 500 -
+Query Results API error: Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with QueryResult.query has an attribute 'filter_by'
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/query_results HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "[35m[1mGET /api/query_results HTTP/1.1[0m" 500 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "POST /api/query_results HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "[31m[1mPOST /api/query_results HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "POST /api/query_results HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "[31m[1mPOST /api/query_results HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/shop/plants HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/shop/plants HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/shop/plants HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/shop/plants HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/stt HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/stt HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/stt HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/stt HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "POST /api/stt HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "POST /api/stt HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "POST /api/stt HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "POST /api/stt HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/suggest_plants/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/suggest_plants/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/suggest_plants/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/suggest_plants/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/super-admin/audit-logs HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "[31m[1mGET /api/super-admin/audit-logs HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/super-admin/audit-logs HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/super-admin/audit-logs HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "POST /api/super-admin/login HTTP/1.1" 401 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "[31m[1mPOST /api/super-admin/login HTTP/1.1[0m" 401 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "POST /api/super-admin/login HTTP/1.1" 401 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "[31m[1mPOST /api/super-admin/login HTTP/1.1[0m" 401 -
+127.0.0.1 - - [24/Nov/2026 21:58:31] "GET /api/super-admin/nurseries HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:31] "[31m[1mGET /api/super-admin/nurseries HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/super-admin/nurseries HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/super-admin/nurseries HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/super-admin/nurseries HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/super-admin/nurseries HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/super-admin/nurseries HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/super-admin/nurseries HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "DELETE /api/super-admin/nurseries/NONEXISTENT-BIZ-999999 HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mDELETE /api/super-admin/nurseries/NONEXISTENT-BIZ-999999 HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "DELETE /api/super-admin/nurseries/NONEXISTENT-BIZ-999999 HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[33mDELETE /api/super-admin/nurseries/NONEXISTENT-BIZ-999999 HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "PATCH /api/super-admin/nurseries/NONEXISTENT-BIZ-999999/status HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPATCH /api/super-admin/nurseries/NONEXISTENT-BIZ-999999/status HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "PATCH /api/super-admin/nurseries/NONEXISTENT-BIZ-999999/status HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPATCH /api/super-admin/nurseries/NONEXISTENT-BIZ-999999/status HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "PUT /api/super-admin/nurseries/NONEXISTENT-BIZ-999999/status HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPUT /api/super-admin/nurseries/NONEXISTENT-BIZ-999999/status HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "PUT /api/super-admin/nurseries/NONEXISTENT-BIZ-999999/status HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPUT /api/super-admin/nurseries/NONEXISTENT-BIZ-999999/status HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/super-admin/nursery HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/super-admin/nursery HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/super-admin/nursery HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/super-admin/nursery HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "DELETE /api/super-admin/nursery/NONEXISTENT-BIZ-999999 HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mDELETE /api/super-admin/nursery/NONEXISTENT-BIZ-999999 HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "DELETE /api/super-admin/nursery/NONEXISTENT-BIZ-999999 HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[33mDELETE /api/super-admin/nursery/NONEXISTENT-BIZ-999999 HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "PATCH /api/super-admin/nursery/NONEXISTENT-BIZ-999999/status HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPATCH /api/super-admin/nursery/NONEXISTENT-BIZ-999999/status HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "PATCH /api/super-admin/nursery/NONEXISTENT-BIZ-999999/status HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPATCH /api/super-admin/nursery/NONEXISTENT-BIZ-999999/status HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "PUT /api/super-admin/nursery/NONEXISTENT-BIZ-999999/status HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPUT /api/super-admin/nursery/NONEXISTENT-BIZ-999999/status HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "PUT /api/super-admin/nursery/NONEXISTENT-BIZ-999999/status HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPUT /api/super-admin/nursery/NONEXISTENT-BIZ-999999/status HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/super-admin/stats HTTP/1.1" 403 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mGET /api/super-admin/stats HTTP/1.1[0m" 403 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/super-admin/stats HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/super-admin/stats HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/tools/disease-identify HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/tools/disease-identify HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/tools/disease-identify HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/tools/disease-identify HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/tools/n8n-webhook HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/tools/n8n-webhook HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/tools/n8n-webhook HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/tools/n8n-webhook HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/tools/plant-identify HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/tools/plant-identify HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/tools/plant-identify HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/tools/plant-identify HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/user/phone HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/user/phone HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/user/phone HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/user/phone HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/user_interest HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/user_interest HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/user_interest HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/user_interest HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/user_queries HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/user_queries HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/user_queries HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/user_queries HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/user_queries/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/user_queries/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/user_queries/999999 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/user_queries/999999 HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/whatsapp/cart HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mGET /api/whatsapp/cart HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "GET /api/whatsapp/cart HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mGET /api/whatsapp/cart HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/whatsapp/cart/approve HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/whatsapp/cart/approve HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/whatsapp/cart/approve HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/whatsapp/cart/approve HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:32] "POST /api/whatsapp/cart/update HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:32] "[31m[1mPOST /api/whatsapp/cart/update HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /api/whatsapp/cart/update HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[31m[1mPOST /api/whatsapp/cart/update HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /api/whatsapp/checkout HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[31m[1mPOST /api/whatsapp/checkout HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /api/whatsapp/checkout HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[31m[1mPOST /api/whatsapp/checkout HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /api/whatsapp/orders HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[33mGET /api/whatsapp/orders HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /api/whatsapp/orders HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[33mGET /api/whatsapp/orders HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /api/whatsapp/orders/track HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[31m[1mGET /api/whatsapp/orders/track HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /api/whatsapp/orders/track HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[31m[1mGET /api/whatsapp/orders/track HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /health HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /health HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /login HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[31m[1mPOST /login HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /login HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[31m[1mPOST /login HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /logout HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /logout HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /logout HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /logout HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /plants HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /plants HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /plants HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /plants HTTP/1.1" 200 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /register HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[31m[1mPOST /register HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "POST /register HTTP/1.1" 400 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[31m[1mPOST /register HTTP/1.1[0m" 400 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /static/nonexistent_file.txt HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[33mGET /static/nonexistent_file.txt HTTP/1.1[0m" 404 -
+127.0.0.1 - - [24/Nov/2026 21:58:33] "GET /static/nonexistent_file.txt HTTP/1.1" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Nov/2026 21:58:33] "[33mGET /static/nonexistent_file.txt HTTP/1.1[0m" 404 -

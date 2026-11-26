@@ -1,0 +1,59 @@
+D:\PlantApp\app_legacy.py:32: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+2026-11-25 11:22:11.418765: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-25 11:22:13.720622: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+ [Langfuse] Telemetry & logging client initialized.
+ [RAG] Indexed 119 knowledge chunks.
+ [FAISS] Initializing embeddings with sentence-transformers/all-MiniLM-L6-v2...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 6915.31it/s]
+ [History FAISS] Initializing embeddings with sentence-transformers/all-MiniLM-L6-v2...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3577.84it/s]
+ [History FAISS] Loaded history index from disk.
+ [Model] Loading Stage 1 Crop Type model from plant_disease_detection\model\crop_type_model.h5...
+2026-11-25 11:22:27.790612: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+ [Model] Crop Type model loaded: {'0': 'Potato', '1': 'Tomato'}
+ [Model] Loading Stage 2 Potato Disease model from plant_disease_detection\model\potato_disease_model.h5...
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+ [Model] Potato model loaded: {'0': 'Potato___Early_blight', '1': 'Potato___Flower', '2': 'Potato___Fruit', '3': 'Potato___Late_blight', '4': 'Potato___healthy'}
+ [Model] Loading Stage 2 Tomato Disease model from plant_disease_detection\model\tomato_disease_model.h5...
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+ [Model] Tomato model loaded: {'0': 'Tomato___Bacterial_spot', '1': 'Tomato___Early_blight', '2': 'Tomato___Flower', '3': 'Tomato___Fruit', '4': 'Tomato___Late_blight', '5': 'Tomato___Leaf_Mold', '6': 'Tomato___Septoria_leaf_spot', '7': 'Tomato___healthy'}
+ [Model] Loading Dedicated Flower Crop model from plant_disease_detection\model\flower_crop_model.h5...
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+ [Model] Flower Crop model loaded: {'0': 'Potato', '1': 'Tomato'}
+ DB schemas verified.
+ [DB] Admin user credentials verified: admin / admin@123
+(1) Result: (1,)
+ DB CONNECTED SUCCESSFULLY
+ Reseeded plant identity to 135
+
+============================================================
+ [FAISS Startup] Existing FAISS index found.
+ Type 'y' + Enter to REBUILD from CSVs, or press Enter / wait 5s to use cached index.
+============================================================
+>  [FAISS Startup] Using cached FAISS index.
+ [FAISS] Loaded index from disk.
+ Starting on http://127.0.0.1:8083
+ * Serving Flask app 'app_legacy'
+ * Debug mode: off
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8083
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:22:34] "GET /health HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:22:34] "POST /api/admin/categories HTTP/1.1" 200 -
+ Synonym 'test_syn_xyz' added for category_id 32
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:22:35] "POST /api/category_synonyms HTTP/1.1" 200 -
+ Synonym 'test_syn_xyz' added for category_id 32
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:22:35] "POST /api/category_synonyms HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:22:35] "GET /api/category_synonyms HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:22:35] "[31m[1mDELETE /api/category_synonyms HTTP/1.1[0m" 400 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:22:35] "DELETE /api/admin/categories/32 HTTP/1.1" 200 -

@@ -1,0 +1,120 @@
+[
+  {
+    "server": "legacy",
+    "create_cat": {
+      "status": 200,
+      "body": {
+        "message": "Category saved",
+        "status": "success"
+      },
+      "category_id": 32
+    },
+    "post_synonym_1": {
+      "status": 200,
+      "body": {
+        "message": "Synonym 'test_syn_xyz' added to category 'TEST_cat'",
+        "status": "success",
+        "synonym_id": 0
+      },
+      "synonym_id_is_int": true
+    },
+    "post_synonym_2_dup": {
+      "status": 200,
+      "body": {
+        "message": "Synonym 'test_syn_xyz' added to category 'TEST_cat'",
+        "status": "success",
+        "synonym_id": 1
+      }
+    },
+    "get_synonyms_count": 2,
+    "get_synonyms_matching_test": [
+      {
+        "category_id": 32,
+        "category_name": "TEST_cat",
+        "created_at": "2026-11-25 05:52:34",
+        "synonym": "test_syn_xyz",
+        "synonym_id": 0
+      },
+      {
+        "category_id": 32,
+        "category_name": "TEST_cat",
+        "created_at": "2026-11-25 05:52:35",
+        "synonym": "test_syn_xyz",
+        "synonym_id": 1
+      }
+    ],
+    "delete_synonym": {
+      "status": 400,
+      "body": {
+        "message": "Synonym ID required",
+        "status": "error"
+      }
+    },
+    "delete_cat": {
+      "status": 200,
+      "body": {
+        "message": "Category deleted",
+        "status": "success"
+      }
+    }
+  },
+  {
+    "server": "new",
+    "create_cat": {
+      "status": 200,
+      "body": {
+        "message": "Category saved",
+        "status": "success"
+      },
+      "category_id": 33
+    },
+    "post_synonym_1": {
+      "status": 200,
+      "body": {
+        "message": "Synonym 'test_syn_xyz' added to category 'TEST_cat'",
+        "status": "success",
+        "synonym_id": 2
+      },
+      "synonym_id_is_int": true
+    },
+    "post_synonym_2_dup": {
+      "status": 200,
+      "body": {
+        "message": "Synonym 'test_syn_xyz' added to category 'TEST_cat'",
+        "status": "success",
+        "synonym_id": 3
+      }
+    },
+    "get_synonyms_count": 2,
+    "get_synonyms_matching_test": [
+      {
+        "category_id": 33,
+        "category_name": "TEST_cat",
+        "created_at": "2026-11-25 05:52:35",
+        "synonym": "test_syn_xyz",
+        "synonym_id": 2
+      },
+      {
+        "category_id": 33,
+        "category_name": "TEST_cat",
+        "created_at": "2026-11-25 05:52:35",
+        "synonym": "test_syn_xyz",
+        "synonym_id": 3
+      }
+    ],
+    "delete_synonym": {
+      "status": 200,
+      "body": {
+        "message": "Synonym deleted",
+        "status": "success"
+      }
+    },
+    "delete_cat": {
+      "status": 200,
+      "body": {
+        "message": "Category deleted",
+        "status": "success"
+      }
+    }
+  }
+]

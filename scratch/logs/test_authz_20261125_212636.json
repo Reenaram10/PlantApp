@@ -1,0 +1,38 @@
+[
+  {
+    "case": "super_admin_backdoor_removed",
+    "method": "POST",
+    "path": "/api/super-admin/login",
+    "role": "no_token",
+    "expected": 401,
+    "actual": 200,
+    "body_preview": "{\"business_id\":\"SYSTEM\",\"role\":\"SUPER_ADMIN\",\"status\":\"success\",\"token\":\"eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ1c2VyX2lkIjogMTksICJ1c2VybmFtZSI6ICJTdXBlciBBZG1pbiIsICJlbWFpbCI6ICJhZG1pbkBzeXN0ZW0uY29tIiwgInJvbGUiOiAiU1VQRVJfQURNSU4iLCAiYnVzaW5lc3NfaWQiOiAiU1lTVEVNIiwgImV4cCI6IDE3OTU3MDg1OTN9.c"
+  },
+  {
+    "case": "register_ignores_role",
+    "method": "POST",
+    "path": "/register",
+    "role": "no_token",
+    "expected": 201,
+    "actual": 400,
+    "body_preview": "{\"message\":\"Username, email and password are required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "register_invalid_business",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "role": "no_token",
+    "expected": 400,
+    "actual": 400,
+    "body_preview": "{\"message\":\"Username, email and password are required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "public_plant_image",
+    "method": "GET",
+    "path": "/api/plant/1/image",
+    "role": "no_token",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"image_url\":\"/static/images/plants/plant_1_aloe_vera.jpeg\",\"source\":\"filesystem\",\"status\":\"success\"}\n"
+  }
+]

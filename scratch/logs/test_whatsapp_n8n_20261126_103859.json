@@ -1,0 +1,330 @@
+[
+  {
+    "case": "boot_missing_whatsapp_key",
+    "method": "BOOT",
+    "path": "config.py",
+    "expected": "nonzero",
+    "actual": 1,
+    "body_preview": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import config\n  File \"D:\\PlantApp\\config.py\", line 107, in <module>\n    raise RuntimeError(\"Security error: WHATSAPP_API_KEY must be set in environment.\")\nRuntimeError: Security error: WHATSAPP_API_KEY must be set in envir"
+  },
+  {
+    "case": "missing_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/cart?phone=9999999999",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "wrong_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/cart?phone=9999999999",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "correct_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/cart?phone=9999999999",
+    "expected": "not 401",
+    "actual": 200,
+    "body_preview": "{\"cart\":[],\"customer_phone\":\"9999999999\",\"delivery_charge\":0.0,\"status\":\"success\",\"subtotal\":0.0,\"total_amount\":0.0,\"user_id\":\"9999999999\",\"whatsapp_message\":\"\\ud83d\\uded2 Your PlantApp cart is currently empty.\\nVisit our catalog to add fresh plants!\",\"whatsapp_text\":\"\\ud83d\\uded2 Your PlantApp cart"
+  },
+  {
+    "case": "options_preflight",
+    "method": "OPTIONS",
+    "path": "/api/whatsapp/cart?phone=9999999999",
+    "expected": "not 401",
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "missing_api_key",
+    "method": "POST",
+    "path": "/api/whatsapp/cart/approve",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "wrong_api_key",
+    "method": "POST",
+    "path": "/api/whatsapp/cart/approve",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "correct_api_key",
+    "method": "POST",
+    "path": "/api/whatsapp/cart/approve",
+    "expected": "not 401",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Phone or user_id required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "options_preflight",
+    "method": "OPTIONS",
+    "path": "/api/whatsapp/cart/approve",
+    "expected": "not 401",
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "missing_api_key",
+    "method": "POST",
+    "path": "/api/whatsapp/cart/update",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "wrong_api_key",
+    "method": "POST",
+    "path": "/api/whatsapp/cart/update",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "correct_api_key",
+    "method": "POST",
+    "path": "/api/whatsapp/cart/update",
+    "expected": "not 401",
+    "actual": 400,
+    "body_preview": "{\"message\":\"User identifier and plant_id or plant_name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "options_preflight",
+    "method": "OPTIONS",
+    "path": "/api/whatsapp/cart/update",
+    "expected": "not 401",
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "missing_api_key",
+    "method": "POST",
+    "path": "/api/whatsapp/checkout",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "wrong_api_key",
+    "method": "POST",
+    "path": "/api/whatsapp/checkout",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "correct_api_key",
+    "method": "POST",
+    "path": "/api/whatsapp/checkout",
+    "expected": "not 401",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Phone number or user_id required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "options_preflight",
+    "method": "OPTIONS",
+    "path": "/api/whatsapp/checkout",
+    "expected": "not 401",
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "missing_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/orders?phone=9999999999",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "wrong_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/orders?phone=9999999999",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "correct_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/orders?phone=9999999999",
+    "expected": "not 401",
+    "actual": 200,
+    "body_preview": "{\"orders\":[],\"orders_count\":0,\"phone\":\"9999999999\",\"status\":\"success\"}\n"
+  },
+  {
+    "case": "options_preflight",
+    "method": "OPTIONS",
+    "path": "/api/whatsapp/orders?phone=9999999999",
+    "expected": "not 401",
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "missing_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/latest?phone=9999999999",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "wrong_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/latest?phone=9999999999",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "correct_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/latest?phone=9999999999",
+    "expected": "not 401",
+    "actual": 404,
+    "body_preview": "{\"message\":\"No orders found for this phone number\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "options_preflight",
+    "method": "OPTIONS",
+    "path": "/api/whatsapp/orders/latest?phone=9999999999",
+    "expected": "not 401",
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "missing_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/track?order_id=ORD-1&phone=9999999999",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "wrong_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/track?order_id=ORD-1&phone=9999999999",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Unauthorized: Invalid or missing API key\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "correct_api_key",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/track?order_id=ORD-1&phone=9999999999",
+    "expected": "not 401",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Order not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "options_preflight",
+    "method": "OPTIONS",
+    "path": "/api/whatsapp/orders/track?order_id=ORD-1&phone=9999999999",
+    "expected": "not 401",
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "track_matching_phone",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/track",
+    "expected": 200,
+    "actual": 200,
+    "body_preview": "{\"current_status\":\"Order Placed\",\"estimated_delivery\":\"3-5 Business Days\",\"order_group_id\":\"ORD-TRK-1795669738\",\"status\":\"success\",\"timeline\":[{\"cancelled\":false,\"completed\":true,\"current\":true,\"stage\":\"Order Placed\"},{\"cancelled\":false,\"completed\":false,\"current\":false,\"stage\":\"Order Confirmed\"},{\""
+  },
+  {
+    "case": "track_nonmatching_phone",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/track",
+    "expected": 403,
+    "actual": 403,
+    "body_preview": "{\"message\":\"Unauthorized: Phone number does not match order owner\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "track_empty_phone",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/track",
+    "expected": 403,
+    "actual": 403,
+    "body_preview": "{\"message\":\"Unauthorized: Phone number does not match order owner\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "latest_missing_phone",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/latest",
+    "expected": 400,
+    "actual": 400,
+    "body_preview": "{\"message\":\"phone is required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "latest_no_orders",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/latest",
+    "expected": 404,
+    "actual": 404,
+    "body_preview": "{\"message\":\"No orders found for this phone number\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "latest_valid",
+    "method": "GET",
+    "path": "/api/whatsapp/orders/latest",
+    "expected": 200,
+    "actual": 200,
+    "body_preview": "{'order_date': '2026-01-02 10:00', 'order_group_id': 'ORD-LAT-NEW-1795669739', 'order_id': 35, 'order_status': 'Shipped', 'status': 'success', 'tracking_number': 'GB-TRK-ORD-LAT-NEW-1795669739'}"
+  },
+  {
+    "case": "webhook_set",
+    "method": "PUT",
+    "path": "/api/admin/orders/ORD-WH-PH-1795669739",
+    "expected": 200,
+    "actual": 200,
+    "body_preview": "{'url': 'https://n8n.example.local/webhook/order-status', 'json': {'order_group_id': 'ORD-WH-PH-1795669739', 'status': 'Shipped', 'phone': '9876500444', 'customer_name': 'wh_customer', 'tracking_number': 'GB-TRK-ORD-WH-PH-1795669739'}, 'headers': {'Content-Type': 'application/json', 'X-Webhook-Secre"
+  },
+  {
+    "case": "webhook_skipped_no_phone",
+    "method": "PUT",
+    "path": "/api/admin/orders/ORD-WH-NOPH-1795669739",
+    "expected": 200,
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "webhook_unset",
+    "method": "PUT",
+    "path": "/api/admin/orders/ORD-WH-PH-1795669739",
+    "expected": 200,
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "webhook_timeout",
+    "method": "PUT",
+    "path": "/api/admin/orders/ORD-WH-PH-1795669739",
+    "expected": 200,
+    "actual": 200,
+    "body_preview": ""
+  },
+  {
+    "case": "checkout_baseline",
+    "method": "POST",
+    "path": "/api/checkout",
+    "expected": 201,
+    "actual": 201,
+    "body_preview": "['customer_name', 'delivery_charge', 'estimated_delivery', 'items', 'message', 'order_group_id', 'order_status', 'payment_method', 'payment_status', 'phone', 'shipping_address', 'status', 'subtotal', 'total_amount', 'tracking_number']"
+  },
+  {
+    "case": "checkout_whatsapp",
+    "method": "POST",
+    "path": "/api/whatsapp/checkout",
+    "expected": 201,
+    "actual": 400,
+    "body_preview": "['message', 'status']"
+  }
+]

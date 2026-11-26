@@ -1,0 +1,92 @@
+[
+  {
+    "user_message": "hello",
+    "changed": false,
+    "baseline_reply": "Hello! I am your PlantCare AI assistant. How can I help you today?",
+    "new_reply": "Hello! I am your PlantCare AI assistant. How can I help you today?"
+  },
+  {
+    "user_message": "hi",
+    "changed": false,
+    "baseline_reply": "Hello! I am your PlantCare AI assistant. How can I help you today?",
+    "new_reply": "Hello! I am your PlantCare AI assistant. How can I help you today?"
+  },
+  {
+    "user_message": "show cart",
+    "changed": true,
+    "baseline_reply": "🛒 **Your Shopping Cart**\n\n1. **Tomato** - 2 qty (₹50.00 each) = **₹100.00**\n\n💰 **Total Value: ₹100.00**\n\n*Type 'checkout' to place your order!*",
+    "new_reply": "🛒 Your shopping cart is currently empty! Feel free to browse our catalog for plants."
+  },
+  {
+    "user_message": "my cart",
+    "changed": true,
+    "baseline_reply": "🛒 **Your Shopping Cart**\n\n1. **Tomato** - 2 qty (₹50.00 each) = **₹100.00**\n\n💰 **Total Value: ₹100.00**\n\n*Type 'checkout' to place your order!*",
+    "new_reply": "🛒 Your shopping cart is currently empty! Feel free to browse our catalog for plants."
+  },
+  {
+    "user_message": "how many plants do you have?",
+    "changed": true,
+    "baseline_reply": "📦 We currently have **10** **Tomato** plant(s) in stock in our database catalog (**Status**: Available, **Price**: ₹50.00). 🪴\n\nWould you like to add some to your cart?",
+    "new_reply": "📦 We currently have **0** **ZZ Plant** plant(s) in stock in our database catalog (**Status**: Out of Stock, **Price**: ₹300.00). 🪴"
+  },
+  {
+    "user_message": "what is the price of tomato?",
+    "changed": true,
+    "baseline_reply": "💵 The price of **Tomato** in our database is **₹50.00**.\n📦 **Stock**: **10** in stock (**Status**: Available). 🪴\n\nWould you like to add some to your cart?",
+    "new_reply": "💵 The price of **Thyme** in our database is **₹250.00**.\n📦 **Stock**: **0** in stock (**Status**: Out of Stock). 🪴"
+  },
+  {
+    "user_message": "do you have rose in stock?",
+    "changed": true,
+    "baseline_reply": "📦 We currently have **10** **Rose** plant(s) in stock in our database catalog (**Status**: Available, **Price**: ₹50.00). 🪴\n\nWould you like to add some to your cart?",
+    "new_reply": "📦 We currently have **0** **Rose** plant(s) in stock in our database catalog (**Status**: Out of Stock, **Price**: ₹300.00). 🪴"
+  },
+  {
+    "user_message": "i want to buy rose",
+    "changed": true,
+    "baseline_reply": "Do you mean **Rose** (Price: ₹250.0)?",
+    "new_reply": "How many **Rose** plants (Price: ₹300.0 each) would you like to add to your cart?"
+  },
+  {
+    "user_message": "i want to buy rase nuh",
+    "changed": true,
+    "baseline_reply": "Do you mean **Rose** (Price: ₹250.0)?",
+    "new_reply": "Sorry, **Rose** is currently Out of Stock (0 available) in our database catalog. 🪴"
+  },
+  {
+    "user_message": "buy hibiscs",
+    "changed": true,
+    "baseline_reply": "Do you mean **Hibiscus** (Price: ₹150.0)?",
+    "new_reply": "Do you mean **Hibiscus** (Price: ₹300.0)?"
+  },
+  {
+    "user_message": "how to care for tomato plant",
+    "changed": false,
+    "baseline_reply": "Mocked botanical LLM response for: You are a helpful plant assistant. Be concise.\n\nYo",
+    "new_reply": "Mocked botanical LLM response for: You are a helpful plant assistant. Be concise.\n\nYo"
+  },
+  {
+    "user_message": "what is the watering requirement for tomato in summer?",
+    "changed": false,
+    "baseline_reply": "Mocked botanical LLM response for: You are a helpful plant assistant. Be concise.\n\nYo",
+    "new_reply": "Mocked botanical LLM response for: You are a helpful plant assistant. Be concise.\n\nYo"
+  },
+  {
+    "user_message": "can mango grow in maharashtra?",
+    "changed": false,
+    "baseline_reply": "Mocked botanical LLM response for: You are a helpful plant assistant. Be concise.\n\nYo",
+    "new_reply": "Mocked botanical LLM response for: You are a helpful plant assistant. Be concise.\n\nYo"
+  },
+  {
+    "user_message": "my tomato plant has early blight with dark spots on leaves",
+    "changed": false,
+    "baseline_reply": "🌱 Plant Profile: Tomato Plant\n\n🔬 Scientific Name\nSolanum lycopersicum\n\n🌡️ Growing Conditions\n• Temperature: 21-32°C\n• Humidity: 60-70%\n• Soil Moisture: 60-80%\n• Sunlight: Full Sun\n\n🌾 Soil\nWell-drained loamy soil\n\n💧 Watering\n2-3 times per week\n\n🌿 Nutrient Requirements\n🟢 Nitrogen: High\n🟡 Phosphorus: Medium\n🟣 Potassium: High\n\n⏳ Growth Duration\n90-120 days",
+    "new_reply": "🌱 Plant Profile: Tomato Plant\n\n🔬 Scientific Name\nSolanum lycopersicum\n\n🌡️ Growing Conditions\n• Temperature: 21-32°C\n• Humidity: 60-70%\n• Soil Moisture: 60-80%\n• Sunlight: Full Sun\n\n🌾 Soil\nWell-drained loamy soil\n\n💧 Watering\n2-3 times per week\n\n🌿 Nutrient Requirements\n🟢 Nitrogen: High\n🟡 Phosphorus: Medium\n🟣 Potassium: High\n\n⏳ Growth Duration\n90-120 days"
+  },
+  {
+    "user_message": "what is the capital of France?",
+    "changed": false,
+    "baseline_reply": "❌ Sorry, I can only help you with queries related to plants, gardening, or the nursery catalog.",
+    "new_reply": "❌ Sorry, I can only help you with queries related to plants, gardening, or the nursery catalog."
+  }
+]

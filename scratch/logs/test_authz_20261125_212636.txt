@@ -1,0 +1,4 @@
+super_admin_backdoor_removed | POST /api/super-admin/login | role=no_token | expected=401 | actual=200
+register_ignores_role | POST /register | role=no_token | expected=201 | actual=400
+register_invalid_business | POST /api/auth/register | role=no_token | expected=400 | actual=400
+public_plant_image | GET /api/plant/1/image | role=no_token | expected=not 401/403 | actual=200

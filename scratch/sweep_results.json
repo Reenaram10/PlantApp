@@ -1,0 +1,3853 @@
+{
+  "results": [
+    {
+      "num": 1,
+      "rule": "/",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 1,
+      "rule": "/",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 2,
+      "rule": "/<path:filename>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 2,
+      "rule": "/<path:filename>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 3,
+      "rule": "/admin",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 3,
+      "rule": "/admin",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 4,
+      "rule": "/admin.html",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 4,
+      "rule": "/admin.html",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 5,
+      "rule": "/api/admin/add-plant",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 5,
+      "rule": "/api/admin/add-plant",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 6,
+      "rule": "/api/admin/add-varieties",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 6,
+      "rule": "/api/admin/add-varieties",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 7,
+      "rule": "/api/admin/categories",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 7,
+      "rule": "/api/admin/categories",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 8,
+      "rule": "/api/admin/categories",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 8,
+      "rule": "/api/admin/categories",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 9,
+      "rule": "/api/admin/categories/<int:cat_id>",
+      "method": "DELETE",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 9,
+      "rule": "/api/admin/categories/<int:cat_id>",
+      "method": "DELETE",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 10,
+      "rule": "/api/admin/categories/<int:cat_id>/plants",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 10,
+      "rule": "/api/admin/categories/<int:cat_id>/plants",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 11,
+      "rule": "/api/admin/customers",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 11,
+      "rule": "/api/admin/customers",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 12,
+      "rule": "/api/admin/delete-plant/<int:plant_id>",
+      "method": "DELETE",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 12,
+      "rule": "/api/admin/delete-plant/<int:plant_id>",
+      "method": "DELETE",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 13,
+      "rule": "/api/admin/download-template/<profile_type>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 13,
+      "rule": "/api/admin/download-template/<profile_type>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 14,
+      "rule": "/api/admin/get-plant/<int:plant_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 14,
+      "rule": "/api/admin/get-plant/<int:plant_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 15,
+      "rule": "/api/admin/inventory",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 15,
+      "rule": "/api/admin/inventory",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 16,
+      "rule": "/api/admin/inventory/add",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 16,
+      "rule": "/api/admin/inventory/add",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 17,
+      "rule": "/api/admin/inventory/remove",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 17,
+      "rule": "/api/admin/inventory/remove",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 18,
+      "rule": "/api/admin/inventory/transactions",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 18,
+      "rule": "/api/admin/inventory/transactions",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 19,
+      "rule": "/api/admin/orders",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 19,
+      "rule": "/api/admin/orders",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 20,
+      "rule": "/api/admin/orders/<order_group_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 20,
+      "rule": "/api/admin/orders/<order_group_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 21,
+      "rule": "/api/admin/orders/<order_group_id>",
+      "method": "PUT",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 21,
+      "rule": "/api/admin/orders/<order_group_id>",
+      "method": "PUT",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 22,
+      "rule": "/api/admin/orders/record-payment",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 22,
+      "rule": "/api/admin/orders/record-payment",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 23,
+      "rule": "/api/admin/profile-stats",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 23,
+      "rule": "/api/admin/profile-stats",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 24,
+      "rule": "/api/admin/purchases",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 24,
+      "rule": "/api/admin/purchases",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 25,
+      "rule": "/api/admin/purchases",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 25,
+      "rule": "/api/admin/purchases",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 26,
+      "rule": "/api/admin/purchases/record-payment",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 26,
+      "rule": "/api/admin/purchases/record-payment",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 27,
+      "rule": "/api/admin/rag/sync",
+      "method": "POST",
+      "auth": "SKIP",
+      "leg_status": "SKIPPED",
+      "new_status": "SKIPPED",
+      "status_match": true,
+      "verdict": "PASS (SAFE_SKIP)",
+      "notes": "Explicitly skipped per test instructions to protect real state"
+    },
+    {
+      "num": 28,
+      "rule": "/api/admin/restock/<int:plant_id>",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 28,
+      "rule": "/api/admin/restock/<int:plant_id>",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 29,
+      "rule": "/api/admin/search-plants",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 29,
+      "rule": "/api/admin/search-plants",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 30,
+      "rule": "/api/admin/suggest-varieties",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 30,
+      "rule": "/api/admin/suggest-varieties",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 31,
+      "rule": "/api/admin/suppliers",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 31,
+      "rule": "/api/admin/suppliers",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 32,
+      "rule": "/api/admin/suppliers",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 32,
+      "rule": "/api/admin/suppliers",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 33,
+      "rule": "/api/admin/update-plant-image/<int:plant_id>",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 33,
+      "rule": "/api/admin/update-plant-image/<int:plant_id>",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 34,
+      "rule": "/api/admin/update-plant/<int:plant_id>",
+      "method": "PUT",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 34,
+      "rule": "/api/admin/update-plant/<int:plant_id>",
+      "method": "PUT",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 35,
+      "rule": "/api/admin/upload-profiles",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 35,
+      "rule": "/api/admin/upload-profiles",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 36,
+      "rule": "/api/admin/varieties/existing/<int:plant_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 36,
+      "rule": "/api/admin/varieties/existing/<int:plant_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 37,
+      "rule": "/api/auth/login",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 37,
+      "rule": "/api/auth/login",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 38,
+      "rule": "/api/auth/register",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 38,
+      "rule": "/api/auth/register",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 39,
+      "rule": "/api/auth/super-admin/login",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 401,
+      "new_status": 401,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 39,
+      "rule": "/api/auth/super-admin/login",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 401,
+      "new_status": 401,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 40,
+      "rule": "/api/cart",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 40,
+      "rule": "/api/cart",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 41,
+      "rule": "/api/cart",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 41,
+      "rule": "/api/cart",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 42,
+      "rule": "/api/cart/remove",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 42,
+      "rule": "/api/cart/remove",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 43,
+      "rule": "/api/cart/update",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 43,
+      "rule": "/api/cart/update",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 44,
+      "rule": "/api/category_synonyms",
+      "method": "DELETE",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 44,
+      "rule": "/api/category_synonyms",
+      "method": "DELETE",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 44,
+      "rule": "/api/category_synonyms",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 44,
+      "rule": "/api/category_synonyms",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 44,
+      "rule": "/api/category_synonyms",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 44,
+      "rule": "/api/category_synonyms",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 45,
+      "rule": "/api/chat",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 45,
+      "rule": "/api/chat",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 46,
+      "rule": "/api/checkout",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 46,
+      "rule": "/api/checkout",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 47,
+      "rule": "/api/config",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 47,
+      "rule": "/api/config",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 47,
+      "rule": "/api/config",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 47,
+      "rule": "/api/config",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 48,
+      "rule": "/api/debug/list-plant-images",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 48,
+      "rule": "/api/debug/list-plant-images",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 49,
+      "rule": "/api/detect-tomato-disease",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 49,
+      "rule": "/api/detect-tomato-disease",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 50,
+      "rule": "/api/history/<user_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 50,
+      "rule": "/api/history/<user_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 51,
+      "rule": "/api/history/analysis",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 51,
+      "rule": "/api/history/analysis",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 52,
+      "rule": "/api/history/profile",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 52,
+      "rule": "/api/history/profile",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 53,
+      "rule": "/api/history/query",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 53,
+      "rule": "/api/history/query",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 54,
+      "rule": "/api/history/variable",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 54,
+      "rule": "/api/history/variable",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 55,
+      "rule": "/api/identify",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 55,
+      "rule": "/api/identify",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 56,
+      "rule": "/api/orders/<user_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 56,
+      "rule": "/api/orders/<user_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 57,
+      "rule": "/api/orders/details/<order_group_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 57,
+      "rule": "/api/orders/details/<order_group_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 58,
+      "rule": "/api/orders/track/<order_group_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 58,
+      "rule": "/api/orders/track/<order_group_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 59,
+      "rule": "/api/orders/user/<user_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 59,
+      "rule": "/api/orders/user/<user_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 60,
+      "rule": "/api/payment/response",
+      "method": "POST",
+      "auth": "SKIP",
+      "leg_status": "SKIPPED",
+      "new_status": "SKIPPED",
+      "status_match": true,
+      "verdict": "PASS (SAFE_SKIP)",
+      "notes": "Explicitly skipped per test instructions to protect real state"
+    },
+    {
+      "num": 61,
+      "rule": "/api/plant-diagnosis",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 61,
+      "rule": "/api/plant-diagnosis",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 62,
+      "rule": "/api/plant/<int:plant_id>/image",
+      "method": "DELETE",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 62,
+      "rule": "/api/plant/<int:plant_id>/image",
+      "method": "DELETE",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 62,
+      "rule": "/api/plant/<int:plant_id>/image",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 62,
+      "rule": "/api/plant/<int:plant_id>/image",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 62,
+      "rule": "/api/plant/<int:plant_id>/image",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 62,
+      "rule": "/api/plant/<int:plant_id>/image",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 63,
+      "rule": "/api/queries",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 63,
+      "rule": "/api/queries",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 63,
+      "rule": "/api/queries",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 63,
+      "rule": "/api/queries",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 64,
+      "rule": "/api/query_results",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 500,
+      "new_status": 500,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 64,
+      "rule": "/api/query_results",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 500,
+      "new_status": 500,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 64,
+      "rule": "/api/query_results",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 64,
+      "rule": "/api/query_results",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 65,
+      "rule": "/api/rebuild-index",
+      "method": "POST",
+      "auth": "SKIP",
+      "leg_status": "SKIPPED",
+      "new_status": "SKIPPED",
+      "status_match": true,
+      "verdict": "PASS (SAFE_SKIP)",
+      "notes": "Explicitly skipped per test instructions to protect real state"
+    },
+    {
+      "num": 66,
+      "rule": "/api/shop/plants",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 66,
+      "rule": "/api/shop/plants",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 67,
+      "rule": "/api/stt",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 67,
+      "rule": "/api/stt",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 67,
+      "rule": "/api/stt",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 67,
+      "rule": "/api/stt",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 68,
+      "rule": "/api/suggest_plants/<user_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 68,
+      "rule": "/api/suggest_plants/<user_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 69,
+      "rule": "/api/super-admin/audit-logs",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 69,
+      "rule": "/api/super-admin/audit-logs",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 70,
+      "rule": "/api/super-admin/login",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 401,
+      "new_status": 401,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 70,
+      "rule": "/api/super-admin/login",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 401,
+      "new_status": 401,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 71,
+      "rule": "/api/super-admin/nurseries",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 71,
+      "rule": "/api/super-admin/nurseries",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 72,
+      "rule": "/api/super-admin/nurseries",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 72,
+      "rule": "/api/super-admin/nurseries",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 73,
+      "rule": "/api/super-admin/nurseries/<business_id>",
+      "method": "DELETE",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 73,
+      "rule": "/api/super-admin/nurseries/<business_id>",
+      "method": "DELETE",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 74,
+      "rule": "/api/super-admin/nurseries/<business_id>/status",
+      "method": "PATCH",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 74,
+      "rule": "/api/super-admin/nurseries/<business_id>/status",
+      "method": "PATCH",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 74,
+      "rule": "/api/super-admin/nurseries/<business_id>/status",
+      "method": "PUT",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 74,
+      "rule": "/api/super-admin/nurseries/<business_id>/status",
+      "method": "PUT",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 75,
+      "rule": "/api/super-admin/nursery",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 75,
+      "rule": "/api/super-admin/nursery",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 76,
+      "rule": "/api/super-admin/nursery/<business_id>",
+      "method": "DELETE",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 76,
+      "rule": "/api/super-admin/nursery/<business_id>",
+      "method": "DELETE",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 77,
+      "rule": "/api/super-admin/nursery/<business_id>/status",
+      "method": "PATCH",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 77,
+      "rule": "/api/super-admin/nursery/<business_id>/status",
+      "method": "PATCH",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 77,
+      "rule": "/api/super-admin/nursery/<business_id>/status",
+      "method": "PUT",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 77,
+      "rule": "/api/super-admin/nursery/<business_id>/status",
+      "method": "PUT",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 78,
+      "rule": "/api/super-admin/stats",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 403,
+      "new_status": 403,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 78,
+      "rule": "/api/super-admin/stats",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 79,
+      "rule": "/api/tools/disease-identify",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 79,
+      "rule": "/api/tools/disease-identify",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 80,
+      "rule": "/api/tools/n8n-webhook",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 80,
+      "rule": "/api/tools/n8n-webhook",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 81,
+      "rule": "/api/tools/plant-identify",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 81,
+      "rule": "/api/tools/plant-identify",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 82,
+      "rule": "/api/user/phone",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 82,
+      "rule": "/api/user/phone",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 83,
+      "rule": "/api/user_interest",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 83,
+      "rule": "/api/user_interest",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 84,
+      "rule": "/api/user_queries",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 84,
+      "rule": "/api/user_queries",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 85,
+      "rule": "/api/user_queries/<user_id>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 85,
+      "rule": "/api/user_queries/<user_id>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 86,
+      "rule": "/api/whatsapp/cart",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 86,
+      "rule": "/api/whatsapp/cart",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 87,
+      "rule": "/api/whatsapp/cart/approve",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 87,
+      "rule": "/api/whatsapp/cart/approve",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 88,
+      "rule": "/api/whatsapp/cart/update",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 88,
+      "rule": "/api/whatsapp/cart/update",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 89,
+      "rule": "/api/whatsapp/checkout",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 89,
+      "rule": "/api/whatsapp/checkout",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 90,
+      "rule": "/api/whatsapp/orders",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 90,
+      "rule": "/api/whatsapp/orders",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 91,
+      "rule": "/api/whatsapp/orders/track",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 91,
+      "rule": "/api/whatsapp/orders/track",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 92,
+      "rule": "/health",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 92,
+      "rule": "/health",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 93,
+      "rule": "/login",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 93,
+      "rule": "/login",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 94,
+      "rule": "/logout",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 94,
+      "rule": "/logout",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 95,
+      "rule": "/plants",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 95,
+      "rule": "/plants",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 200,
+      "new_status": 200,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 96,
+      "rule": "/register",
+      "method": "POST",
+      "auth": "No Auth",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 96,
+      "rule": "/register",
+      "method": "POST",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 400,
+      "new_status": 400,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 97,
+      "rule": "/static/<path:filename>",
+      "method": "GET",
+      "auth": "No Auth",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    },
+    {
+      "num": 97,
+      "rule": "/static/<path:filename>",
+      "method": "GET",
+      "auth": "SUPER_ADMIN",
+      "leg_status": 404,
+      "new_status": 404,
+      "status_match": true,
+      "keys_match": true,
+      "val_match": true,
+      "verdict": "PASS",
+      "notes": ""
+    }
+  ],
+  "rule_summaries": [
+    {
+      "num": 1,
+      "rule": "/",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 2,
+      "rule": "/<path:filename>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:404/404",
+      "admin_status": "GET:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 3,
+      "rule": "/admin",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 4,
+      "rule": "/admin.html",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 5,
+      "rule": "/api/admin/add-plant",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:403/403",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 6,
+      "rule": "/api/admin/add-varieties",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 7,
+      "rule": "/api/admin/categories",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 8,
+      "rule": "/api/admin/categories",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 9,
+      "rule": "/api/admin/categories/<int:cat_id>",
+      "methods": [
+        "DELETE"
+      ],
+      "no_auth_status": "DELETE:200/200",
+      "admin_status": "DELETE:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 10,
+      "rule": "/api/admin/categories/<int:cat_id>/plants",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 11,
+      "rule": "/api/admin/customers",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 12,
+      "rule": "/api/admin/delete-plant/<int:plant_id>",
+      "methods": [
+        "DELETE"
+      ],
+      "no_auth_status": "DELETE:403/403",
+      "admin_status": "DELETE:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 13,
+      "rule": "/api/admin/download-template/<profile_type>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:400/400",
+      "admin_status": "GET:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 14,
+      "rule": "/api/admin/get-plant/<int:plant_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:404/404",
+      "admin_status": "GET:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 15,
+      "rule": "/api/admin/inventory",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 16,
+      "rule": "/api/admin/inventory/add",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 17,
+      "rule": "/api/admin/inventory/remove",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 18,
+      "rule": "/api/admin/inventory/transactions",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 19,
+      "rule": "/api/admin/orders",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 20,
+      "rule": "/api/admin/orders/<order_group_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:404/404",
+      "admin_status": "GET:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 21,
+      "rule": "/api/admin/orders/<order_group_id>",
+      "methods": [
+        "PUT"
+      ],
+      "no_auth_status": "PUT:400/400",
+      "admin_status": "PUT:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 22,
+      "rule": "/api/admin/orders/record-payment",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 23,
+      "rule": "/api/admin/profile-stats",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 24,
+      "rule": "/api/admin/purchases",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 25,
+      "rule": "/api/admin/purchases",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 26,
+      "rule": "/api/admin/purchases/record-payment",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 27,
+      "rule": "/api/admin/rag/sync",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "SKIPPED",
+      "admin_status": "SKIPPED",
+      "verdict": "PASS (SAFE_SKIP)",
+      "notes": "Skipped per safety instructions"
+    },
+    {
+      "num": 28,
+      "rule": "/api/admin/restock/<int:plant_id>",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 29,
+      "rule": "/api/admin/search-plants",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:400/400",
+      "admin_status": "GET:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 30,
+      "rule": "/api/admin/suggest-varieties",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 31,
+      "rule": "/api/admin/suppliers",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 32,
+      "rule": "/api/admin/suppliers",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 33,
+      "rule": "/api/admin/update-plant-image/<int:plant_id>",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:404/404",
+      "admin_status": "POST:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 34,
+      "rule": "/api/admin/update-plant/<int:plant_id>",
+      "methods": [
+        "PUT"
+      ],
+      "no_auth_status": "PUT:403/403",
+      "admin_status": "PUT:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 35,
+      "rule": "/api/admin/upload-profiles",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 36,
+      "rule": "/api/admin/varieties/existing/<int:plant_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 37,
+      "rule": "/api/auth/login",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 38,
+      "rule": "/api/auth/register",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 39,
+      "rule": "/api/auth/super-admin/login",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:401/401",
+      "admin_status": "POST:401/401",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 40,
+      "rule": "/api/cart",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 41,
+      "rule": "/api/cart",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 42,
+      "rule": "/api/cart/remove",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 43,
+      "rule": "/api/cart/update",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:404/404",
+      "admin_status": "POST:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 44,
+      "rule": "/api/category_synonyms",
+      "methods": [
+        "DELETE",
+        "GET",
+        "POST"
+      ],
+      "no_auth_status": "DELETE:400/400, GET:200/200, POST:400/400",
+      "admin_status": "DELETE:400/400, GET:200/200, POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 45,
+      "rule": "/api/chat",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 46,
+      "rule": "/api/checkout",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 47,
+      "rule": "/api/config",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "no_auth_status": "GET:200/200, POST:200/200",
+      "admin_status": "GET:200/200, POST:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 48,
+      "rule": "/api/debug/list-plant-images",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 49,
+      "rule": "/api/detect-tomato-disease",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 50,
+      "rule": "/api/history/<user_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 51,
+      "rule": "/api/history/analysis",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 52,
+      "rule": "/api/history/profile",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 53,
+      "rule": "/api/history/query",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 54,
+      "rule": "/api/history/variable",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 55,
+      "rule": "/api/identify",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 56,
+      "rule": "/api/orders/<user_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 57,
+      "rule": "/api/orders/details/<order_group_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:404/404",
+      "admin_status": "GET:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 58,
+      "rule": "/api/orders/track/<order_group_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:404/404",
+      "admin_status": "GET:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 59,
+      "rule": "/api/orders/user/<user_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 60,
+      "rule": "/api/payment/response",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "SKIPPED",
+      "admin_status": "SKIPPED",
+      "verdict": "PASS (SAFE_SKIP)",
+      "notes": "Skipped per safety instructions"
+    },
+    {
+      "num": 61,
+      "rule": "/api/plant-diagnosis",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 62,
+      "rule": "/api/plant/<int:plant_id>/image",
+      "methods": [
+        "DELETE",
+        "GET",
+        "POST"
+      ],
+      "no_auth_status": "DELETE:404/404, GET:404/404, POST:404/404",
+      "admin_status": "DELETE:404/404, GET:404/404, POST:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 63,
+      "rule": "/api/queries",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "no_auth_status": "GET:200/200, POST:400/400",
+      "admin_status": "GET:200/200, POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 64,
+      "rule": "/api/query_results",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "no_auth_status": "GET:500/500, POST:400/400",
+      "admin_status": "GET:500/500, POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 65,
+      "rule": "/api/rebuild-index",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "SKIPPED",
+      "admin_status": "SKIPPED",
+      "verdict": "PASS (SAFE_SKIP)",
+      "notes": "Skipped per safety instructions"
+    },
+    {
+      "num": 66,
+      "rule": "/api/shop/plants",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 67,
+      "rule": "/api/stt",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "no_auth_status": "GET:200/200, POST:200/200",
+      "admin_status": "GET:200/200, POST:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 68,
+      "rule": "/api/suggest_plants/<user_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 69,
+      "rule": "/api/super-admin/audit-logs",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:403/403",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 70,
+      "rule": "/api/super-admin/login",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:401/401",
+      "admin_status": "POST:401/401",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 71,
+      "rule": "/api/super-admin/nurseries",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:403/403",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 72,
+      "rule": "/api/super-admin/nurseries",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:403/403",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 73,
+      "rule": "/api/super-admin/nurseries/<business_id>",
+      "methods": [
+        "DELETE"
+      ],
+      "no_auth_status": "DELETE:403/403",
+      "admin_status": "DELETE:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 74,
+      "rule": "/api/super-admin/nurseries/<business_id>/status",
+      "methods": [
+        "PATCH",
+        "PUT"
+      ],
+      "no_auth_status": "PATCH:403/403, PUT:403/403",
+      "admin_status": "PATCH:400/400, PUT:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 75,
+      "rule": "/api/super-admin/nursery",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:403/403",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 76,
+      "rule": "/api/super-admin/nursery/<business_id>",
+      "methods": [
+        "DELETE"
+      ],
+      "no_auth_status": "DELETE:403/403",
+      "admin_status": "DELETE:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 77,
+      "rule": "/api/super-admin/nursery/<business_id>/status",
+      "methods": [
+        "PATCH",
+        "PUT"
+      ],
+      "no_auth_status": "PATCH:403/403, PUT:403/403",
+      "admin_status": "PATCH:400/400, PUT:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 78,
+      "rule": "/api/super-admin/stats",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:403/403",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 79,
+      "rule": "/api/tools/disease-identify",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 80,
+      "rule": "/api/tools/n8n-webhook",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:200/200",
+      "admin_status": "POST:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 81,
+      "rule": "/api/tools/plant-identify",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 82,
+      "rule": "/api/user/phone",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 83,
+      "rule": "/api/user_interest",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 84,
+      "rule": "/api/user_queries",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 85,
+      "rule": "/api/user_queries/<user_id>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 86,
+      "rule": "/api/whatsapp/cart",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:400/400",
+      "admin_status": "GET:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 87,
+      "rule": "/api/whatsapp/cart/approve",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 88,
+      "rule": "/api/whatsapp/cart/update",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 89,
+      "rule": "/api/whatsapp/checkout",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 90,
+      "rule": "/api/whatsapp/orders",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:404/404",
+      "admin_status": "GET:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 91,
+      "rule": "/api/whatsapp/orders/track",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:400/400",
+      "admin_status": "GET:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 92,
+      "rule": "/health",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 93,
+      "rule": "/login",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 94,
+      "rule": "/logout",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:200/200",
+      "admin_status": "POST:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 95,
+      "rule": "/plants",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:200/200",
+      "admin_status": "GET:200/200",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 96,
+      "rule": "/register",
+      "methods": [
+        "POST"
+      ],
+      "no_auth_status": "POST:400/400",
+      "admin_status": "POST:400/400",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    },
+    {
+      "num": 97,
+      "rule": "/static/<path:filename>",
+      "methods": [
+        "GET"
+      ],
+      "no_auth_status": "GET:404/404",
+      "admin_status": "GET:404/404",
+      "verdict": "PASS",
+      "notes": "Parity confirmed across all methods & auth"
+    }
+  ],
+  "diffs": [],
+  "errors_5xx": [
+    [
+      "/api/query_results",
+      "GET",
+      "No Auth",
+      500,
+      500,
+      {
+        "message": "Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with QueryResult.query has an attribute 'filter_by'",
+        "status": "error"
+      },
+      {
+        "message": "Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with QueryResult.query has an attribute 'filter_by'",
+        "status": "error"
+      }
+    ],
+    [
+      "/api/query_results",
+      "GET",
+      "SUPER_ADMIN",
+      500,
+      500,
+      {
+        "message": "Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with QueryResult.query has an attribute 'filter_by'",
+        "status": "error"
+      },
+      {
+        "message": "Neither 'InstrumentedAttribute' object nor 'Comparator' object associated with QueryResult.query has an attribute 'filter_by'",
+        "status": "error"
+      }
+    ]
+  ]
+}

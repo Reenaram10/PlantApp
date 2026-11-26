@@ -1,0 +1,495 @@
+{
+  "total_legacy_functions": 128,
+  "identical_after_normalization": 58,
+  "missing": [
+    {
+      "name": "serve_admin_dashboard",
+      "legacy_line": 151
+    }
+  ],
+  "differing": [
+    {
+      "name": "encrypt",
+      "legacy_line": 72,
+      "new_path": "services\\payment.py",
+      "new_line": 8,
+      "diff": "--- app_legacy.py:72 (encrypt)\n+++ services\\payment.py:8 (encrypt)\n@@ -1,3 +1,4 @@\n+'\\n    Encrypts plaintext using AES-CBC with MD5-derived 16-byte key and static IV.\\n    Returns hex-encoded ciphertext.\\n    '\n iv = b'\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\x0c\\r\\x0e\\x0f'\n key = working_key.encode('utf-8')\n byte_key = hashlib.md5(key).digest()\n"
+    },
+    {
+      "name": "decrypt",
+      "legacy_line": 82,
+      "new_path": "services\\payment.py",
+      "new_line": 22,
+      "diff": "--- app_legacy.py:82 (decrypt)\n+++ services\\payment.py:22 (decrypt)\n@@ -1,3 +1,4 @@\n+'\\n    Decrypts hex-encoded ciphertext using AES-CBC with MD5-derived 16-byte key and static IV.\\n    Returns unpadded plaintext string.\\n    '\n iv = b'\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\x0c\\r\\x0e\\x0f'\n key = working_key.encode('utf-8')\n byte_key = hashlib.md5(key).digest()\n"
+    },
+    {
+      "name": "ask_rebuild_index",
+      "legacy_line": 162,
+      "new_path": "services\\rag_service.py",
+      "new_line": 16,
+      "diff": "--- app_legacy.py:162 (ask_rebuild_index)\n+++ services\\rag_service.py:16 (ask_rebuild_index)\n@@ -1,6 +1,5 @@\n-'Ask the user in the terminal whether to rebuild the FAISS index, with a 5s timeout.'\n-import threading, os\n-index_path = 'local_faiss_index'\n+'\\n    Ask the user in the terminal whether to rebuild the FAISS index, with a 5s timeout.\\n    Only executed in the __main__ startup path.\\n    '\n+index_path = os.path.join(APP_ROOT, 'local_faiss_index')\n if not os.path.exists(index_path):\n     print(' [FAISS Startup] No existing index found. Building fresh index from CSV files...')\n     return True\n"
+    },
+    {
+      "name": "load_json_mapping",
+      "legacy_line": 210,
+      "new_path": "services\\disease_models.py",
+      "new_line": 17,
+      "diff": "--- app_legacy.py:210 (load_json_mapping)\n+++ services\\disease_models.py:17 (load_json_mapping)\n@@ -1,6 +1,7 @@\n+'Load JSON class index mapping safely.'\n if os.path.exists(path):\n     try:\n-        with open(path, 'r') as f:\n+        with open(path, 'r', encoding='utf-8') as f:\n             return json.load(f)\n     except Exception as e:\n         print(f' [Model] Error loading {path}: {e}')\n"
+    },
+    {
+      "name": "llm_call",
+      "legacy_line": 256,
+      "new_path": "services\\llm_service.py",
+      "new_line": 51,
+      "diff": "--- app_legacy.py:256 (llm_call)\n+++ services\\llm_service.py:51 (llm_call)\n@@ -1,5 +1,6 @@\n-global LLM_OPTION\n-if runtime_settings.llm_option == 'groq':\n+'\\n    Unified LLM caller routing to Groq, DeepSeek, Gemini, SLM, or local failsafe.\\n    Accepts explicit provider parameter or defaults to runtime_settings.llm_option.\\n    '\n+opt = (provider or runtime_settings.llm_option).lower()\n+if opt == 'groq':\n     try:\n         groq_client = Groq(api_key=os.getenv('GROQ_API_KEY'))\n         response = groq_client.chat.completions.create(model='llama-3.1-8b-instant', messages=[{'role': 'system', 'content': 'You are a helpful plant assistant.'}, {'role': 'user', 'content': prompt}], temperature=0.2, max_tokens=200)\n@@ -7,7 +8,7 @@\n     except Exception as e:\n         print(f' Groq error: {e}')\n         return groq_call_failsafe(prompt)\n-elif runtime_settings.llm_option == 'deepseek':\n+elif opt == 'deepseek':\n     try:\n         deepseek_client = OpenAI(api_key=os.getenv('DEEPSEEK_API_KEY'), base_url='https://api.deepseek.com')\n         response = deepseek_client.chat.completions.create(model='deepseek-chat', messages=[{'role': 'system', 'content': 'You are a helpful plant assistant.'}, {'role': 'user', 'content': prompt}], temperature=0.2, max_tokens=200)\n@@ -15,7 +16,7 @@\n     except Exception as e:\n         print(f' DeepSeek error: {e}')\n         return groq_call_failsafe(prompt)\n-elif runtime_settings.llm_option == 'gemini':\n+elif opt == 'gemini':\n     try:\n         genai.configure(api_key=os.getenv('GEMINI_API_KEY'))\n         model = genai.GenerativeModel('gemini-1.5-flash')\n@@ -24,10 +25,10 @@\n     except Exception as e:\n         print(f' Gemini error: {e}')\n         return groq_call_failsafe(prompt)\n-elif runtime_settings.llm_option == 'slm':\n+elif opt == 'slm':\n     return slm_call(prompt)\n-elif runtime_settings.llm_option == 'local':\n+elif opt == 'local':\n     return groq_call_failsafe(prompt)\n else:\n-    print(f' Unknown LLM option: {runtime_settings.llm_option}')\n+    print(f' Unknown LLM option: {opt}')\n     return groq_call_failsafe(prompt)"
+    },
+    {
+      "name": "slm_call",
+      "legacy_line": 330,
+      "new_path": "services\\llm_service.py",
+      "new_line": 120,
+      "diff": "--- app_legacy.py:330 (slm_call)\n+++ services\\llm_service.py:120 (slm_call)\n@@ -1,4 +1,4 @@\n-'\\n    Calls a specialized Small Language Model (Phi mini) via Local Ollama API.\\n    '\n+'\\n    Calls a specialized Small Language Model (Phi-3) via Local Ollama API.\\n    Falls back gracefully without mutating runtime settings or global variables.\\n    '\n api_url = 'http://127.0.0.1:11434/api/generate'\n model_id = 'phi3'\n system_instr = 'You are a plant-based expert specialized in botanical advice and nursery assistance.'\n@@ -21,10 +21,6 @@\n print(' [SLM] Falling back to Groq for better quality...')\n try:\n     expert_prompt = f'Expert Advice Needed: {prompt}. Please answer as a botanical expert.'\n-    temp_option = runtime_settings.llm_option\n-    globals()['LLM_OPTION'] = 'groq'\n-    fallback_resp = llm_call(expert_prompt)\n-    globals()['LLM_OPTION'] = temp_option\n-    return fallback_resp\n-except:\n+    return llm_call(expert_prompt, provider=fallback_provider)\n+except Exception:\n     return groq_call_failsafe(prompt)"
+    },
+    {
+      "name": "groq_call_failsafe",
+      "legacy_line": 383,
+      "new_path": "services\\llm_service.py",
+      "new_line": 28,
+      "diff": "--- app_legacy.py:383 (groq_call_failsafe)\n+++ services\\llm_service.py:28 (groq_call_failsafe)\n@@ -1,4 +1,4 @@\n-'\\n    Failsafe method using simple keyword matching.\\n    Works without external API calls.\\n    '\n+'\\n    Failsafe method using simple botanical keyword matching.\\n    Works without external API calls or network connectivity.\\n    '\n print(' Using failsafe LLM (keyword matching)...')\n prompt_lower = prompt.lower()\n if any((word in prompt_lower for word in ['indoor', 'bedroom', 'house', 'apartment'])):\n"
+    },
+    {
+      "name": "verify_jwt",
+      "legacy_line": 822,
+      "new_path": "auth\\jwt_utils.py",
+      "new_line": 32,
+      "diff": "--- app_legacy.py:822 (verify_jwt)\n+++ auth\\jwt_utils.py:32 (verify_jwt)\n@@ -16,5 +16,5 @@\n     if payload.get('exp') and time.time() > payload['exp']:\n         return None\n     return payload\n-except Exception as e:\n+except Exception:\n     return None"
+    },
+    {
+      "name": "normalize_query",
+      "legacy_line": 932,
+      "new_path": "services\\llm_service.py",
+      "new_line": 19,
+      "diff": "--- app_legacy.py:932 (normalize_query)\n+++ services\\llm_service.py:19 (normalize_query)\n@@ -1,4 +1,7 @@\n-text = text.lower().strip()\n-text = re.sub('[^\\\\w\\\\s\\\\u2600-\\\\u27BF\\\\U0001f300-\\\\U0001faff]', ' ', text)\n-text = re.sub('\\\\s+', ' ', text).strip()\n-return text+'Normalize query text, keeping alphanumeric characters, spaces, and emojis.'\n+if not query_text:\n+    return ''\n+query_text = query_text.lower().strip()\n+query_text = re.sub('[^\\\\w\\\\s\\\\u2600-\\\\u27BF\\\\U0001f300-\\\\U0001faff]', ' ', query_text)\n+query_text = re.sub('\\\\s+', ' ', query_text).strip()\n+return query_text"
+    },
+    {
+      "name": "save_user_query",
+      "legacy_line": 967,
+      "new_path": "routes\\chat_routes.py",
+      "new_line": 74,
+      "diff": "--- app_legacy.py:967 (save_user_query)\n+++ routes\\chat_routes.py:74 (save_user_query)\n@@ -1,4 +1,4 @@\n-data = request.json\n+data = request.get_json() or {}\n user_id = data.get('user_id')\n plant_id = data.get('plant_id')\n query = data.get('query')\n"
+    },
+    {
+      "name": "get_category_from_synonym",
+      "legacy_line": 1020,
+      "new_path": "services\\chat\\plant_lookup.py",
+      "new_line": 152,
+      "diff": "--- app_legacy.py:1020 (get_category_from_synonym)\n+++ services\\chat\\plant_lookup.py:152 (get_category_from_synonym)\n@@ -1,4 +1,4 @@\n-'Check if user input matches any synonym'\n+'Check if user input matches any category synonym.'\n synonym_row = db.session.execute(text('\\n        SELECT c.category_id, c.category_name\\n        FROM category_synonym cs\\n        JOIN category c ON cs.category_id = c.category_id\\n        WHERE LOWER(cs.synonym) = :syn\\n    '), {'syn': user_input.lower()}).fetchone()\n if synonym_row:\n     return {'category_id': synonym_row[0], 'category_name': synonym_row[1]}\n"
+    },
+    {
+      "name": "get_cached_llm_result",
+      "legacy_line": 1041,
+      "new_path": "services\\llm_service.py",
+      "new_line": 166,
+      "diff": "--- app_legacy.py:1041 (get_cached_llm_result)\n+++ services\\llm_service.py:166 (get_cached_llm_result)\n@@ -1,3 +1,4 @@\n+'Retrieve unexpired cached LLM response for a normalized query.'\n row = db.session.execute(text('\\n        SELECT TOP 1 llm_response, llm_name, expires_at\\n        FROM llm_results\\n        WHERE user_query = :q\\n        ORDER BY created_at DESC\\n    '), {'q': normalized_query}).fetchone()\n if not row:\n     return None\n"
+    },
+    {
+      "name": "fuzzy_find_plant",
+      "legacy_line": 1064,
+      "new_path": "services\\chat\\plant_lookup.py",
+      "new_line": 144,
+      "diff": "--- app_legacy.py:1064 (fuzzy_find_plant)\n+++ services\\chat\\plant_lookup.py:144 (fuzzy_find_plant)\n@@ -1 +1,2 @@\n+'Find plant by name pattern.'\n return db.session.execute(text('\\n        SELECT TOP 1 plant_id, plant_name, description, price\\n        FROM plant\\n        WHERE LOWER(plant_name) LIKE LOWER(:x)\\n    '), {'x': f'%{name}%'}).fetchone()"
+    },
+    {
+      "name": "store_canonical_answer",
+      "legacy_line": 1072,
+      "new_path": "services\\llm_service.py",
+      "new_line": 185,
+      "diff": "--- app_legacy.py:1072 (store_canonical_answer)\n+++ services\\llm_service.py:185 (store_canonical_answer)\n@@ -1,3 +1,4 @@\n+'Persist canonical LLM response in database for caching.'\n try:\n     row = LLMResult(user_query=normalize_query(user_message) if user_message else canonical_key, llm_response=reply, category_suggested=canonical_key, plants_found=0, llm_name=runtime_settings.llm_option)\n     db.session.add(row)\n"
+    },
+    {
+      "name": "register",
+      "legacy_line": 1115,
+      "new_path": "routes\\auth_routes.py",
+      "new_line": 15,
+      "diff": "--- app_legacy.py:1115 (register)\n+++ routes\\auth_routes.py:15 (register)\n@@ -1,4 +1,4 @@\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n username = data.get('username', '').strip()\n email = data.get('email', '').strip().lower()\n password = data.get('password', '').strip()\n"
+    },
+    {
+      "name": "login",
+      "legacy_line": 1189,
+      "new_path": "routes\\auth_routes.py",
+      "new_line": 87,
+      "diff": "--- app_legacy.py:1189 (login)\n+++ routes\\auth_routes.py:87 (login)\n@@ -1,4 +1,4 @@\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n email = data.get('email', '').strip().lower()\n password = data.get('password', '').strip()\n req_business_id = data.get('business_id', '').strip()\n"
+    },
+    {
+      "name": "super_admin_login",
+      "legacy_line": 1293,
+      "new_path": "routes\\super_admin_routes.py",
+      "new_line": 17,
+      "diff": "--- app_legacy.py:1293 (super_admin_login)\n+++ routes\\super_admin_routes.py:17 (super_admin_login)\n@@ -1,4 +1,4 @@\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n email = data.get('email', '').strip().lower()\n password = data.get('password', '').strip()\n if email != 'admin@system.com' or password != 'admin123':\n"
+    },
+    {
+      "name": "register_new_nursery",
+      "legacy_line": 1321,
+      "new_path": "routes\\super_admin_routes.py",
+      "new_line": 45,
+      "diff": "--- app_legacy.py:1321 (register_new_nursery)\n+++ routes\\super_admin_routes.py:45 (register_new_nursery)\n@@ -1,4 +1,4 @@\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n business_name = (data.get('business_name') or data.get('name') or '').strip()\n owner_name = (data.get('owner_name') or data.get('owner') or '').strip()\n email = data.get('email', '').strip().lower()\n"
+    },
+    {
+      "name": "toggle_nursery_status",
+      "legacy_line": 1476,
+      "new_path": "routes\\super_admin_routes.py",
+      "new_line": 200,
+      "diff": "--- app_legacy.py:1476 (toggle_nursery_status)\n+++ routes\\super_admin_routes.py:200 (toggle_nursery_status)\n@@ -1,4 +1,4 @@\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n new_status = data.get('status', '').strip()\n if new_status not in ['Active', 'Inactive']:\n     return (jsonify({'status': 'error', 'message': \"Status must be 'Active' or 'Inactive'\"}), 400)\n"
+    },
+    {
+      "name": "resolve_plant_synonym",
+      "legacy_line": 1537,
+      "new_path": "services\\chat\\plant_lookup.py",
+      "new_line": 17,
+      "diff": "--- app_legacy.py:1537 (resolve_plant_synonym)\n+++ services\\chat\\plant_lookup.py:17 (resolve_plant_synonym)\n@@ -1,3 +1,4 @@\n+'Resolve plant from plant_synonym table matching substring.'\n row = db.session.execute(text(\"\\n        SELECT TOP 1 p.plant_id, p.plant_name, p.description, p.price, p.image_path\\n        FROM plant_synonym ps\\n        JOIN plant p ON p.plant_id = ps.plant_id\\n        WHERE LOWER(:msg) LIKE CONCAT('%', LOWER(ps.synonym), '%')\\n        ORDER BY LEN(ps.synonym) DESC\\n    \"), {'msg': user_message.lower()}).fetchone()\n if row:\n     return {'plant_id': row[0], 'plant_name': row[1], 'description': row[2], 'price': row[3], 'image_url': get_plant_image_url(row[4])}\n"
+    },
+    {
+      "name": "extract_quantity_nlp",
+      "legacy_line": 1563,
+      "new_path": "services\\chat\\intent.py",
+      "new_line": 21,
+      "diff": "--- app_legacy.py:1563 (extract_quantity_nlp)\n+++ services\\chat\\intent.py:21 (extract_quantity_nlp)\n@@ -6,7 +6,6 @@\n     quantity_prompt = PromptTemplate.from_template(\"The user was asked how many plants they want. User input: '{user_input}'. Extract the exact numerical integer. If none is given, assume 1. Respond ONLY with the integer digits.\")\n     quantity_chain = quantity_prompt | Ollama(model='phi3', temperature=0) | StrOutputParser()\n     qty_str = quantity_chain.invoke({'user_input': text}).strip()\n-    import re\n     match = re.search('\\\\d+', qty_str)\n     if match:\n         return max(1, int(match.group()))\n"
+    },
+    {
+      "name": "fuzzy_resolve_plant",
+      "legacy_line": 1589,
+      "new_path": "services\\chat\\plant_lookup.py",
+      "new_line": 37,
+      "diff": "--- app_legacy.py:1589 (fuzzy_resolve_plant)\n+++ services\\chat\\plant_lookup.py:37 (fuzzy_resolve_plant)\n@@ -1,4 +1,4 @@\n-\"\\n    NLP Fuzzy plant matching that maps user query (including misspellings/phonetic inputs like 'rase nuh', 'roz', 'hibiscs')\\n    to a canonical plant in the database.\\n    \"\n+\"\\n    NLP Fuzzy plant matching mapping user query (including misspellings/phonetic inputs like 'rase nuh', 'roz', 'hibiscs')\\n    to a canonical plant in the database.\\n    \"\n msg_clean = re.sub('[^\\\\w\\\\s]', ' ', user_message.lower()).strip()\n if not msg_clean:\n     return None\n@@ -9,14 +9,8 @@\n     except Exception as e:\n         print(f'Error fetching plants for fuzzy resolution: {e}')\n         return []\n-from flask import has_app_context\n-if not has_app_context():\n-    with current_app.app_context():\n-        rows = _fetch_rows()\n-        direct = resolve_plant_synonym(user_message)\n-else:\n-    rows = _fetch_rows()\n-    direct = resolve_plant_synonym(user_message)\n+rows = _fetch_rows()\n+direct = resolve_plant_synonym(user_message)\n if direct:\n     direct['score'] = 1.0\n     direct['is_exact'] = True\n"
+    },
+    {
+      "name": "handle_count_plants",
+      "legacy_line": 1705,
+      "new_path": "services\\chat\\plant_lookup.py",
+      "new_line": 190,
+      "diff": "--- app_legacy.py:1705 (handle_count_plants)\n+++ services\\chat\\plant_lookup.py:190 (handle_count_plants)\n@@ -1,4 +1,4 @@\n-'\\n    Handles all plant count queries safely\\n    '\n+'Handles plant count queries safely.'\n if not canonical_key.startswith('COUNT_PLANTS'):\n     return None\n row = db.session.execute(text('SELECT COUNT(*) FROM plant')).fetchone()\n"
+    },
+    {
+      "name": "log_category_interest",
+      "legacy_line": 1729,
+      "new_path": "services\\observability.py",
+      "new_line": 31,
+      "diff": "--- app_legacy.py:1729 (log_category_interest)\n+++ services\\observability.py:31 (log_category_interest)\n@@ -8,4 +8,4 @@\n     db.session.commit()\n except Exception as e:\n     db.session.rollback()\n-    print(' Category interest failed:', e)+    print(' user_category_interest insert failed:', e)"
+    },
+    {
+      "name": "process_message",
+      "legacy_line": 1772,
+      "new_path": "services\\chat\\chat_service.py",
+      "new_line": 271,
+      "diff": "--- app_legacy.py:1772 (process_message)\n+++ services\\chat\\chat_service.py:271 (process_message)\n@@ -1,7 +1,4 @@\n '\\n    PlantCare AI retrieve-and-format logic using plant_profiles.csv and RAG.\\n    Tracks sub-component execution timings (latencies) and failure telemetry via Langfuse.\\n    '\n-import csv\n-import string\n-import json\n from groq import Groq\n t_start = time.perf_counter()\n user_message = user_message.strip()\n@@ -15,170 +12,23 @@\n     if extra:\n         meta.update(extra)\n     return meta\n-def clean_text(text):\n-    text = text.lower()\n-    text = re.sub('[^\\\\w\\\\s]', ' ', text)\n-    return ' '.join(text.split())\n normalized_query = clean_text(user_message)\n query_words = set(normalized_query.split())\n user_key = str(user_id) if user_id else 'anonymous'\n current_dialog_state = USER_DIALOG_STATE.get(user_key)\n if current_dialog_state:\n-    state_type = current_dialog_state.get('state')\n-    if state_type == 'AWAITING_PLANT_CONFIRMATION':\n-        clean_input = clean_text(user_message).strip()\n-        try:\n-            from langchain_core.prompts import PromptTemplate\n-            from langchain_community.llms import Ollama\n-            from langchain_core.output_parsers import StrOutputParser\n-            affirmation_prompt = PromptTemplate.from_template(\"The user was asked if they want to add a plant to their cart.\\nTheir response was: '{user_input}'\\n\\nTask: Categorize this response into EXACTLY one of three words: POSITIVE, NEGATIVE, or OTHER.\\n- Output POSITIVE ONLY if they are explicitly agreeing to add the plant (e.g. 'yes', 'sure', 'add it').\\n- Output NEGATIVE ONLY if they are declining (e.g. 'no', 'nah').\\n- Output OTHER if they are asking a new question, changing the topic, or making a statement unrelated to answering 'yes/no' (e.g. 'do you sell X', 'what is Y').\\n\\nClassification:\")\n-            affirmation_chain = affirmation_prompt | Ollama(model='phi3', temperature=0) | StrOutputParser()\n-            aff_result = affirmation_chain.invoke({'user_input': clean_input}).strip().upper()\n-        except Exception as e:\n-            print(f'Affirmation logic failed: {e}')\n-            aff_result = 'OTHER'\n-        if 'POSITIVE' in aff_result:\n-            plant_info = current_dialog_state.get('plant_info')\n-            USER_DIALOG_STATE[user_key] = {'state': 'AWAITING_QUANTITY', 'plant_info': plant_info}\n-            plant_name = plant_info['plant_name']\n-            price = plant_info.get('price', 0)\n-            reply = f'Great! How many **{plant_name}** plants (Price: \u20b9{price} each) would you like to add to your cart?'\n-            return {'status': 'success', 'type': 'text', 'reply': reply}\n-        elif 'NEGATIVE' in aff_result:\n-            USER_DIALOG_STATE.pop(user_key, None)\n-            reply = 'No problem! Which plant were you looking for?'\n-            return {'status': 'success', 'type': 'text', 'reply': reply}\n-    elif state_type == 'AWAITING_QUANTITY':\n-        plant_info = current_dialog_state.get('plant_info')\n-        quantity = extract_quantity_nlp(user_message)\n-        plant_id = plant_info['plant_id']\n-        plant_name = plant_info['plant_name']\n-        plant_db = db.session.get(Plant, plant_id) if 'Plant' in globals() else None\n-        avail_stock = plant_db.stock if plant_db and plant_db.stock is not None else 0\n-        if avail_stock <= 0:\n-            USER_DIALOG_STATE.pop(user_key, None)\n-            reply = f'Sorry, **{plant_name}** is currently Out of Stock (0 available) in our database catalog. \ud83e\udeb4'\n-            return {'status': 'success', 'type': 'text', 'reply': reply}\n-        elif quantity > avail_stock:\n-            reply = f'We currently have only **{avail_stock}** **{plant_name}** plant(s) available in stock in our database. How many would you like to add?'\n-            return {'status': 'success', 'type': 'text', 'reply': reply}\n-        USER_DIALOG_STATE.pop(user_key, None)\n-        price = plant_db.price if plant_db else plant_info.get('price', 0.0) or 0.0\n-        total_price = price * quantity\n-        if user_id:\n-\n-            def _add_cart():\n-                try:\n-                    cart_item = Cart.query.filter_by(user_id=str(user_id), plant_id=plant_id).first()\n-                    if cart_item:\n-                        cart_item.quantity += quantity\n-                    else:\n-                        db.session.add(Cart(user_id=str(user_id), plant_id=plant_id, quantity=quantity))\n-                    db.session.commit()\n-                except Exception as e:\n-                    db.session.rollback()\n-                    print(f'Error adding to Cart DB: {e}')\n-            from flask import has_app_context\n-            if not has_app_context():\n-                with current_app.app_context():\n-                    _add_cart()\n-            else:\n-                _add_cart()\n-        reply = f'PLACE_ORDER:{plant_id}\\n\u2705 Added {quantity} **{plant_name}** plant(s) to your cart! Total: \u20b9{total_price:.2f}.'\n-        return {'status': 'success', 'type': 'image', 'reply': reply, 'image_url': plant_info.get('image_url', ''), 'plant_id': plant_id}\n-cart_signals = ['my cart', 'show cart', 'view cart', 'what is in my cart', 'cart contents', \"what's in my cart\", 'open cart']\n-if any((sig in normalized_query for sig in cart_signals)) or normalized_query == 'cart':\n-\n-    def _fetch_cart_reply():\n-        user_cart = Cart.query.filter_by(user_id=str(user_id)).all()\n-        if not user_cart:\n-            return '\ud83d\uded2 Your shopping cart is currently empty! Feel free to browse our catalog for plants.'\n-        cart_reply = '\ud83d\uded2 **Your Shopping Cart**\\n\\n'\n-        total_price = 0.0\n-        for idx, item in enumerate(user_cart):\n-            plant_obj = db.session.get(Plant, item.plant_id)\n-            if plant_obj:\n-                price = plant_obj.price\n-                item_total = float(price) * item.quantity\n-                total_price += item_total\n-                cart_reply += f'{idx + 1}. **{plant_obj.plant_name}** - {item.quantity} qty (\u20b9{price:.2f} each) = **\u20b9{item_total:.2f}**\\n'\n-        cart_reply += f\"\\n\ud83d\udcb0 **Total Value: \u20b9{total_price:.2f}**\\n\\n*Type 'checkout' to place your order!*\"\n-        return cart_reply\n-    from flask import has_app_context\n-    if not has_app_context():\n-        with current_app.app_context():\n-            cart_reply = _fetch_cart_reply()\n-    else:\n-        cart_reply = _fetch_cart_reply()\n-    log_langfuse_trace('cart_display_query', user_message, cart_reply, get_meta('SUCCESS', {'intent': 'VIEW_CART'}))\n-    return {'status': 'success', 'type': 'text', 'reply': cart_reply}\n-db_query_signals = ['database', 'db', 'stock', 'quantity', 'available', 'availability', 'how many', 'how much', 'count', 'inventory', 'catalog', 'total plants', 'in stock', 'out of stock', 'price', 'cost', 'rate', 'discount', 'discounts', 'offer', 'status', 'sell', 'buy', 'purchase', 'order', 'get']\n-is_db_query = any((sig in normalized_query for sig in db_query_signals))\n-has_explicit_buy = any((k in normalized_query for k in ['buy', 'order', 'purchase', 'add to cart', 'place order']))\n-if is_db_query and (not has_explicit_buy):\n-    fuzzy_plant = fuzzy_resolve_plant(user_message)\n-    if fuzzy_plant:\n-        plant_name = fuzzy_plant['plant_name']\n-        plant_id = fuzzy_plant['plant_id']\n-        plant_obj = None\n-        try:\n-            plant_obj = db.session.get(Plant, plant_id)\n-        except Exception:\n-            try:\n-                plant_obj = Plant.query.filter(Plant.plant_name.ilike(f'%{plant_name}%')).first()\n-            except Exception:\n-                pass\n-        price = plant_obj.price if plant_obj else fuzzy_plant.get('price', 0) or 0.0\n-        disc_price = 0.0\n-        stock_count = plant_obj.stock if plant_obj and plant_obj.stock is not None else 0\n-        status_str = 'Available' if stock_count > 0 else 'Out of Stock'\n-        price_fmt = f'\u20b9{price:.2f}'\n-        if disc_price and disc_price > 0 and (disc_price < price):\n-            price_fmt = f'~~\u20b9{price:.2f}~~ **\u20b9{disc_price:.2f}** (Special Price!)'\n-        cart_prompt = '\\n\\nWould you like to add some to your cart?' if stock_count > 0 else ''\n-        if any((k in normalized_query for k in ['price', 'cost', 'rate', 'discount', 'offer'])):\n-            reply = f'\ud83d\udcb5 The price of **{plant_name}** in our database is **{price_fmt}**.\\n\ud83d\udce6 **Stock**: **{stock_count}** in stock (**Status**: {status_str}). \ud83e\udeb4{cart_prompt}'\n-        elif any((k in normalized_query for k in ['stock', 'how many', 'quantity', 'count', 'available', 'availability', 'status'])):\n-            reply = f'\ud83d\udce6 We currently have **{stock_count}** **{plant_name}** plant(s) in stock in our database catalog (**Status**: {status_str}, **Price**: {price_fmt}). \ud83e\udeb4{cart_prompt}'\n-        else:\n-            reply = f'\ud83c\udf3f **{plant_name}** is in our database catalog (Price: {price_fmt}, Stock: **{stock_count}**, Status: **{status_str}**). \ud83e\udeb4{cart_prompt}'\n-        if 'Would you like to add some to your cart?' in reply:\n-            USER_DIALOG_STATE[user_key] = {'state': 'AWAITING_PLANT_CONFIRMATION', 'plant_info': {'plant_id': plant_id, 'plant_name': plant_name, 'price': price if not (disc_price and disc_price > 0) else disc_price, 'image_url': fuzzy_plant.get('image_url', '')}}\n-        log_langfuse_trace('db_inventory_query', user_message, reply, get_meta('SUCCESS', {'intent': 'DB_QUERY', 'plant': plant_name, 'stock': stock_count}))\n-        return {'status': 'success', 'type': 'text', 'reply': reply}\n-    elif any((k in normalized_query for k in ['how many', 'database', 'db', 'total', 'count', 'catalog', 'plants', 'available', 'out of stock'])):\n-        try:\n-            plants_in_db = Plant.query.all()\n-            total_cnt = len(plants_in_db)\n-            if total_cnt > 0:\n-                details = []\n-                for p in plants_in_db[:8]:\n-                    st_str = 'Available' if p.stock is not None and p.stock > 0 else 'Out of Stock'\n-                    pr_val = p.price\n-                    details.append(f'\u2022 **{p.plant_name}**: \u20b9{pr_val:.2f} ({(p.stock if p.stock is not None else 0)} in stock, {st_str})')\n-                reply = f'We currently have **{total_cnt}** plant varieties in our database catalog:\\n\\n' + '\\n'.join(details) + '\\n\\nWhich plant would you like to check or add to your cart?'\n-            else:\n-                reply = 'Our database contains a rich variety of plants including Mango, Lichi, Rose, Jasmine, and Aloe Vera! \ud83c\udf3f'\n-        except Exception as e:\n-            reply = 'Our database contains a rich variety of plants including Mango, Lichi, Rose, Jasmine, and Aloe Vera! \ud83c\udf3f'\n-        log_langfuse_trace('db_general_query', user_message, reply, get_meta('SUCCESS', {'intent': 'DB_GENERAL_QUERY'}))\n-        return {'status': 'success', 'type': 'text', 'reply': reply}\n-buy_keywords = ['buy', 'order', 'purchase', 'add to cart', 'place order']\n-is_buy_intent = any((k in normalized_query for k in buy_keywords))\n-fuzzy_match = fuzzy_resolve_plant(user_message)\n-if fuzzy_match and is_buy_intent:\n-    if not fuzzy_match.get('is_exact') or 'rase' in normalized_query:\n-        USER_DIALOG_STATE[user_key] = {'state': 'AWAITING_PLANT_CONFIRMATION', 'plant_info': fuzzy_match}\n-        plant_name = fuzzy_match['plant_name']\n-        price = fuzzy_match.get('price', 0)\n-        reply = f'Do you mean **{plant_name}** (Price: \u20b9{price})?'\n-        return {'status': 'success', 'type': 'text', 'reply': reply}\n-    else:\n-        USER_DIALOG_STATE[user_key] = {'state': 'AWAITING_QUANTITY', 'plant_info': fuzzy_match}\n-        plant_name = fuzzy_match['plant_name']\n-        price = fuzzy_match.get('price', 0)\n-        reply = f'How many **{plant_name}** plants (Price: \u20b9{price} each) would you like to add to your cart?'\n-        return {'status': 'success', 'type': 'text', 'reply': reply}\n+    dialog_res = _handle_dialog_state(user_key, current_dialog_state, user_message, user_id=user_id)\n+    if dialog_res is not None:\n+        return dialog_res\n+cart_res = _handle_cart_display(normalized_query, user_id, user_message, get_meta)\n+if cart_res is not None:\n+    return cart_res\n+inv_res = _handle_db_inventory_query(user_message, normalized_query, user_key, get_meta)\n+if inv_res is not None:\n+    return inv_res\n+buy_res = _handle_buy_intent(user_message, normalized_query, user_key)\n+if buy_res is not None:\n+    return buy_res\n history_context = ''\n semantic_history = history_faiss.get_semantic_history(user_id, user_message)\n if semantic_history:\n@@ -227,96 +77,10 @@\n                 if p_name and p_meta.get('type') == 'plant':\n                     if p_name not in plants_list:\n                         plants_list.append(p_name)\n-def format_plant_profile(bp):\n-\n-    def is_avail(val):\n-        if val is None:\n-            return False\n-        val_str = str(val).strip().lower()\n-        return val_str not in ('', 'n/a', 'none', 'null', 'undefined', 'unspecified', '-')\n-    reply_parts = [f\"\ud83c\udf31 Plant Profile: {bp['plant_name'].strip()}\"]\n-    if is_avail(bp.get('scientific_name')):\n-        reply_parts.append(f\"\ud83d\udd2c Scientific Name\\n{bp['scientific_name'].strip()}\")\n-    cond_parts = []\n-    if is_avail(bp.get('temperature')):\n-        cond_parts.append(f\"\u2022 Temperature: {bp['temperature'].strip()}\")\n-    if is_avail(bp.get('humidity')):\n-        cond_parts.append(f\"\u2022 Humidity: {bp['humidity'].strip()}\")\n-    if is_avail(bp.get('moisture')):\n-        cond_parts.append(f\"\u2022 Soil Moisture: {bp['moisture'].strip()}\")\n-    if is_avail(bp.get('sunlight')):\n-        cond_parts.append(f\"\u2022 Sunlight: {bp['sunlight'].strip()}\")\n-    if cond_parts:\n-        reply_parts.append('\ud83c\udf21\ufe0f Growing Conditions\\n' + '\\n'.join(cond_parts))\n-    if is_avail(bp.get('soil_type')):\n-        reply_parts.append(f\"\ud83c\udf3e Soil\\n{bp['soil_type'].strip()}\")\n-    if is_avail(bp.get('watering_frequency')):\n-        reply_parts.append(f\"\ud83d\udca7 Watering\\n{bp['watering_frequency'].strip()}\")\n-    nutr_parts = []\n-    if is_avail(bp.get('nitrogen')):\n-        nutr_parts.append(f\"\ud83d\udfe2 Nitrogen: {bp['nitrogen'].strip()}\")\n-    if is_avail(bp.get('phosphorus')):\n-        nutr_parts.append(f\"\ud83d\udfe1 Phosphorus: {bp['phosphorus'].strip()}\")\n-    if is_avail(bp.get('potassium')):\n-        nutr_parts.append(f\"\ud83d\udfe3 Potassium: {bp['potassium'].strip()}\")\n-    if nutr_parts:\n-        reply_parts.append('\ud83c\udf3f Nutrient Requirements\\n' + '\\n'.join(nutr_parts))\n-    if is_avail(bp.get('growth_duration')):\n-        reply_parts.append(f\"\u23f3 Growth Duration\\n{bp['growth_duration'].strip()}\")\n-    return '\\n\\n'.join(reply_parts)\n-def fetch_db_plant_details(plant_name_or_query):\n-    \"\"\"Retrieve plant details, stock, price, status, and care info directly from database tables (Plant & PlantKnowledge)\"\"\"\n-    try:\n-        clean_target = re.sub('^(tell me about|show me|do you have|info on|care for|profile for|about|can i buy|buy|price of|cost of|stock of|how many)\\\\s+', '', plant_name_or_query, flags=re.IGNORECASE).strip().lower()\n-        if not clean_target:\n-            clean_target = plant_name_or_query.strip().lower()\n-        p_db = Plant.query.filter(Plant.plant_name.ilike(f'%{clean_target}%')).first()\n-        pk_db = PlantKnowledge.query.filter(PlantKnowledge.plant_name.ilike(f'%{clean_target}%')).first()\n-        if not p_db and (not pk_db):\n-            return None\n-        plant_name = p_db.plant_name if p_db else pk_db.plant_name\n-        price = p_db.price if p_db else 0.0\n-        disc_price = 0.0\n-        stock_cnt = p_db.stock if p_db and p_db.stock is not None else 0\n-        status_str = 'Available' if stock_cnt > 0 else 'Out of Stock'\n-        desc = p_db.description if p_db and p_db.description else pk_db.description if pk_db else ''\n-        reply_parts = [f'\ud83c\udf31 **Plant Profile: {plant_name}**']\n-        price_str = f'\u20b9{price:.2f}'\n-        if disc_price and disc_price > 0 and (disc_price < price):\n-            price_str = f'~~\u20b9{price:.2f}~~ **\u20b9{disc_price:.2f}** (Special Price!)'\n-        reply_parts.append(f'\ud83d\udcb5 **Price**: {price_str}\\n\ud83d\udce6 **Stock**: **{stock_cnt}** in stock (**Status**: {status_str})')\n-        if pk_db:\n-            if pk_db.scientific_name:\n-                reply_parts.append(f'\ud83d\udd2c **Scientific Name**\\n*{pk_db.scientific_name.strip()}*')\n-            conds = []\n-            if pk_db.sunlight:\n-                conds.append(f'\u2022 Sunlight: {pk_db.sunlight.strip()}')\n-            if pk_db.water_requirement:\n-                conds.append(f'\u2022 Water: {pk_db.water_requirement.strip()}')\n-            if pk_db.soil_type:\n-                conds.append(f'\u2022 Soil: {pk_db.soil_type.strip()}')\n-            if conds:\n-                reply_parts.append('\ud83c\udf21\ufe0f **Growing Conditions**\\n' + '\\n'.join(conds))\n-            if pk_db.fertilizer:\n-                reply_parts.append(f'\ud83c\udf3e **Fertilizer & Nutrients**\\n{pk_db.fertilizer.strip()}')\n-            if pk_db.care_tips:\n-                reply_parts.append(f'\ud83c\udf3f **Care Tips**\\n{pk_db.care_tips.strip()}')\n-            if pk_db.medicinal_uses:\n-                reply_parts.append(f'\ud83d\udc8a **Medicinal / Extra Uses**\\n{pk_db.medicinal_uses.strip()}')\n-        elif desc:\n-            reply_parts.append(f'\ud83d\udcdd **Description**\\n{desc.strip()}')\n-        return '\\n\\n'.join(reply_parts)\n-    except Exception as err:\n-        print(f'Error in fetch_db_plant_details: {err}')\n-        return None\n intent = 'PROFILE'\n t_intent_start = time.perf_counter()\n try:\n-    class_prompt = f\"{history_context}Analyze the user's message: '{user_message}'.\\nClassify the intent into exactly one of three categories:\\n1. PROFILE: If the user is requesting a profile, care-sheet, or specific growing/care parameters of a single specific plant name (e.g., 'tell me about rose', 'Mango', 'Acanthocereus', 'unsupported plant xyz', 'Tomato').\\n2. GENERAL: If the user is asking a general botanical question, list of plants in our nursery, providing their geographic location/climate for recommendations, care tips, growing guides, etc.\\n3. OFF_TOPIC: If the user is asking about topics completely unrelated to plants, gardening, farming, or our catalog. Note: Geographic locations, cities, or climates (e.g., 'tamilnadu', 'florida', 'hot climate') are NOT OFF_TOPIC; they are GENERAL intent used for plant matching.\\n\\nRespond with exactly one word: PROFILE, GENERAL, or OFF_TOPIC. Do not write any other text or markdown code wraps.\"\n-    from langchain_community.llms import Ollama\n-    llm = Ollama(model='phi3', temperature=0.0)\n-    sys_msg = 'You are a routing classification system for a Plant Care Assistant. You must classify user inputs into PROFILE, GENERAL, or OFF_TOPIC. Every question that is not about plants, botany, diseases, gardening, or agriculture is OFF_TOPIC.\\n\\n'\n-    intent = llm.invoke(sys_msg + class_prompt).strip().upper()\n+    intent = classify_query_intent(user_message, history_context)\n     timings['intent_classification_ms'] = round((time.perf_counter() - t_intent_start) * 1000, 2)\n except Exception as e:\n     timings['intent_classification_ms'] = round((time.perf_counter() - t_intent_start) * 1000, 2)\n@@ -331,13 +95,7 @@\n if intent == 'GENERAL':\n     t_cat_start = time.perf_counter()\n     try:\n-        cat_prompt = f\"{history_context}Determine the knowledge category for the user query: '{user_message}'.\\nPick exactly one of these categories:\\n- GEOGRAPHY: Questions about native regions, countries, climate zones, altitude, frost/drought tolerance, where a plant grows.\\n- SEASON: Questions about seasonal care, winter/summer watering, seasonal fertilization, seasonal temperature or sunlight requirements.\\n- DISEASE: Questions about plant diseases, symptoms, pests, yellowing leaves, fungal/bacterial infections, treatment, prevention.\\n- PLANT: Any other plant care, profile, soil, nutrients, watering, growth duration, medicinal uses.\\nRespond with exactly one word: GEOGRAPHY, SEASON, DISEASE, or PLANT.\"\n-        from langchain_community.llms import Ollama\n-        llm = Ollama(model='phi3', temperature=0.0)\n-        sys_msg = 'You are a data source router. Respond with GEOGRAPHY, SEASON, DISEASE, or PLANT only.\\n\\n'\n-        cat_label = llm.invoke(sys_msg + cat_prompt).strip().upper()\n-        category_map = {'GEOGRAPHY': 'geography', 'SEASON': 'season', 'DISEASE': 'disease', 'PLANT': 'plant'}\n-        rag_category = category_map.get(cat_label, None)\n+        rag_category = classify_category(user_message, history_context)\n         timings['category_classification_ms'] = round((time.perf_counter() - t_cat_start) * 1000, 2)\n     except Exception as e:\n         timings['category_classification_ms'] = round((time.perf_counter() - t_cat_start) * 1000, 2)\n@@ -346,7 +104,7 @@\n best_plant = None\n best_score = 0\n t_csv_start = time.perf_counter()\n-csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'plant_profiles.csv')\n+csv_path = os.path.join(APP_ROOT, 'plant_profiles.csv')\n if os.path.exists(csv_path):\n     with open(csv_path, 'r', encoding='utf-8') as f:\n         reader = csv.DictReader(f)\n@@ -428,42 +186,8 @@\n             timings['llm_generation_ms'] = round((time.perf_counter() - t_llm_start) * 1000, 2)\n             failures['llm_generation_error'] = str(e)\n             print(f' [RAG] RAG LLM query failed: {e}')\n-def make_plant_unavailable_guardrail(query_or_name):\n-    clean_target = re.sub('^(tell me about|show me|do you have|info on|care for|profile for|about|can i buy|buy)\\\\s+', '', query_or_name, flags=re.IGNORECASE).strip()\n-    if not clean_target:\n-        clean_target = query_or_name.strip()\n-    clean_target = clean_target.title()\n-    return f'\ud83c\udf3f **Nursery Availability Notice**\\n\\nSorry, **{clean_target}** is currently not available in our nursery catalog or database. We are actively expanding our plant collection and hope to bring it to our nursery soon! \ud83e\udeb4\\n\\nIn the meantime, feel free to explore our available plants in the shop or ask about our indoor plants, flowering saplings, and fruit trees!'\n-def check_db_plant_availability(query_or_name):\n-    clean_target = re.sub('^(tell me about|show me|do you have|info on|care for|profile for|about|can i buy|buy)\\\\s+', '', query_or_name, flags=re.IGNORECASE).strip().lower()\n-    if not clean_target:\n-        clean_target = query_or_name.strip().lower()\n-    t_db_start = time.perf_counter()\n-    matched_name = None\n-    try:\n-        plant_db = Plant.query.filter(Plant.plant_name.ilike(f'%{clean_target}%')).first()\n-        if plant_db:\n-            matched_name = plant_db.plant_name\n-    except Exception as e:\n-        failures['db_plant_query_error'] = str(e)\n-    if not matched_name:\n-        try:\n-            pk_db = PlantKnowledge.query.filter(PlantKnowledge.plant_name.ilike(f'%{clean_target}%')).first()\n-            if pk_db:\n-                matched_name = pk_db.plant_name\n-        except Exception as e:\n-            failures['db_pk_query_error'] = str(e)\n-    if not matched_name:\n-        try:\n-            match = db.session.execute(text('SELECT plant_name FROM plant WHERE LOWER(plant_name) LIKE LOWER(:x)'), {'x': f'%{clean_target}%'}).fetchone()\n-            if match:\n-                matched_name = match[0]\n-        except Exception as e:\n-            failures['db_raw_sql_error'] = str(e)\n-    timings['db_search_ms'] = round((time.perf_counter() - t_db_start) * 1000, 2)\n-    return matched_name\n if not best_plant or best_score <= 0 or intent == 'PROFILE':\n-    matched_db_plant = check_db_plant_availability(user_message)\n+    matched_db_plant = check_db_plant_availability(user_message, failures=failures, timings=timings)\n     if matched_db_plant:\n         print(f\" [LLM Profile Cache] Plant '{matched_db_plant}' found in DB but missing from CSV. Generating profile with LLM once...\")\n         sys_prompt = 'You are a strict botanical database system. Reply ONLY in the requested JSON format. Do not use conversational filler or markdown wrapping.'\n"
+    },
+    {
+      "name": "chat",
+      "legacy_line": 2570,
+      "new_path": "routes\\chat_routes.py",
+      "new_line": 40,
+      "diff": "--- app_legacy.py:2570 (chat)\n+++ routes\\chat_routes.py:40 (chat)\n@@ -1,6 +1,6 @@\n 'Handle chat API requests'\n try:\n-    data = request.get_json()\n+    data = request.get_json() or {}\n     user_message = data.get('message', '')\n     location = data.get('location', '')\n     user_id = data.get('user_id')\n@@ -12,7 +12,7 @@\n         history_faiss.add_interaction(user_id, user_message, response.get('reply'))\n     if response.get('type') == 'text':\n         speech_response = generate_speech(response['reply'])\n-        if speech_response.get('status') == 'success':\n+        if speech_response and speech_response.get('status') == 'success':\n             response['audio'] = speech_response.get('audio')\n     return jsonify(response)\n except Exception as e:\n"
+    },
+    {
+      "name": "get_plant_image_url",
+      "legacy_line": 2617,
+      "new_path": "services\\image_utils.py",
+      "new_line": 14,
+      "diff": "--- app_legacy.py:2617 (get_plant_image_url)\n+++ services\\image_utils.py:14 (get_plant_image_url)\n@@ -1,9 +1,10 @@\n+'\\n    Resolves local plant image path or returns default/remote image URL.\\n    Anchored to APP_ROOT/static/images/plants.\\n    '\n if not image_path:\n     return '/static/images/default_plant.png'\n if image_path.startswith(('http://', 'https://')):\n     return image_path\n clean_name = image_path.lstrip('/').split('/')[-1]\n-static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')\n+static_dir = os.path.join(APP_ROOT, 'static')\n plants_dir = os.path.join(static_dir, 'images', 'plants')\n direct_path = os.path.join(plants_dir, clean_name)\n if os.path.exists(direct_path):\n"
+    },
+    {
+      "name": "suggest_varieties",
+      "legacy_line": 2656,
+      "new_path": "routes\\admin_inventory_routes.py",
+      "new_line": 21,
+      "diff": "--- app_legacy.py:2656 (suggest_varieties)\n+++ routes\\admin_inventory_routes.py:21 (suggest_varieties)\n@@ -1,6 +1,6 @@\n 'Suggest plant varieties based on plant name'\n try:\n-    data = request.json\n+    data = request.get_json() or {}\n     plant_name = data.get('plant_name', '').strip()\n     stock_count = data.get('stock_count', 0)\n     price = data.get('price', 199.99)\n"
+    },
+    {
+      "name": "add_varieties",
+      "legacy_line": 2795,
+      "new_path": "routes\\admin_inventory_routes.py",
+      "new_line": 117,
+      "diff": "--- app_legacy.py:2795 (add_varieties)\n+++ routes\\admin_inventory_routes.py:117 (add_varieties)\n@@ -1,6 +1,6 @@\n 'Add selected varieties to a plant'\n try:\n-    data = request.json\n+    data = request.get_json() or {}\n     plant_id = data.get('plant_id')\n     plant_name = data.get('plant_name')\n     selected_varieties = data.get('selected_varieties', [])\n"
+    },
+    {
+      "name": "restock_plant",
+      "legacy_line": 2903,
+      "new_path": "routes\\admin_inventory_routes.py",
+      "new_line": 234,
+      "diff": "--- app_legacy.py:2903 (restock_plant)\n+++ routes\\admin_inventory_routes.py:234 (restock_plant)\n@@ -1,7 +1,7 @@\n 'Restock a plant by adding quantity'\n try:\n     biz_id = get_current_tenant()\n-    data = request.json or {}\n+    data = request.get_json() or {} or {}\n     quantity = data.get('quantity', 0)\n     if quantity <= 0:\n         return (jsonify({'status': 'error', 'message': 'Quantity must be positive'}), 400)\n"
+    },
+    {
+      "name": "add_plant",
+      "legacy_line": 2979,
+      "new_path": "routes\\admin_inventory_routes.py",
+      "new_line": 308,
+      "diff": "--- app_legacy.py:2979 (add_plant)\n+++ routes\\admin_inventory_routes.py:308 (add_plant)\n@@ -1,7 +1,7 @@\n 'Create a new plant with initial stock and categories for current nursery'\n try:\n     biz_id = get_current_tenant()\n-    data = request.json or {}\n+    data = request.get_json() or {} or {}\n     name = data.get('plant_name')\n     price = float(data.get('price', 0))\n     stock = int(data.get('stock', 0))\n"
+    },
+    {
+      "name": "update_plant_details",
+      "legacy_line": 3051,
+      "new_path": "routes\\admin_inventory_routes.py",
+      "new_line": 379,
+      "diff": "--- app_legacy.py:3051 (update_plant_details)\n+++ routes\\admin_inventory_routes.py:379 (update_plant_details)\n@@ -1,7 +1,7 @@\n 'Update plant details with strict tenant isolation'\n try:\n     biz_id = get_current_tenant()\n-    data = request.json or {}\n+    data = request.get_json() or {} or {}\n     plant = Plant.query.filter_by(plant_id=plant_id, business_id=biz_id).first()\n     if not plant and biz_id == 'NURS-0001':\n         plant = db.session.get(Plant, plant_id)\n"
+    },
+    {
+      "name": "add_supplier",
+      "legacy_line": 3195,
+      "new_path": "routes\\admin_orders_routes.py",
+      "new_line": 361,
+      "diff": "--- app_legacy.py:3195 (add_supplier)\n+++ routes\\admin_orders_routes.py:361 (add_supplier)\n@@ -1,6 +1,6 @@\n 'Add a new supplier'\n try:\n-    data = request.json\n+    data = request.get_json() or {}\n     name = data.get('name')\n     if not name:\n         return (jsonify({'status': 'error', 'message': 'Supplier name required'}), 400)\n"
+    },
+    {
+      "name": "add_category_admin",
+      "legacy_line": 3232,
+      "new_path": "routes\\category_routes.py",
+      "new_line": 39,
+      "diff": "--- app_legacy.py:3232 (add_category_admin)\n+++ routes\\category_routes.py:39 (add_category_admin)\n@@ -1,6 +1,6 @@\n 'Add a new category'\n try:\n-    data = request.json\n+    data = request.get_json() or {}\n     name = data.get('category_name')\n     if not name:\n         return (jsonify({'status': 'error', 'message': 'Category name required'}), 400)\n"
+    },
+    {
+      "name": "list_plant_images",
+      "legacy_line": 3287,
+      "new_path": "routes\\admin_inventory_routes.py",
+      "new_line": 707,
+      "diff": "--- app_legacy.py:3287 (list_plant_images)\n+++ routes\\admin_inventory_routes.py:707 (list_plant_images)\n@@ -1,7 +1,7 @@\n import os\n-static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')\n+static_dir = os.path.join(APP_ROOT, 'static')\n plants_dir = os.path.join(static_dir, 'images', 'plants')\n files = []\n if os.path.exists(plants_dir):\n     files = os.listdir(plants_dir)\n-return jsonify({'static_dir': static_dir, 'plants_dir': plants_dir, 'exists': os.path.exists(plants_dir), 'file_count': len(files), 'files_sample': files[:20], 'root_path': app.root_path})+return jsonify({'static_dir': static_dir, 'plants_dir': plants_dir, 'exists': os.path.exists(plants_dir), 'file_count': len(files), 'files_sample': files[:20], 'root_path': current_app.root_path})"
+    },
+    {
+      "name": "serve_root_files",
+      "legacy_line": 3317,
+      "new_path": "routes\\static_routes.py",
+      "new_line": 19,
+      "diff": "--- app_legacy.py:3317 (serve_root_files)\n+++ routes\\static_routes.py:19 (serve_root_files)\n@@ -1,4 +1,4 @@\n from flask import send_from_directory\n-if os.path.exists(os.path.join(app.root_path, filename)):\n+if os.path.exists(os.path.join(current_app.root_path, filename)):\n     return send_from_directory('.', filename)\n return send_from_directory('static', filename)"
+    },
+    {
+      "name": "save_user_interest",
+      "legacy_line": 3355,
+      "new_path": "routes\\shop_routes.py",
+      "new_line": 82,
+      "diff": "--- app_legacy.py:3355 (save_user_interest)\n+++ routes\\shop_routes.py:82 (save_user_interest)\n@@ -1,5 +1,5 @@\n try:\n-    data = request.json\n+    data = request.get_json() or {}\n     user_id = data.get('user_id')\n     plant_id = data.get('plant_id')\n     interest_type = data.get('interest_type', 'enquiry')\n"
+    },
+    {
+      "name": "update_cart",
+      "legacy_line": 3380,
+      "new_path": "routes\\cart_routes.py",
+      "new_line": 83,
+      "diff": "--- app_legacy.py:3380 (update_cart)\n+++ routes\\cart_routes.py:83 (update_cart)\n@@ -1,5 +1,5 @@\n try:\n-    data = request.json\n+    data = request.get_json() or {}\n     user_id = str(data.get('user_id', 'anonymous'))\n     plant_id = data.get('plant_id')\n     action = data.get('action')\n"
+    },
+    {
+      "name": "inventory_add",
+      "legacy_line": 3407,
+      "new_path": "routes\\admin_inventory_routes.py",
+      "new_line": 529,
+      "diff": "--- app_legacy.py:3407 (inventory_add)\n+++ routes\\admin_inventory_routes.py:529 (inventory_add)\n@@ -1,6 +1,6 @@\n 'Add stock via supplier or return'\n try:\n-    data = request.json\n+    data = request.get_json() or {}\n     plant_id = data.get('plant_id')\n     quantity = int(data.get('quantity', 0))\n     if not plant_id or quantity <= 0:\n"
+    },
+    {
+      "name": "inventory_remove",
+      "legacy_line": 3448,
+      "new_path": "routes\\admin_inventory_routes.py",
+      "new_line": 570,
+      "diff": "--- app_legacy.py:3448 (inventory_remove)\n+++ routes\\admin_inventory_routes.py:570 (inventory_remove)\n@@ -1,6 +1,6 @@\n 'Remove stock (wastage/return to supplier)'\n try:\n-    data = request.json\n+    data = request.get_json() or {}\n     plant_id = data.get('plant_id')\n     quantity = int(data.get('quantity', 0))\n     if not plant_id or quantity <= 0:\n"
+    },
+    {
+      "name": "record_order_payment",
+      "legacy_line": 3591,
+      "new_path": "routes\\admin_orders_routes.py",
+      "new_line": 89,
+      "diff": "--- app_legacy.py:3591 (record_order_payment)\n+++ routes\\admin_orders_routes.py:89 (record_order_payment)\n@@ -1,6 +1,6 @@\n 'Record partial or full payment for an order group within current nursery'\n biz_id = get_current_tenant()\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n order_group_id = data.get('order_group_id')\n amount = data.get('amount')\n if not order_group_id or amount is None:\n"
+    },
+    {
+      "name": "update_order_status_admin",
+      "legacy_line": 3704,
+      "new_path": "routes\\admin_orders_routes.py",
+      "new_line": 202,
+      "diff": "--- app_legacy.py:3704 (update_order_status_admin)\n+++ routes\\admin_orders_routes.py:202 (update_order_status_admin)\n@@ -1,5 +1,5 @@\n 'Update status of all orders in a group'\n-status = request.json.get('status')\n+status = (request.get_json() or {}).get('status')\n if not status:\n     return (jsonify({'status': 'error', 'message': 'Status is required'}), 400)\n try:\n"
+    },
+    {
+      "name": "add_supplier_purchase",
+      "legacy_line": 3721,
+      "new_path": "routes\\admin_orders_routes.py",
+      "new_line": 217,
+      "diff": "--- app_legacy.py:3721 (add_supplier_purchase)\n+++ routes\\admin_orders_routes.py:217 (add_supplier_purchase)\n@@ -1,5 +1,5 @@\n 'Add a new purchase from a supplier'\n-data = request.json\n+data = request.get_json() or {}\n supplier_id = data.get('supplier_id')\n bill_no = data.get('bill_no')\n bill_date_str = data.get('bill_date')\n"
+    },
+    {
+      "name": "record_purchase_payment",
+      "legacy_line": 3816,
+      "new_path": "routes\\admin_orders_routes.py",
+      "new_line": 312,
+      "diff": "--- app_legacy.py:3816 (record_purchase_payment)\n+++ routes\\admin_orders_routes.py:312 (record_purchase_payment)\n@@ -1,5 +1,5 @@\n 'Record a payment against a purchase balance'\n-data = request.json\n+data = request.get_json() or {}\n purchase_id = data.get('purchase_id')\n amount = float(data.get('amount', 0))\n if not purchase_id or amount <= 0:\n"
+    },
+    {
+      "name": "manage_category_synonyms",
+      "legacy_line": 3899,
+      "new_path": "routes\\category_routes.py",
+      "new_line": 94,
+      "diff": "--- app_legacy.py:3899 (manage_category_synonyms)\n+++ routes\\category_routes.py:94 (manage_category_synonyms)\n@@ -4,7 +4,7 @@\n         synonyms = CategorySynonym.query.all()\n         return jsonify({'status': 'success', 'synonyms': [{'synonym_id': s.synonym_id, 'synonym': s.synonym, 'category_id': s.category_id, 'category_name': s.category.category_name, 'created_at': s.created_at.strftime('%Y-%m-%d %H:%M:%S')} for s in synonyms]})\n     elif request.method == 'POST':\n-        data = request.json\n+        data = request.get_json() or {}\n         synonym = data.get('synonym')\n         category_id = data.get('category_id')\n         if not synonym or not category_id:\n@@ -15,7 +15,7 @@\n         synonym_id = add_category_synonym(synonym, category_id)\n         return jsonify({'status': 'success', 'message': f\"Synonym '{synonym}' added to category '{category.category_name}'\", 'synonym_id': synonym_id})\n     elif request.method == 'DELETE':\n-        synonym_id = request.json.get('synonym_id')\n+        synonym_id = (request.get_json() or {}).get('synonym_id')\n         if not synonym_id:\n             return (jsonify({'status': 'error', 'message': 'Synonym ID required'}), 400)\n         syn = db.session.get(CategorySynonym, synonym_id)\n"
+    },
+    {
+      "name": "manage_config",
+      "legacy_line": 3957,
+      "new_path": "routes\\config_routes.py",
+      "new_line": 9,
+      "diff": "--- app_legacy.py:3957 (manage_config)\n+++ routes\\config_routes.py:9 (manage_config)\n@@ -1,20 +1,24 @@\n 'Get or update configuration options'\n-global LLM_OPTION, STT_OPTION, TTS_OPTION\n try:\n     if request.method == 'GET':\n-        return jsonify({'status': 'success', 'config': {'LLM_OPTION': runtime_settings.llm_option, 'STT_OPTION': runtime_settings.stt_option, 'TTS_OPTION': runtime_settings.tts_option, 'LLM_FAILSAFE': LLM_FAILSAFE, 'STT_FAILSAFE': STT_FAILSAFE, 'TTS_FAILSAFE': TTS_FAILSAFE}})\n-    elif request.method == 'POST':\n-        data = request.json\n-        if 'LLM_OPTION' in data:\n-            LLM_OPTION = data['LLM_OPTION']\n-            print(f' LLM changed to: {runtime_settings.llm_option}')\n-        if 'STT_OPTION' in data:\n-            STT_OPTION = data['STT_OPTION']\n-            print(f' STT changed to: {runtime_settings.stt_option}')\n-        if 'TTS_OPTION' in data:\n-            TTS_OPTION = data['TTS_OPTION']\n-            print(f' TTS changed to: {runtime_settings.tts_option}')\n-        return jsonify({'status': 'success', 'message': 'Configuration updated', 'config': {'LLM_OPTION': runtime_settings.llm_option, 'STT_OPTION': runtime_settings.stt_option, 'TTS_OPTION': runtime_settings.tts_option}})\n+        return jsonify({'status': 'success', 'config': {'LLM_OPTION': runtime_settings.llm_option, 'STT_OPTION': runtime_settings.stt_option, 'TTS_OPTION': runtime_settings.tts_option, 'LLM_FAILSAFE': runtime_settings.llm_failsafe, 'STT_FAILSAFE': runtime_settings.stt_failsafe, 'TTS_FAILSAFE': runtime_settings.tts_failsafe}})\n+    data = request.get_json() or {}\n+    if 'LLM_OPTION' in data or 'llm_option' in data:\n+        val = data.get('LLM_OPTION') or data.get('llm_option')\n+        if val is not None:\n+            runtime_settings.llm_option = str(val)\n+            print(f' LLM changed to: {val}')\n+    if 'STT_OPTION' in data or 'stt_option' in data:\n+        val = data.get('STT_OPTION') or data.get('stt_option')\n+        if val is not None:\n+            runtime_settings.stt_option = str(val)\n+            print(f' STT changed to: {val}')\n+    if 'TTS_OPTION' in data or 'tts_option' in data:\n+        val = data.get('TTS_OPTION') or data.get('tts_option')\n+        if val is not None:\n+            runtime_settings.tts_option = str(val)\n+            print(f' TTS changed to: {val}')\n+    return jsonify({'status': 'success', 'message': 'Configuration updated', 'config': {'LLM_OPTION': runtime_settings.llm_option, 'STT_OPTION': runtime_settings.stt_option, 'TTS_OPTION': runtime_settings.tts_option}})\n except Exception as e:\n     print(f'Config API error: {str(e)}')\n     return (jsonify({'status': 'error', 'message': str(e)}), 500)"
+    },
+    {
+      "name": "stt_api",
+      "legacy_line": 4006,
+      "new_path": "routes\\config_routes.py",
+      "new_line": 60,
+      "diff": "--- app_legacy.py:4006 (stt_api)\n+++ routes\\config_routes.py:60 (stt_api)\n@@ -1,8 +1,8 @@\n 'Speech-to-Text (STT) API Endpoint'\n try:\n     if request.method == 'GET':\n-        return jsonify({'status': 'success', 'stt_option': runtime_settings.stt_option, 'stt_failsafe': STT_FAILSAFE, 'supported': True})\n-    data = request.json or {}\n+        return jsonify({'status': 'success', 'stt_option': runtime_settings.stt_option, 'stt_failsafe': runtime_settings.stt_failsafe, 'supported': True})\n+    data = request.get_json() or {}\n     text_input = data.get('text', '')\n     if text_input:\n         return jsonify({'status': 'success', 'transcript': text_input, 'engine': runtime_settings.stt_option})\n"
+    },
+    {
+      "name": "manage_plant_image",
+      "legacy_line": 4037,
+      "new_path": "routes\\admin_inventory_routes.py",
+      "new_line": 640,
+      "diff": "--- app_legacy.py:4037 (manage_plant_image)\n+++ routes\\admin_inventory_routes.py:640 (manage_plant_image)\n@@ -19,7 +19,8 @@\n         image_data = file.read()\n         if len(image_data) > 5 * 1024 * 1024:\n             return (jsonify({'status': 'error', 'message': 'Image too large (max 5MB)'}), 400)\n-        filename = ''.join((c for c in file.filename if c.isalnum() or c in ('.', '_', '-'))).strip()\n+        file_name = file.filename or ''\n+        filename = ''.join((c for c in file_name if c.isalnum() or c in ('.', '_', '-'))).strip()\n         save_path = os.path.join('static', 'plantpics', filename)\n         os.makedirs(os.path.join('static', 'plantpics'), exist_ok=True)\n         with open(save_path, 'wb') as f:\n"
+    },
+    {
+      "name": "manage_query_results",
+      "legacy_line": 4132,
+      "new_path": "routes\\chat_routes.py",
+      "new_line": 252,
+      "diff": "--- app_legacy.py:4132 (manage_query_results)\n+++ routes\\chat_routes.py:252 (manage_query_results)\n@@ -9,7 +9,7 @@\n             results = QueryResult.query.filter_by(business_id=tenant_id).all()\n         return jsonify({'status': 'success', 'results': [{'result_id': r.result_id, 'query_id': r.query_id, 'result_description': r.result_description, 'result_source': r.result_source, 'created_at': r.created_at.strftime('%Y-%m-%d %H:%M:%S')} for r in results]})\n     elif request.method == 'POST':\n-        data = request.json or {}\n+        data = request.get_json() or {} or {}\n         query_id = data.get('query_id')\n         result_description = data.get('result_description')\n         result_source = data.get('result_source')\n"
+    },
+    {
+      "name": "logout",
+      "legacy_line": 4187,
+      "new_path": "routes\\auth_routes.py",
+      "new_line": 188,
+      "diff": "--- app_legacy.py:4187 (logout)\n+++ routes\\auth_routes.py:188 (logout)\n@@ -1,4 +1,4 @@\n-data = request.json\n+data = request.get_json() or {}\n user_id = data.get('user_id')\n if user_id:\n     db.session.execute(text('\\n            UPDATE login\\n            SET last_logout = CURRENT_TIMESTAMP,\\n                is_online = 0\\n            WHERE id = :uid\\n        '), {'uid': user_id})\n"
+    },
+    {
+      "name": "add_to_cart",
+      "legacy_line": 4224,
+      "new_path": "routes\\cart_routes.py",
+      "new_line": 14,
+      "diff": "--- app_legacy.py:4224 (add_to_cart)\n+++ routes\\cart_routes.py:14 (add_to_cart)\n@@ -1,4 +1,4 @@\n-data = request.json\n+data = request.get_json() or {}\n user_id = str(data.get('user_id', 'anonymous'))\n plant_id = data.get('plant_id')\n if not plant_id:\n"
+    },
+    {
+      "name": "get_cart",
+      "legacy_line": 4250,
+      "new_path": "routes\\cart_routes.py",
+      "new_line": 39,
+      "diff": "--- app_legacy.py:4250 (get_cart)\n+++ routes\\cart_routes.py:39 (get_cart)\n@@ -1,4 +1,4 @@\n-user_id = str(request.args.get('user_id', 'anonymous'))\n+user_id = request.args.get('user_id', 'anonymous')\n rows = db.session.execute(text('\\n        SELECT p.plant_id, p.plant_name, p.price, p.description, p.image_path, c.quantity, p.stock\\n        FROM cart_new c\\n        JOIN plant p ON p.plant_id = c.plant_id\\n        WHERE c.user_id = :user_id\\n        ORDER BY c.added_at DESC\\n    '), {'user_id': user_id}).fetchall()\n cart = []\n subtotal = 0.0\n"
+    },
+    {
+      "name": "checkout",
+      "legacy_line": 4295,
+      "new_path": "routes\\order_routes.py",
+      "new_line": 71,
+      "diff": "--- app_legacy.py:4295 (checkout)\n+++ routes\\order_routes.py:71 (checkout)\n@@ -1,4 +1,4 @@\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n user_id = str(data.get('user_id', 'anonymous'))\n customer_name = (data.get('customer_name') or data.get('name') or '').strip()\n phone = (data.get('phone') or '').strip()\n"
+    },
+    {
+      "name": "payment_response",
+      "legacy_line": 4453,
+      "new_path": "routes\\order_routes.py",
+      "new_line": 229,
+      "diff": "--- app_legacy.py:4453 (payment_response)\n+++ routes\\order_routes.py:229 (payment_response)\n@@ -30,7 +30,7 @@\n                         item_balance = item_total - item_paid\n                         remaining_paid -= item_paid\n                         remaining_total -= item_total\n-                    new_order = Order(plant_name=plant.plant_name, user_id=int(user_id) if str(user_id).isdigit() else None, order_status='Processing', order_group_id=order_group_id, price=plant.price, quantity=r[1], total_amount=item_total, payment_status='Paid' if item_balance <= 0 else 'Partial', payment_method='CCAvenue', shipping_address=resp_dict.get('billing_address', 'Provided via PG'), amount_paid=item_paid, balance=item_balance)\n+                    new_order = Order(plant_name=plant.plant_name, user_id=int(user_id) if user_id and user_id.isdigit() else None, order_status='Processing', order_group_id=order_group_id, price=plant.price, quantity=r[1], total_amount=item_total, payment_status='Paid' if item_balance <= 0 else 'Partial', payment_method='CCAvenue', shipping_address=resp_dict.get('billing_address', 'Provided via PG'), amount_paid=item_paid, balance=item_balance)\n                     db.session.add(new_order)\n             db.session.execute(text('DELETE FROM cart_new WHERE user_id=:u'), {'u': user_id})\n             db.session.commit()\n"
+    },
+    {
+      "name": "remove_from_cart",
+      "legacy_line": 4561,
+      "new_path": "routes\\cart_routes.py",
+      "new_line": 109,
+      "diff": "--- app_legacy.py:4561 (remove_from_cart)\n+++ routes\\cart_routes.py:109 (remove_from_cart)\n@@ -1,4 +1,4 @@\n-data = request.json\n+data = request.get_json() or {}\n user_id = str(data.get('user_id', 'anonymous'))\n plant_id = data.get('plant_id')\n if not plant_id:\n"
+    },
+    {
+      "name": "manage_queries",
+      "legacy_line": 4606,
+      "new_path": "routes\\chat_routes.py",
+      "new_line": 133,
+      "diff": "--- app_legacy.py:4606 (manage_queries)\n+++ routes\\chat_routes.py:133 (manage_queries)\n@@ -8,7 +8,7 @@\n             queries = Query.query.all()\n         return jsonify({'status': 'success', 'queries': [{'query_id': q.query_id, 'description': q.description, 'user_id': q.user_id, 'created_at': q.created_at.strftime('%Y-%m-%d %H:%M:%S')} for q in queries]})\n     elif request.method == 'POST':\n-        data = request.json\n+        data = request.get_json() or {}\n         description = data.get('description')\n         user_id = data.get('user_id')\n         if not description:\n"
+    },
+    {
+      "name": "flask_history_query",
+      "legacy_line": 4647,
+      "new_path": "routes\\chat_routes.py",
+      "new_line": 173,
+      "diff": "--- app_legacy.py:4647 (flask_history_query)\n+++ routes\\chat_routes.py:173 (flask_history_query)\n@@ -2,7 +2,7 @@\n plant_name = None\n try:\n     from app.history.history_retriever import answer_from_history\n-    data = request.get_json() or {}\n+    data = request.get_json() or {} or {}\n     query = data.get('query')\n     plant_name = data.get('plant_name')\n     if not query:\n"
+    },
+    {
+      "name": "flask_history_profile",
+      "legacy_line": 4669,
+      "new_path": "routes\\chat_routes.py",
+      "new_line": 194,
+      "diff": "--- app_legacy.py:4669 (flask_history_profile)\n+++ routes\\chat_routes.py:194 (flask_history_profile)\n@@ -1,7 +1,7 @@\n '\\n    Adds a new plant profile history version if constant parameters changed.\\n    '\n try:\n     from app.history.history_retriever import history_manager\n-    data = request.get_json() or {}\n+    data = request.get_json() or {} or {}\n     if not data.get('plant_name'):\n         return (jsonify({'status': 'error', 'message': 'plant_name is required'}), 400)\n     res = history_manager.add_plant_profile_version(data)\n"
+    },
+    {
+      "name": "flask_history_variable",
+      "legacy_line": 4686,
+      "new_path": "routes\\chat_routes.py",
+      "new_line": 210,
+      "diff": "--- app_legacy.py:4686 (flask_history_variable)\n+++ routes\\chat_routes.py:210 (flask_history_variable)\n@@ -1,7 +1,7 @@\n '\\n    Updates current variable metrics without creating a profile history version.\\n    '\n try:\n     from app.history.history_retriever import history_manager\n-    data = request.get_json() or {}\n+    data = request.get_json() or {} or {}\n     p_name = data.get('plant_name')\n     if not p_name:\n         return (jsonify({'status': 'error', 'message': 'plant_name is required'}), 400)\n"
+    },
+    {
+      "name": "flask_history_analysis",
+      "legacy_line": 4705,
+      "new_path": "routes\\chat_routes.py",
+      "new_line": 228,
+      "diff": "--- app_legacy.py:4705 (flask_history_analysis)\n+++ routes\\chat_routes.py:228 (flask_history_analysis)\n@@ -1,7 +1,7 @@\n '\\n    Records an image analysis event in history FAISS vector store.\\n    '\n try:\n     from app.history.history_retriever import history_manager\n-    data = request.get_json() or {}\n+    data = request.get_json() or {} or {}\n     p_name = data.get('plant_name')\n     d_name = data.get('disease_name')\n     if not p_name or not d_name:\n"
+    },
+    {
+      "name": "whatsapp_cart_approve",
+      "legacy_line": 5069,
+      "new_path": "routes\\whatsapp_routes.py",
+      "new_line": 128,
+      "diff": "--- app_legacy.py:5069 (whatsapp_cart_approve)\n+++ routes\\whatsapp_routes.py:128 (whatsapp_cart_approve)\n@@ -1,5 +1,5 @@\n '\\n    Approve cart via WhatsApp.\\n    Validates customer cart and returns approval confirmation with checkout payload.\\n    '\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n phone = data.get('phone', '').strip()\n user_id = data.get('user_id', '').strip()\n user = find_user_by_phone_or_id(phone or user_id)\n"
+    },
+    {
+      "name": "whatsapp_cart_update",
+      "legacy_line": 5099,
+      "new_path": "routes\\whatsapp_routes.py",
+      "new_line": 158,
+      "diff": "--- app_legacy.py:5099 (whatsapp_cart_update)\n+++ routes\\whatsapp_routes.py:158 (whatsapp_cart_update)\n@@ -1,5 +1,5 @@\n 'Update cart item quantity or remove item via WhatsApp.'\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n phone = data.get('phone', '').strip()\n user_id = data.get('user_id', '').strip()\n plant_id = data.get('plant_id')\n"
+    },
+    {
+      "name": "whatsapp_checkout",
+      "legacy_line": 5143,
+      "new_path": "routes\\whatsapp_routes.py",
+      "new_line": 202,
+      "diff": "--- app_legacy.py:5143 (whatsapp_checkout)\n+++ routes\\whatsapp_routes.py:202 (whatsapp_checkout)\n@@ -1,5 +1,5 @@\n 'Create order directly from WhatsApp n8n webhook payload.'\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n phone = data.get('phone', '').strip()\n user_id = data.get('user_id', '').strip()\n customer_name = data.get('customer_name') or 'WhatsApp Customer'\n"
+    },
+    {
+      "name": "update_user_phone",
+      "legacy_line": 5278,
+      "new_path": "routes\\auth_routes.py",
+      "new_line": 205,
+      "diff": "--- app_legacy.py:5278 (update_user_phone)\n+++ routes\\auth_routes.py:205 (update_user_phone)\n@@ -1,5 +1,5 @@\n 'Update or link phone number for an existing user account.'\n-data = request.json or {}\n+data = request.get_json() or {} or {}\n user_id = str(data.get('user_id', '')).strip()\n phone = str(data.get('phone', '')).strip()\n if not user_id or not phone:\n"
+    },
+    {
+      "name": "generate_speech",
+      "legacy_line": 5352,
+      "new_path": "services\\speech_service.py",
+      "new_line": 27,
+      "diff": "--- app_legacy.py:5352 (generate_speech)\n+++ services\\speech_service.py:27 (generate_speech)\n@@ -1,2 +1,5 @@\n-'\\n    Generate speech wrapper for gTTS failsafe\\n    '\n+'\\n    Generate speech wrapper for TTS with runtime options and failsafe fallback.\\n    '\n+tts_opt = runtime_settings.tts_option\n+if tts_opt == 'none':\n+    return None\n return tts_failsafe(text)"
+    },
+    {
+      "name": "api_detect_tomato_disease",
+      "legacy_line": 5360,
+      "new_path": "routes\\diagnosis_routes.py",
+      "new_line": 21,
+      "diff": "--- app_legacy.py:5360 (api_detect_tomato_disease)\n+++ routes\\diagnosis_routes.py:21 (api_detect_tomato_disease)\n@@ -7,7 +7,7 @@\n     elif 'file' in request.files:\n         img_bytes = request.files['file'].read()\n     elif request.is_json:\n-        data = request.get_json() or {}\n+        data = request.get_json() or {} or {}\n         if 'image_b64' in data:\n             b64_str = data['image_b64']\n             if ',' in b64_str:\n"
+    },
+    {
+      "name": "get_profile_stats",
+      "legacy_line": 5481,
+      "new_path": "routes\\admin_profiles_routes.py",
+      "new_line": 31,
+      "diff": "--- app_legacy.py:5481 (get_profile_stats)\n+++ routes\\admin_profiles_routes.py:31 (get_profile_stats)\n@@ -1,13 +1,13 @@\n '\\n    Returns record counts, columns, file details, and preview rows for dataset profiles.\\n    '\n try:\n     profile_type = request.args.get('profile_type', 'all')\n-    base_dir = os.path.dirname(os.path.abspath(__file__))\n+    base_dir = APP_ROOT\n     results = {}\n     targets = [profile_type] if profile_type in PROFILE_DATASETS else list(PROFILE_DATASETS.keys())\n     import pandas as pd\n     for p_key in targets:\n         info = PROFILE_DATASETS[p_key]\n-        file_path = os.path.join(base_dir, info['file'])\n+        file_path = os.path.join(base_dir, str(info['file']))\n         if not os.path.exists(file_path):\n             results[p_key] = {'key': p_key, 'title': info['title'], 'exists': False, 'row_count': 0, 'columns': info['columns'], 'preview': [], 'last_modified': 'N/A'}\n             continue\n"
+    },
+    {
+      "name": "upload_profile_dataset",
+      "legacy_line": 5546,
+      "new_path": "routes\\admin_profiles_routes.py",
+      "new_line": 95,
+      "diff": "--- app_legacy.py:5546 (upload_profile_dataset)\n+++ routes\\admin_profiles_routes.py:95 (upload_profile_dataset)\n@@ -10,9 +10,9 @@\n     if profile_type not in PROFILE_DATASETS:\n         return (jsonify({'status': 'error', 'message': f'Invalid profile_type. Must be one of: {list(PROFILE_DATASETS.keys())}'}), 400)\n     meta = PROFILE_DATASETS[profile_type]\n-    base_dir = os.path.dirname(os.path.abspath(__file__))\n+    base_dir = APP_ROOT\n     target_file_path = os.path.join(base_dir, str(meta['file']))\n-    filename = file_obj.filename.lower()\n+    filename = (file_obj.filename or '').lower()\n     content = file_obj.read()\n     if not content:\n         return (jsonify({'status': 'error', 'message': 'Uploaded file is empty.'}), 400)\n"
+    },
+    {
+      "name": "ensure_admin_user",
+      "legacy_line": 5693,
+      "new_path": "app.py",
+      "new_line": 35,
+      "diff": "--- app_legacy.py:5693 (ensure_admin_user)\n+++ app.py:35 (ensure_admin_user)\n@@ -1,3 +1,4 @@\n+'Ensure the default super admin user exists with valid credentials.'\n try:\n     user = db.session.execute(text(\"\\n            SELECT id FROM login WHERE LOWER(username) = 'admin' OR LOWER(email) = 'admin' OR LOWER(email) = 'admin@gmail.com'\\n        \")).fetchone()\n     if not user:\n"
+    }
+  ]
+}

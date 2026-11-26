@@ -1,0 +1,21 @@
+[load_json_mapping] (app_legacy.py:210 vs services\disease_models.py:17)
+  + NEW ONLY:    'utf-8'
+[slm_call] (app_legacy.py:330 vs services\llm_service.py:120)
+  - LEGACY ONLY: 'LLM_OPTION'
+  - LEGACY ONLY: 'groq'
+[normalize_query] (app_legacy.py:932 vs services\llm_service.py:19)
+  + NEW ONLY:    ''
+[add_category_synonym] (app_legacy.py:948 vs services\chat\plant_lookup.py:168)
+  - LEGACY ONLY: " Synonym '"
+  - LEGACY ONLY: "' added for category_id "
+  - LEGACY ONLY: 'Error adding synonym: '
+  + NEW ONLY:    'Category not found'
+  + NEW ONLY:    'Synonym added successfully'
+  + NEW ONLY:    'Synonym already exists'
+  + NEW ONLY:    'error'
+  + NEW ONLY:    'message'
+  + NEW ONLY:    'status'
+  + NEW ONLY:    'success'
+[process_message] (app_legacy.py:1772 vs services\chat\chat_service.py:271)
+  - LEGACY ONLY: 'Plant'
+  - LEGACY ONLY: 'Retrieve plant details, stock, price, status, and care info directly from database tables (Plant & PlantKnowledge)'

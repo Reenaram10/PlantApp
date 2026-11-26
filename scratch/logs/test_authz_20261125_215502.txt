@@ -1,0 +1,229 @@
+super_admin_backdoor_removed | POST /api/super-admin/login | role=no_token | expected=401 | actual=401
+register_ignores_role | POST /register | role=no_token | expected=200 | actual=200
+register_missing_business | POST /register | role=no_token | expected=400 | actual=400
+register_invalid_business | POST /api/auth/register | role=no_token | expected=404 | actual=404
+create_user_STAFF_NURS-0001 | POST /api/auth/users | role=no_token | expected=401 | actual=401
+create_user_STAFF_NURS-0001 | POST /api/auth/users | role=CUSTOMER | expected=403 | actual=403
+create_user_STAFF_NURS-0001 | POST /api/auth/users | role=STAFF | expected=403 | actual=403
+create_user_NURSERY_ADMIN_NURS-0001 | POST /api/auth/users | role=NURSERY_ADMIN_OWN | expected=403 | actual=403
+create_user_SUPER_ADMIN_NURS-0001 | POST /api/auth/users | role=NURSERY_ADMIN_OWN | expected=403 | actual=403
+create_user_STAFF_NURS-TEST2 | POST /api/auth/users | role=NURSERY_ADMIN_OWN | expected=403 | actual=403
+create_user_STAFF_NURS-0001 | POST /api/auth/users | role=NURSERY_ADMIN_OWN | expected=201 | actual=201
+create_user_NURSERY_ADMIN_NURS-TEST2 | POST /api/auth/users | role=SUPER_ADMIN | expected=201 | actual=201
+staff_read | GET /api/admin/inventory | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/search-plants?q=rose | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/get-plant/1 | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/varieties/existing/1 | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/inventory/transactions | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/customers | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/orders | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/orders/NONEXISTENT-GROUP | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/purchases | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/suppliers | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/categories | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/categories/1/plants | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/profile-stats?profile_type=plant | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/download-template/plant | role=no_token | expected=401 | actual=401
+staff_read | GET /api/admin/inventory | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/search-plants?q=rose | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/get-plant/1 | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/varieties/existing/1 | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/inventory/transactions | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/customers | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/orders | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/orders/NONEXISTENT-GROUP | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/purchases | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/suppliers | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/categories | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/categories/1/plants | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/profile-stats?profile_type=plant | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/download-template/plant | role=CUSTOMER | expected=403 | actual=403
+staff_read | GET /api/admin/inventory | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/search-plants?q=rose | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/get-plant/1 | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/varieties/existing/1 | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/inventory/transactions | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/customers | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/orders | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/orders/NONEXISTENT-GROUP | role=STAFF | expected=not 401/403 | actual=404
+staff_read | GET /api/admin/purchases | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/suppliers | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/categories | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/categories/1/plants | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/profile-stats?profile_type=plant | role=STAFF | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/download-template/plant | role=STAFF | expected=not 401/403 | actual=400
+staff_read | GET /api/admin/inventory | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/search-plants?q=rose | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/get-plant/1 | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/varieties/existing/1 | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/inventory/transactions | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/customers | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/orders | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/orders/NONEXISTENT-GROUP | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=404
+staff_read | GET /api/admin/purchases | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/suppliers | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/categories | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/categories/1/plants | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/profile-stats?profile_type=plant | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/download-template/plant | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+staff_read | GET /api/admin/inventory | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/search-plants?q=rose | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/get-plant/1 | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/varieties/existing/1 | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/inventory/transactions | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/customers | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/orders | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/orders/NONEXISTENT-GROUP | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=404
+staff_read | GET /api/admin/purchases | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/suppliers | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/categories | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/categories/1/plants | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/profile-stats?profile_type=plant | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/download-template/plant | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+staff_read | GET /api/admin/inventory | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/search-plants?q=rose | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/get-plant/1 | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/varieties/existing/1 | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/inventory/transactions | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/customers | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/orders | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/orders/NONEXISTENT-GROUP | role=SUPER_ADMIN | expected=not 401/403 | actual=404
+staff_read | GET /api/admin/purchases | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/suppliers | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/categories | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/categories/1/plants | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/profile-stats?profile_type=plant | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_read | GET /api/admin/download-template/plant | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/suggest-varieties | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/add-varieties | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/add-plant | role=no_token | expected=401 | actual=401
+admin_write | PUT /api/admin/update-plant/999999 | role=no_token | expected=401 | actual=401
+admin_write | DELETE /api/admin/delete-plant/999999 | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/update-plant-image/999999 | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/inventory/add | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/inventory/remove | role=no_token | expected=401 | actual=401
+admin_write | POST /api/plant/999999/image | role=no_token | expected=401 | actual=401
+admin_write | DELETE /api/plant/999999/image | role=no_token | expected=401 | actual=401
+admin_write | PUT /api/admin/orders/NONEXISTENT-GROUP | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/purchases | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/purchases/record-payment | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/suppliers | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/categories | role=no_token | expected=401 | actual=401
+admin_write | DELETE /api/admin/categories/999999 | role=no_token | expected=401 | actual=401
+admin_write | POST /api/admin/suggest-varieties | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/add-varieties | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/add-plant | role=CUSTOMER | expected=403 | actual=403
+admin_write | PUT /api/admin/update-plant/999999 | role=CUSTOMER | expected=403 | actual=403
+admin_write | DELETE /api/admin/delete-plant/999999 | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/update-plant-image/999999 | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/inventory/add | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/inventory/remove | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/plant/999999/image | role=CUSTOMER | expected=403 | actual=403
+admin_write | DELETE /api/plant/999999/image | role=CUSTOMER | expected=403 | actual=403
+admin_write | PUT /api/admin/orders/NONEXISTENT-GROUP | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/purchases | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/purchases/record-payment | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/suppliers | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/categories | role=CUSTOMER | expected=403 | actual=403
+admin_write | DELETE /api/admin/categories/999999 | role=CUSTOMER | expected=403 | actual=403
+admin_write | POST /api/admin/suggest-varieties | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/add-varieties | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/add-plant | role=STAFF | expected=403 | actual=403
+admin_write | PUT /api/admin/update-plant/999999 | role=STAFF | expected=403 | actual=403
+admin_write | DELETE /api/admin/delete-plant/999999 | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/update-plant-image/999999 | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/inventory/add | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/inventory/remove | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/plant/999999/image | role=STAFF | expected=403 | actual=403
+admin_write | DELETE /api/plant/999999/image | role=STAFF | expected=403 | actual=403
+admin_write | PUT /api/admin/orders/NONEXISTENT-GROUP | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/purchases | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/purchases/record-payment | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/suppliers | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/categories | role=STAFF | expected=403 | actual=403
+admin_write | DELETE /api/admin/categories/999999 | role=STAFF | expected=403 | actual=403
+admin_write | POST /api/admin/suggest-varieties | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/add-varieties | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/add-plant | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+admin_write | PUT /api/admin/update-plant/999999 | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=404
+admin_write | DELETE /api/admin/delete-plant/999999 | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=404
+admin_write | POST /api/admin/update-plant-image/999999 | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=404
+admin_write | POST /api/admin/inventory/add | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/inventory/remove | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+admin_write | POST /api/plant/999999/image | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=404
+admin_write | DELETE /api/plant/999999/image | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=404
+admin_write | PUT /api/admin/orders/NONEXISTENT-GROUP | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+admin_write | POST /api/admin/purchases | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/purchases/record-payment | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/suppliers | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/categories | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+admin_write | DELETE /api/admin/categories/999999 | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=200
+admin_write | POST /api/admin/suggest-varieties | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/add-varieties | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/add-plant | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+admin_write | PUT /api/admin/update-plant/999999 | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=404
+admin_write | DELETE /api/admin/delete-plant/999999 | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=404
+admin_write | POST /api/admin/update-plant-image/999999 | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=404
+admin_write | POST /api/admin/inventory/add | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/inventory/remove | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+admin_write | POST /api/plant/999999/image | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=404
+admin_write | DELETE /api/plant/999999/image | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=404
+admin_write | PUT /api/admin/orders/NONEXISTENT-GROUP | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+admin_write | POST /api/admin/purchases | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/purchases/record-payment | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/suppliers | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/categories | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+admin_write | DELETE /api/admin/categories/999999 | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=200
+admin_write | POST /api/admin/suggest-varieties | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/add-varieties | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/add-plant | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | PUT /api/admin/update-plant/999999 | role=SUPER_ADMIN | expected=not 401/403 | actual=404
+admin_write | DELETE /api/admin/delete-plant/999999 | role=SUPER_ADMIN | expected=not 401/403 | actual=404
+admin_write | POST /api/admin/update-plant-image/999999 | role=SUPER_ADMIN | expected=not 401/403 | actual=404
+admin_write | POST /api/admin/inventory/add | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/inventory/remove | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | POST /api/plant/999999/image | role=SUPER_ADMIN | expected=not 401/403 | actual=404
+admin_write | DELETE /api/plant/999999/image | role=SUPER_ADMIN | expected=not 401/403 | actual=404
+admin_write | PUT /api/admin/orders/NONEXISTENT-GROUP | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+admin_write | POST /api/admin/purchases | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/purchases/record-payment | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/suppliers | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | POST /api/admin/categories | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+admin_write | DELETE /api/admin/categories/999999 | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+super_admin_write | POST /api/admin/upload-profiles | role=no_token | expected=401 | actual=401
+super_admin_write | POST /api/rebuild-index | role=no_token | expected=401 | actual=401
+super_admin_write | POST /api/admin/rag/sync | role=no_token | expected=401 | actual=401
+super_admin_write | POST /api/admin/upload-profiles | role=CUSTOMER | expected=403 | actual=403
+super_admin_write | POST /api/rebuild-index | role=CUSTOMER | expected=403 | actual=403
+super_admin_write | POST /api/admin/rag/sync | role=CUSTOMER | expected=403 | actual=403
+super_admin_write | POST /api/admin/upload-profiles | role=STAFF | expected=403 | actual=403
+super_admin_write | POST /api/rebuild-index | role=STAFF | expected=403 | actual=403
+super_admin_write | POST /api/admin/rag/sync | role=STAFF | expected=403 | actual=403
+super_admin_write | POST /api/admin/upload-profiles | role=NURSERY_ADMIN_OTHER | expected=403 | actual=403
+super_admin_write | POST /api/rebuild-index | role=NURSERY_ADMIN_OTHER | expected=403 | actual=403
+super_admin_write | POST /api/admin/rag/sync | role=NURSERY_ADMIN_OTHER | expected=403 | actual=403
+super_admin_write | POST /api/admin/upload-profiles | role=NURSERY_ADMIN_OWN | expected=403 | actual=403
+super_admin_write | POST /api/rebuild-index | role=NURSERY_ADMIN_OWN | expected=403 | actual=403
+super_admin_write | POST /api/admin/rag/sync | role=NURSERY_ADMIN_OWN | expected=403 | actual=403
+super_admin_write | POST /api/admin/upload-profiles | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+super_admin_write | POST /api/rebuild-index | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+super_admin_write | POST /api/admin/rag/sync | role=SUPER_ADMIN | expected=not 401/403 | actual=200
+staff_write | POST /api/admin/restock/999999 | role=no_token | expected=401 | actual=401
+staff_write | POST /api/admin/orders/record-payment | role=no_token | expected=401 | actual=401
+staff_write | POST /api/admin/restock/999999 | role=CUSTOMER | expected=403 | actual=403
+staff_write | POST /api/admin/orders/record-payment | role=CUSTOMER | expected=403 | actual=403
+staff_write | POST /api/admin/restock/999999 | role=STAFF | expected=not 401/403 | actual=404
+staff_write | POST /api/admin/orders/record-payment | role=STAFF | expected=not 401/403 | actual=400
+staff_write | POST /api/admin/restock/999999 | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=404
+staff_write | POST /api/admin/orders/record-payment | role=NURSERY_ADMIN_OTHER | expected=not 401/403 | actual=400
+staff_write | POST /api/admin/restock/999999 | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=404
+staff_write | POST /api/admin/orders/record-payment | role=NURSERY_ADMIN_OWN | expected=not 401/403 | actual=400
+staff_write | POST /api/admin/restock/999999 | role=SUPER_ADMIN | expected=not 401/403 | actual=404
+staff_write | POST /api/admin/orders/record-payment | role=SUPER_ADMIN | expected=not 401/403 | actual=400
+debug_images | GET /api/debug/list-plant-images | role=no_token | expected=401 | actual=401
+debug_images | GET /api/debug/list-plant-images | role=CUSTOMER | expected=403 | actual=403
+debug_images | GET /api/debug/list-plant-images | role=STAFF | expected=403 | actual=403
+debug_images | GET /api/debug/list-plant-images | role=NURSERY_ADMIN_OTHER | expected=403 | actual=403
+debug_images | GET /api/debug/list-plant-images | role=NURSERY_ADMIN_OWN | expected=403 | actual=403
+debug_images | GET /api/debug/list-plant-images | role=SUPER_ADMIN | expected=200 | actual=200
+public_plant_image | GET /api/plant/1/image | role=no_token | expected=not 401/403 | actual=200

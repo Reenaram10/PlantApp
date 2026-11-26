@@ -1,0 +1,93 @@
+D:\PlantApp\app_legacy.py:32: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+2026-11-25 11:23:13.150189: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-25 11:23:24.216560: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+ [Langfuse] Telemetry & logging client initialized.
+ [RAG] Indexed 119 knowledge chunks.
+ [FAISS] Initializing embeddings with sentence-transformers/all-MiniLM-L6-v2...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 2353.31it/s]
+ [History FAISS] Initializing embeddings with sentence-transformers/all-MiniLM-L6-v2...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3203.18it/s]
+ [History FAISS] Loaded history index from disk.
+ [Model] Loading Stage 1 Crop Type model from plant_disease_detection\model\crop_type_model.h5...
+2026-11-25 11:24:39.445881: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+ [Model] Crop Type model loaded: {'0': 'Potato', '1': 'Tomato'}
+ [Model] Loading Stage 2 Potato Disease model from plant_disease_detection\model\potato_disease_model.h5...
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+ [Model] Potato model loaded: {'0': 'Potato___Early_blight', '1': 'Potato___Flower', '2': 'Potato___Fruit', '3': 'Potato___Late_blight', '4': 'Potato___healthy'}
+ [Model] Loading Stage 2 Tomato Disease model from plant_disease_detection\model\tomato_disease_model.h5...
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+ [Model] Tomato model loaded: {'0': 'Tomato___Bacterial_spot', '1': 'Tomato___Early_blight', '2': 'Tomato___Flower', '3': 'Tomato___Fruit', '4': 'Tomato___Late_blight', '5': 'Tomato___Leaf_Mold', '6': 'Tomato___Septoria_leaf_spot', '7': 'Tomato___healthy'}
+ [Model] Loading Dedicated Flower Crop model from plant_disease_detection\model\flower_crop_model.h5...
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+ [Model] Flower Crop model loaded: {'0': 'Potato', '1': 'Tomato'}
+ DB schemas verified.
+ [DB] Admin user credentials verified: admin / admin@123
+(1) Result: (1,)
+ DB CONNECTED SUCCESSFULLY
+ Reseeded plant identity to 135
+
+============================================================
+ [FAISS Startup] Existing FAISS index found.
+ Type 'y' + Enter to REBUILD from CSVs, or press Enter / wait 5s to use cached index.
+============================================================
+>  [FAISS Startup] Using cached FAISS index.
+ [FAISS] Loaded index from disk.
+ Starting on http://127.0.0.1:8083
+ * Serving Flask app 'app_legacy'
+ * Debug mode: off
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8083
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:57] "GET /health HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:57] "POST /register HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "[31m[1mPOST /api/admin/add-plant HTTP/1.1[0m" 403 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "[31m[1mPOST /api/admin/add-plant HTTP/1.1[0m" 403 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/admin/add-plant HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "GET /api/admin/inventory HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "GET /api/admin/inventory HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/admin/restock/136 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "GET /api/shop/plants HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/cart HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/cart/update HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "GET /api/cart?user_id=31 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/cart/remove HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "POST /api/cart HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "[35m[1mPOST /api/checkout HTTP/1.1[0m" 201 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:58] "GET /api/orders/31 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:24:59] "GET /api/orders/track/ORD-1795586098-1399 HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:02] "POST /api/chat HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:05] "POST /api/chat HTTP/1.1" 200 -
+D:\PlantApp\app_legacy.py:1840: LangChainDeprecationWarning: The class `Ollama` was deprecated in LangChain 0.3.1 and will be removed in 1.0.0. An updated version of the class exists in the `langchain-ollama package and should be used instead. To use it run `pip install -U `langchain-ollama` and import as `from `langchain_ollama import OllamaLLM``.
+  affirmation_chain = affirmation_prompt | Ollama(model="phi3", temperature=0) | StrOutputParser()
+ Using failsafe TTS (gTTS)...
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:18] "POST /api/chat HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:25] "POST /api/chat HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:33] "POST /api/chat HTTP/1.1" 200 -
+ Using failsafe TTS (gTTS)...
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:43] "POST /api/chat HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:47] "GET /api/whatsapp/cart?phone=9876543210 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:47] "[31m[1mPOST /api/whatsapp/checkout HTTP/1.1[0m" 400 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:47] "[31m[1mPOST /api/super-admin/login HTTP/1.1[0m" 401 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:47] "POST /api/super-admin/login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:47] "GET /api/super-admin/stats HTTP/1.1" 200 -
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:25:55] "POST /api/tools/plant-identify HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:26:23] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:26:23] "GET /admin HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [25/Nov/2026 11:26:23] "GET /static/images/plants/plant_19_rose.jpeg HTTP/1.1" 200 -

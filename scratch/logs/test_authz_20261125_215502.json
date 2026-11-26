@@ -1,0 +1,2063 @@
+[
+  {
+    "case": "super_admin_backdoor_removed",
+    "method": "POST",
+    "path": "/api/super-admin/login",
+    "role": "no_token",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Invalid Super Admin credentials\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "register_ignores_role",
+    "method": "POST",
+    "path": "/register",
+    "role": "no_token",
+    "expected": 200,
+    "actual": 200,
+    "body_preview": "{\"business_id\":\"NURS-0001\",\"business_name\":\"Green Valley Nursery\",\"email\":\"pubreg_1795623793.173548@test.local\",\"message\":\"Registered successfully\",\"role\":\"CUSTOMER\",\"status\":\"success\",\"token\":\"eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ1c2VyX2lkIjogMzQsICJ1c2VybmFtZSI6ICJwdWJ1c2VyIiwgImVtYWlsIjogI"
+  },
+  {
+    "case": "register_missing_business",
+    "method": "POST",
+    "path": "/register",
+    "role": "no_token",
+    "expected": 400,
+    "actual": 400,
+    "body_preview": "{\"message\":\"business_id is required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "register_invalid_business",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "role": "no_token",
+    "expected": 404,
+    "actual": 404,
+    "body_preview": "{\"message\":\"Invalid Business ID: NURS-DOES-NOT-EXIST\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "create_user_STAFF_NURS-0001",
+    "method": "POST",
+    "path": "/api/auth/users",
+    "role": "no_token",
+    "expected": 401,
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "create_user_STAFF_NURS-0001",
+    "method": "POST",
+    "path": "/api/auth/users",
+    "role": "CUSTOMER",
+    "expected": 403,
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "create_user_STAFF_NURS-0001",
+    "method": "POST",
+    "path": "/api/auth/users",
+    "role": "STAFF",
+    "expected": 403,
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "create_user_NURSERY_ADMIN_NURS-0001",
+    "method": "POST",
+    "path": "/api/auth/users",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": 403,
+    "actual": 403,
+    "body_preview": "{\"message\":\"Nursery Admins can only create STAFF accounts\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "create_user_SUPER_ADMIN_NURS-0001",
+    "method": "POST",
+    "path": "/api/auth/users",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": 403,
+    "actual": 403,
+    "body_preview": "{\"message\":\"Nursery Admins can only create STAFF accounts\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "create_user_STAFF_NURS-TEST2",
+    "method": "POST",
+    "path": "/api/auth/users",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": 403,
+    "actual": 403,
+    "body_preview": "{\"message\":\"Cannot create users for another business\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "create_user_STAFF_NURS-0001",
+    "method": "POST",
+    "path": "/api/auth/users",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": 201,
+    "actual": 201,
+    "body_preview": "{\"business_id\":\"NURS-0001\",\"business_name\":\"Green Valley Nursery\",\"email\":\"created_nursery_admin_own_staff_1795623793.387177@test.local\",\"message\":\"User created successfully\",\"role\":\"STAFF\",\"status\":\"success\",\"user_id\":35,\"username\":\"createduser\"}\n"
+  },
+  {
+    "case": "create_user_NURSERY_ADMIN_NURS-TEST2",
+    "method": "POST",
+    "path": "/api/auth/users",
+    "role": "SUPER_ADMIN",
+    "expected": 201,
+    "actual": 201,
+    "body_preview": "{\"business_id\":\"NURS-TEST2\",\"business_name\":\"Secondary Test Nursery\",\"email\":\"created_super_admin_nursery_admin_1795623793.421907@test.local\",\"message\":\"User created successfully\",\"role\":\"NURSERY_ADMIN\",\"status\":\"success\",\"user_id\":36,\"username\":\"createduser\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/search-plants?q=rose",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/get-plant/1",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/varieties/existing/1",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory/transactions",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/customers",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/purchases",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/suppliers",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories/1/plants",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/profile-stats?profile_type=plant",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/download-template/plant",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/search-plants?q=rose",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/get-plant/1",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/varieties/existing/1",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory/transactions",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/customers",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/purchases",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/suppliers",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories/1/plants",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/profile-stats?profile_type=plant",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/download-template/plant",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"business_id\":\"NURS-0001\",\"plants\":[{\"categories\":\"Cactus\",\"description\":\"Twisted column cactus\",\"image_path\":\"plantpics/plant_76_acanthocereus.jpeg\",\"image_url\":\"/static/images/plants/plant_76_acanthocereus.jpeg\",\"plant_id\":76,\"plant_name\":\"Acanthocereus\",\"price\":340.0,\"stock\":6},{\"categories\":\"Ou"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/search-plants?q=rose",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"count\":20,\"plants\":[{\"description\":\"A classic, fragrant, and timeless flowering shrub.\",\"image_url\":\"/static/images/plants/plant_19_rose.jpeg\",\"plant_id\":19,\"plant_name\":\"Rose\",\"price\":300.0,\"stock\":0},{\"description\":\"A flowering plant with bright rose-pink flowers and silvery leaves.\",\"image_url\""
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/get-plant/1",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"plant\":{\"business_id\":\"NURS-0001\",\"description\":\"A soothing succulent with air-purifying qualities.\",\"image_path\":\"images/plants/plant_1_aloe_vera.jpeg\",\"plant_id\":1,\"plant_name\":\"Aloe Vera\",\"price\":250.0,\"stock\":42},\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/varieties/existing/1",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"varieties\":[{\"variety_name\":\"Climbing Iceberg\"},{\"variety_name\":\"Peace Rose\"},{\"variety_name\":\"Mister Lincoln\"},{\"variety_name\":\"Iceberg\"},{\"variety_name\":\"Double Delight\"},{\"variety_name\":\"Krishna Tulsi\"},{\"variety_name\":\"Rama Tulsi\"},{\"variety_name\":\"Vana Tulsi\"},{\"variety_nam"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory/transactions",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"transactions\":[{\"bill_date\":null,\"bill_no\":null,\"date\":\"October 29, 2026 03:11 PM\",\"notes\":\"Initial stock on creation\",\"plant_name\":\"Special Rose NURS1_1793266885\",\"quantity\":50,\"supplier_name\":\"N/A\",\"type\":\"ADD\"},{\"bill_date\":null,\"bill_no\":null,\"date\":\"October 29, 2026 03:00 P"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/customers",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"customers\":[{\"amount_purchased\":0,\"email\":\"created_nursery_admin_own_staff_1795623793.387177@test.local\",\"id\":35,\"is_online\":false,\"last_login\":null,\"purchases\":0},{\"amount_purchased\":0,\"email\":\"created_nursery_admin_own_staff_1795622357.243472@test.local\",\"id\":31,\"is_online\":false,\"last_login\":nu"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"orders\":[{\"amount_paid\":0,\"balance\":250.0,\"customer_name\":\"Guest\",\"order_date\":\"2026-11-01 08:32\",\"order_group_id\":\"ORD-1793521963-7818\",\"order_status\":\"Order Placed\",\"payment_method\":\"Cash on Delivery\",\"total_amount\":250.0},{\"amount_paid\":0,\"balance\":250.0,\"customer_name\":\"Guest\",\"order_date\":\"20"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Order not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/purchases",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"purchases\":[{\"amount_paid\":400.0,\"balance\":100.0,\"bill_date\":\"2026-04-04\",\"bill_no\":\"DEBUG-BILL-999\",\"purchase_id\":1,\"status\":\"Partial\",\"supplier_name\":\"Green Nursery Co\",\"total_amount\":500.0}],\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/suppliers",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"suppliers\":[{\"address\":\"123 Plant St\",\"contact_number\":\"1234567890\",\"email\":\"john@nursery.com\",\"name\":\"Green Nursery Co\",\"supplier_id\":1}]}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"categories\":[{\"category_id\":10,\"category_name\":\"bedroom plants\"},{\"category_id\":7,\"category_name\":\"Bonsai\"},{\"category_id\":6,\"category_name\":\"Cactus\"},{\"category_id\":17,\"category_name\":\"climbers\"},{\"category_id\":3,\"category_name\":\"Flowering\"},{\"category_id\":29,\"category_name\":\"Fruit\"},{\"category_i"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories/1/plants",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"plants\":[{\"image_url\":\"/static/images/plants/plant_1_aloe_vera.jpeg\",\"plant_id\":1,\"plant_name\":\"Aloe Vera\",\"price\":250.0,\"stock\":42},{\"image_url\":\"/static/images/plants/plant_2_peace_lily.jpeg\",\"plant_id\":2,\"plant_name\":\"Peace Lily\",\"price\":350.0,\"stock\":0},{\"image_url\":\"/static/images/default_pla"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/profile-stats?profile_type=plant",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"datasets\":{\"disease_profile\":{\"columns\":[\"plant_name\",\"disease_name\",\"disease_type\",\"symptoms\",\"causes\",\"prevention\",\"treatment\",\"affected_parts\",\"severity\"],\"exists\":true,\"filename\":\"plant_disease_profiles (1).csv\",\"key\":\"disease_profile\",\"last_modified\":\"2026-09-13 12:59:10\",\"preview\":[{\"affecte"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/download-template/plant",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid profile type.\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"business_id\":\"NURS-TEST2\",\"plants\":[],\"status\":\"success\",\"total_plants\":0,\"total_stock\":0}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/search-plants?q=rose",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"count\":0,\"plants\":[],\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/get-plant/1",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"plant\":{\"business_id\":\"NURS-0001\",\"description\":\"A soothing succulent with air-purifying qualities.\",\"image_path\":\"images/plants/plant_1_aloe_vera.jpeg\",\"plant_id\":1,\"plant_name\":\"Aloe Vera\",\"price\":250.0,\"stock\":42},\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/varieties/existing/1",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"varieties\":[{\"variety_name\":\"Climbing Iceberg\"},{\"variety_name\":\"Peace Rose\"},{\"variety_name\":\"Mister Lincoln\"},{\"variety_name\":\"Iceberg\"},{\"variety_name\":\"Double Delight\"},{\"variety_name\":\"Krishna Tulsi\"},{\"variety_name\":\"Rama Tulsi\"},{\"variety_name\":\"Vana Tulsi\"},{\"variety_nam"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory/transactions",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"transactions\":[]}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/customers",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"customers\":[{\"amount_purchased\":0,\"email\":\"created_super_admin_nursery_admin_1795623793.421907@test.local\",\"id\":36,\"is_online\":false,\"last_login\":null,\"purchases\":0},{\"amount_purchased\":0,\"email\":\"created_super_admin_nursery_admin_1795622357.290457@test.local\",\"id\":32,\"is_online\":false,\"last_login"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"orders\":[],\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Order not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/purchases",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"purchases\":[{\"amount_paid\":400.0,\"balance\":100.0,\"bill_date\":\"2026-04-04\",\"bill_no\":\"DEBUG-BILL-999\",\"purchase_id\":1,\"status\":\"Partial\",\"supplier_name\":\"Green Nursery Co\",\"total_amount\":500.0}],\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/suppliers",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"suppliers\":[{\"address\":\"123 Plant St\",\"contact_number\":\"1234567890\",\"email\":\"john@nursery.com\",\"name\":\"Green Nursery Co\",\"supplier_id\":1}]}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"categories\":[{\"category_id\":10,\"category_name\":\"bedroom plants\"},{\"category_id\":7,\"category_name\":\"Bonsai\"},{\"category_id\":6,\"category_name\":\"Cactus\"},{\"category_id\":17,\"category_name\":\"climbers\"},{\"category_id\":3,\"category_name\":\"Flowering\"},{\"category_id\":29,\"category_name\":\"Fruit\"},{\"category_i"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories/1/plants",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"plants\":[{\"image_url\":\"/static/images/plants/plant_1_aloe_vera.jpeg\",\"plant_id\":1,\"plant_name\":\"Aloe Vera\",\"price\":250.0,\"stock\":42},{\"image_url\":\"/static/images/plants/plant_2_peace_lily.jpeg\",\"plant_id\":2,\"plant_name\":\"Peace Lily\",\"price\":350.0,\"stock\":0},{\"image_url\":\"/static/images/default_pla"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/profile-stats?profile_type=plant",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"datasets\":{\"disease_profile\":{\"columns\":[\"plant_name\",\"disease_name\",\"disease_type\",\"symptoms\",\"causes\",\"prevention\",\"treatment\",\"affected_parts\",\"severity\"],\"exists\":true,\"filename\":\"plant_disease_profiles (1).csv\",\"key\":\"disease_profile\",\"last_modified\":\"2026-09-13 12:59:10\",\"preview\":[{\"affecte"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/download-template/plant",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid profile type.\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"business_id\":\"NURS-0001\",\"plants\":[{\"categories\":\"Cactus\",\"description\":\"Twisted column cactus\",\"image_path\":\"plantpics/plant_76_acanthocereus.jpeg\",\"image_url\":\"/static/images/plants/plant_76_acanthocereus.jpeg\",\"plant_id\":76,\"plant_name\":\"Acanthocereus\",\"price\":340.0,\"stock\":6},{\"categories\":\"Ou"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/search-plants?q=rose",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"count\":20,\"plants\":[{\"description\":\"A classic, fragrant, and timeless flowering shrub.\",\"image_url\":\"/static/images/plants/plant_19_rose.jpeg\",\"plant_id\":19,\"plant_name\":\"Rose\",\"price\":300.0,\"stock\":0},{\"description\":\"A flowering plant with bright rose-pink flowers and silvery leaves.\",\"image_url\""
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/get-plant/1",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"plant\":{\"business_id\":\"NURS-0001\",\"description\":\"A soothing succulent with air-purifying qualities.\",\"image_path\":\"images/plants/plant_1_aloe_vera.jpeg\",\"plant_id\":1,\"plant_name\":\"Aloe Vera\",\"price\":250.0,\"stock\":42},\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/varieties/existing/1",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"varieties\":[{\"variety_name\":\"Climbing Iceberg\"},{\"variety_name\":\"Peace Rose\"},{\"variety_name\":\"Mister Lincoln\"},{\"variety_name\":\"Iceberg\"},{\"variety_name\":\"Double Delight\"},{\"variety_name\":\"Krishna Tulsi\"},{\"variety_name\":\"Rama Tulsi\"},{\"variety_name\":\"Vana Tulsi\"},{\"variety_nam"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory/transactions",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"transactions\":[{\"bill_date\":null,\"bill_no\":null,\"date\":\"October 29, 2026 03:11 PM\",\"notes\":\"Initial stock on creation\",\"plant_name\":\"Special Rose NURS1_1793266885\",\"quantity\":50,\"supplier_name\":\"N/A\",\"type\":\"ADD\"},{\"bill_date\":null,\"bill_no\":null,\"date\":\"October 29, 2026 03:00 P"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/customers",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"customers\":[{\"amount_purchased\":0,\"email\":\"created_nursery_admin_own_staff_1795623793.387177@test.local\",\"id\":35,\"is_online\":false,\"last_login\":null,\"purchases\":0},{\"amount_purchased\":0,\"email\":\"created_nursery_admin_own_staff_1795622357.243472@test.local\",\"id\":31,\"is_online\":false,\"last_login\":nu"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"orders\":[{\"amount_paid\":0,\"balance\":250.0,\"customer_name\":\"Guest\",\"order_date\":\"2026-11-01 08:32\",\"order_group_id\":\"ORD-1793521963-7818\",\"order_status\":\"Order Placed\",\"payment_method\":\"Cash on Delivery\",\"total_amount\":250.0},{\"amount_paid\":0,\"balance\":250.0,\"customer_name\":\"Guest\",\"order_date\":\"20"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Order not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/purchases",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"purchases\":[{\"amount_paid\":400.0,\"balance\":100.0,\"bill_date\":\"2026-04-04\",\"bill_no\":\"DEBUG-BILL-999\",\"purchase_id\":1,\"status\":\"Partial\",\"supplier_name\":\"Green Nursery Co\",\"total_amount\":500.0}],\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/suppliers",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"suppliers\":[{\"address\":\"123 Plant St\",\"contact_number\":\"1234567890\",\"email\":\"john@nursery.com\",\"name\":\"Green Nursery Co\",\"supplier_id\":1}]}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"categories\":[{\"category_id\":10,\"category_name\":\"bedroom plants\"},{\"category_id\":7,\"category_name\":\"Bonsai\"},{\"category_id\":6,\"category_name\":\"Cactus\"},{\"category_id\":17,\"category_name\":\"climbers\"},{\"category_id\":3,\"category_name\":\"Flowering\"},{\"category_id\":29,\"category_name\":\"Fruit\"},{\"category_i"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories/1/plants",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"plants\":[{\"image_url\":\"/static/images/plants/plant_1_aloe_vera.jpeg\",\"plant_id\":1,\"plant_name\":\"Aloe Vera\",\"price\":250.0,\"stock\":42},{\"image_url\":\"/static/images/plants/plant_2_peace_lily.jpeg\",\"plant_id\":2,\"plant_name\":\"Peace Lily\",\"price\":350.0,\"stock\":0},{\"image_url\":\"/static/images/default_pla"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/profile-stats?profile_type=plant",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"datasets\":{\"disease_profile\":{\"columns\":[\"plant_name\",\"disease_name\",\"disease_type\",\"symptoms\",\"causes\",\"prevention\",\"treatment\",\"affected_parts\",\"severity\"],\"exists\":true,\"filename\":\"plant_disease_profiles (1).csv\",\"key\":\"disease_profile\",\"last_modified\":\"2026-09-13 12:59:10\",\"preview\":[{\"affecte"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/download-template/plant",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid profile type.\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"business_id\":\"SYSTEM\",\"plants\":[],\"status\":\"success\",\"total_plants\":0,\"total_stock\":0}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/search-plants?q=rose",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"count\":0,\"plants\":[],\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/get-plant/1",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"plant\":{\"business_id\":\"NURS-0001\",\"description\":\"A soothing succulent with air-purifying qualities.\",\"image_path\":\"images/plants/plant_1_aloe_vera.jpeg\",\"plant_id\":1,\"plant_name\":\"Aloe Vera\",\"price\":250.0,\"stock\":42},\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/varieties/existing/1",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"varieties\":[{\"variety_name\":\"Climbing Iceberg\"},{\"variety_name\":\"Peace Rose\"},{\"variety_name\":\"Mister Lincoln\"},{\"variety_name\":\"Iceberg\"},{\"variety_name\":\"Double Delight\"},{\"variety_name\":\"Krishna Tulsi\"},{\"variety_name\":\"Rama Tulsi\"},{\"variety_name\":\"Vana Tulsi\"},{\"variety_nam"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/inventory/transactions",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"transactions\":[]}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/customers",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"customers\":[{\"amount_purchased\":0,\"email\":\"admin@system.com\",\"id\":19,\"is_online\":false,\"last_login\":null,\"purchases\":0}],\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"orders\":[],\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Order not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/purchases",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"purchases\":[{\"amount_paid\":400.0,\"balance\":100.0,\"bill_date\":\"2026-04-04\",\"bill_no\":\"DEBUG-BILL-999\",\"purchase_id\":1,\"status\":\"Partial\",\"supplier_name\":\"Green Nursery Co\",\"total_amount\":500.0}],\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/suppliers",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"status\":\"success\",\"suppliers\":[{\"address\":\"123 Plant St\",\"contact_number\":\"1234567890\",\"email\":\"john@nursery.com\",\"name\":\"Green Nursery Co\",\"supplier_id\":1}]}\n"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"categories\":[{\"category_id\":10,\"category_name\":\"bedroom plants\"},{\"category_id\":7,\"category_name\":\"Bonsai\"},{\"category_id\":6,\"category_name\":\"Cactus\"},{\"category_id\":17,\"category_name\":\"climbers\"},{\"category_id\":3,\"category_name\":\"Flowering\"},{\"category_id\":29,\"category_name\":\"Fruit\"},{\"category_i"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/categories/1/plants",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"plants\":[{\"image_url\":\"/static/images/plants/plant_1_aloe_vera.jpeg\",\"plant_id\":1,\"plant_name\":\"Aloe Vera\",\"price\":250.0,\"stock\":42},{\"image_url\":\"/static/images/plants/plant_2_peace_lily.jpeg\",\"plant_id\":2,\"plant_name\":\"Peace Lily\",\"price\":350.0,\"stock\":0},{\"image_url\":\"/static/images/default_pla"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/profile-stats?profile_type=plant",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"datasets\":{\"disease_profile\":{\"columns\":[\"plant_name\",\"disease_name\",\"disease_type\",\"symptoms\",\"causes\",\"prevention\",\"treatment\",\"affected_parts\",\"severity\"],\"exists\":true,\"filename\":\"plant_disease_profiles (1).csv\",\"key\":\"disease_profile\",\"last_modified\":\"2026-09-13 12:59:10\",\"preview\":[{\"affecte"
+  },
+  {
+    "case": "staff_read",
+    "method": "GET",
+    "path": "/api/admin/download-template/plant",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid profile type.\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suggest-varieties",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-varieties",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-plant",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/update-plant/999999",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/delete-plant/999999",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/update-plant-image/999999",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/add",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/remove",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/plant/999999/image",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/plant/999999/image",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases/record-payment",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suppliers",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/categories",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/categories/999999",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suggest-varieties",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-varieties",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-plant",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/update-plant/999999",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/delete-plant/999999",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/update-plant-image/999999",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/add",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/remove",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/plant/999999/image",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/plant/999999/image",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases/record-payment",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suppliers",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/categories",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/categories/999999",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suggest-varieties",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-varieties",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-plant",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/update-plant/999999",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/delete-plant/999999",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/update-plant-image/999999",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/add",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/remove",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/plant/999999/image",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/plant/999999/image",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases/record-payment",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suppliers",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/categories",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/categories/999999",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suggest-varieties",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Plant name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-varieties",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Plant ID and varieties required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-plant",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Plant name is required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/update-plant/999999",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found or unauthorized access\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/delete-plant/999999",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found or unauthorized access\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/update-plant-image/999999",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/add",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid plant or quantity\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/remove",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid plant or quantity\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/plant/999999/image",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/plant/999999/image",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"message\":\"Order status updated\",\"status\":\"success\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Supplier and items are required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases/record-payment",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Valid Purchase ID and amount are required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suppliers",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Supplier name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/categories",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Category name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/categories/999999",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"message\":\"Category deleted\",\"status\":\"success\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suggest-varieties",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Plant name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-varieties",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Plant ID and varieties required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-plant",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Plant name is required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/update-plant/999999",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found or unauthorized access\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/delete-plant/999999",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found or unauthorized access\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/update-plant-image/999999",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/add",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid plant or quantity\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/remove",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid plant or quantity\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/plant/999999/image",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/plant/999999/image",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"message\":\"Order status updated\",\"status\":\"success\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Supplier and items are required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases/record-payment",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Valid Purchase ID and amount are required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suppliers",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Supplier name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/categories",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Category name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/categories/999999",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"message\":\"Category deleted\",\"status\":\"success\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suggest-varieties",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Plant name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-varieties",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Plant ID and varieties required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/add-plant",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Plant name is required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/update-plant/999999",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found or unauthorized access\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/delete-plant/999999",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found or unauthorized access\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/update-plant-image/999999",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/add",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid plant or quantity\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/inventory/remove",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Invalid plant or quantity\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/plant/999999/image",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/plant/999999/image",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "PUT",
+    "path": "/api/admin/orders/NONEXISTENT-GROUP",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"message\":\"Order status updated\",\"status\":\"success\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Supplier and items are required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/purchases/record-payment",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Valid Purchase ID and amount are required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/suppliers",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Supplier name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "POST",
+    "path": "/api/admin/categories",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Category name required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "admin_write",
+    "method": "DELETE",
+    "path": "/api/admin/categories/999999",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"message\":\"Category deleted\",\"status\":\"success\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/upload-profiles",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/rebuild-index",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/rag/sync",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/upload-profiles",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/rebuild-index",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/rag/sync",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/upload-profiles",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/rebuild-index",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/rag/sync",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/upload-profiles",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/rebuild-index",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/rag/sync",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/upload-profiles",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/rebuild-index",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/rag/sync",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/upload-profiles",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"No file uploaded in form payload ('file' key expected).\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/rebuild-index",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"message\":\"FAISS vector index rebuilt successfully from database and CSV files.\",\"status\":\"success\"}\n"
+  },
+  {
+    "case": "super_admin_write",
+    "method": "POST",
+    "path": "/api/admin/rag/sync",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"message\":\"FAISS vector index rebuilt successfully from database and CSV files.\",\"status\":\"success\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/restock/999999",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/orders/record-payment",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/restock/999999",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/orders/record-payment",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/restock/999999",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/orders/record-payment",
+    "role": "STAFF",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Missing group ID or amount\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/restock/999999",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/orders/record-payment",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Missing group ID or amount\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/restock/999999",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/orders/record-payment",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Missing group ID or amount\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/restock/999999",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 404,
+    "body_preview": "{\"message\":\"Plant not found\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "staff_write",
+    "method": "POST",
+    "path": "/api/admin/orders/record-payment",
+    "role": "SUPER_ADMIN",
+    "expected": "not 401/403",
+    "actual": 400,
+    "body_preview": "{\"message\":\"Missing group ID or amount\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "debug_images",
+    "method": "GET",
+    "path": "/api/debug/list-plant-images",
+    "role": "no_token",
+    "expected": "401",
+    "actual": 401,
+    "body_preview": "{\"message\":\"Authentication required\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "debug_images",
+    "method": "GET",
+    "path": "/api/debug/list-plant-images",
+    "role": "CUSTOMER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "debug_images",
+    "method": "GET",
+    "path": "/api/debug/list-plant-images",
+    "role": "STAFF",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "debug_images",
+    "method": "GET",
+    "path": "/api/debug/list-plant-images",
+    "role": "NURSERY_ADMIN_OTHER",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "debug_images",
+    "method": "GET",
+    "path": "/api/debug/list-plant-images",
+    "role": "NURSERY_ADMIN_OWN",
+    "expected": "403",
+    "actual": 403,
+    "body_preview": "{\"message\":\"Access denied: Unauthorized role\",\"status\":\"error\"}\n"
+  },
+  {
+    "case": "debug_images",
+    "method": "GET",
+    "path": "/api/debug/list-plant-images",
+    "role": "SUPER_ADMIN",
+    "expected": "200",
+    "actual": 200,
+    "body_preview": "{\"exists\":true,\"file_count\":111,\"files_sample\":[\"apple.jpeg\",\"dates.jpg\",\"lemon.jpeg\",\"lichi.jpg\",\"mango.jpg\",\"orange plant.html\",\"orange plant_files\",\"orange.jpeg\",\"PAPAYATREE_1.webp\",\"plant_10_hibiscus.jpeg\",\"plant_11_cyclamen.jpeg\",\"plant_12_red_cactus.jpeg\",\"plant_13_purple_basil.jpeg\",\"plant_14"
+  },
+  {
+    "case": "public_plant_image",
+    "method": "GET",
+    "path": "/api/plant/1/image",
+    "role": "no_token",
+    "expected": "not 401/403",
+    "actual": 200,
+    "body_preview": "{\"image_url\":\"/static/images/plants/plant_1_aloe_vera.jpeg\",\"source\":\"filesystem\",\"status\":\"success\"}\n"
+  }
+]

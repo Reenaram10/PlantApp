@@ -1,0 +1,273 @@
+[
+  {
+    "input": {
+      "user_message": "hello",
+      "location": "Mumbai",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "Hello! I am your PlantCare AI assistant. How can I help you today?"
+    },
+    "dialog_state_after": {}
+  },
+  {
+    "input": {
+      "user_message": "hi",
+      "location": "Delhi",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "Hello! I am your PlantCare AI assistant. How can I help you today?"
+    },
+    "dialog_state_after": {}
+  },
+  {
+    "input": {
+      "user_message": "show cart",
+      "location": "Bangalore",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "\ud83d\uded2 **Your Shopping Cart**\n\n1. **Tomato** - 2 qty (\u20b950.00 each) = **\u20b9100.00**\n\n\ud83d\udcb0 **Total Value: \u20b9100.00**\n\n*Type 'checkout' to place your order!*"
+    },
+    "dialog_state_after": {}
+  },
+  {
+    "input": {
+      "user_message": "my cart",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "\ud83d\uded2 **Your Shopping Cart**\n\n1. **Tomato** - 2 qty (\u20b950.00 each) = **\u20b9100.00**\n\n\ud83d\udcb0 **Total Value: \u20b9100.00**\n\n*Type 'checkout' to place your order!*"
+    },
+    "dialog_state_after": {}
+  },
+  {
+    "input": {
+      "user_message": "how many plants do you have?",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "\ud83d\udce6 We currently have **10** **Tomato** plant(s) in stock in our database catalog (**Status**: Available, **Price**: \u20b950.00). \ud83e\udeb4\n\nWould you like to add some to your cart?"
+    },
+    "dialog_state_after": {
+      "state": "AWAITING_PLANT_CONFIRMATION",
+      "plant_info": {
+        "plant_id": 1,
+        "plant_name": "Tomato",
+        "price": 50.0,
+        "image_url": "/static/images/plants/plant_81_tomato_plant.jpeg"
+      }
+    }
+  },
+  {
+    "input": {
+      "user_message": "what is the price of tomato?",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "\ud83d\udcb5 The price of **Tomato** in our database is **\u20b950.00**.\n\ud83d\udce6 **Stock**: **10** in stock (**Status**: Available). \ud83e\udeb4\n\nWould you like to add some to your cart?"
+    },
+    "dialog_state_after": {
+      "state": "AWAITING_PLANT_CONFIRMATION",
+      "plant_info": {
+        "plant_id": 1,
+        "plant_name": "Tomato",
+        "price": 50.0,
+        "image_url": "/static/images/plants/plant_81_tomato_plant.jpeg"
+      }
+    }
+  },
+  {
+    "input": {
+      "user_message": "do you have rose in stock?",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "\ud83d\udce6 We currently have **10** **Rose** plant(s) in stock in our database catalog (**Status**: Available, **Price**: \u20b950.00). \ud83e\udeb4\n\nWould you like to add some to your cart?"
+    },
+    "dialog_state_after": {
+      "state": "AWAITING_PLANT_CONFIRMATION",
+      "plant_info": {
+        "plant_id": 1,
+        "plant_name": "Rose",
+        "price": 50.0,
+        "image_url": "/static/images/plants/plant_16_rose_mallow.jpeg"
+      }
+    }
+  },
+  {
+    "input": {
+      "user_message": "i want to buy rose",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "Do you mean **Rose** (Price: \u20b9250.0)?"
+    },
+    "dialog_state_after": {
+      "state": "AWAITING_PLANT_CONFIRMATION",
+      "plant_info": {
+        "plant_id": 1,
+        "plant_name": "Rose",
+        "price": 250.0,
+        "image_url": "/static/images/plants/plant_16_rose_mallow.jpeg",
+        "score": 0.95,
+        "is_exact": false,
+        "raw_query": "ros"
+      }
+    }
+  },
+  {
+    "input": {
+      "user_message": "i want to buy rase nuh",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "Do you mean **Rose** (Price: \u20b9250.0)?"
+    },
+    "dialog_state_after": {
+      "state": "AWAITING_PLANT_CONFIRMATION",
+      "plant_info": {
+        "plant_id": 1,
+        "plant_name": "Rose",
+        "price": 250.0,
+        "image_url": "/static/images/plants/plant_16_rose_mallow.jpeg",
+        "score": 0.95,
+        "is_exact": false,
+        "raw_query": "rase nuh"
+      }
+    }
+  },
+  {
+    "input": {
+      "user_message": "buy hibiscs",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "Do you mean **Hibiscus** (Price: \u20b9150.0)?"
+    },
+    "dialog_state_after": {
+      "state": "AWAITING_PLANT_CONFIRMATION",
+      "plant_info": {
+        "plant_id": 3,
+        "plant_name": "Hibiscus",
+        "price": 150.0,
+        "image_url": "/static/images/plants/plant_10_hibiscus.jpeg",
+        "score": 0.95,
+        "is_exact": false,
+        "raw_query": "hibiscs"
+      }
+    }
+  },
+  {
+    "input": {
+      "user_message": "how to care for tomato plant",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "Mocked botanical LLM response for: You are a helpful plant assistant. Be concise.\n\nYo",
+      "rag_metadata": {
+        "similarity": 0.6585,
+        "distance": 0.5187
+      }
+    },
+    "dialog_state_after": {}
+  },
+  {
+    "input": {
+      "user_message": "what is the watering requirement for tomato in summer?",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "Mocked botanical LLM response for: You are a helpful plant assistant. Be concise.\n\nYo",
+      "rag_metadata": {
+        "similarity": 0.5983,
+        "distance": 0.6714
+      }
+    },
+    "dialog_state_after": {}
+  },
+  {
+    "input": {
+      "user_message": "can mango grow in maharashtra?",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "Mocked botanical LLM response for: You are a helpful plant assistant. Be concise.\n\nYo",
+      "rag_metadata": {
+        "similarity": 0.5956,
+        "distance": 0.6789
+      },
+      "plants": [
+        "Mango"
+      ]
+    },
+    "dialog_state_after": {}
+  },
+  {
+    "input": {
+      "user_message": "my tomato plant has early blight with dark spots on leaves",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "\ud83c\udf31 Plant Profile: Tomato Plant\n\n\ud83d\udd2c Scientific Name\nSolanum lycopersicum\n\n\ud83c\udf21\ufe0f Growing Conditions\n\u2022 Temperature: 21-32\u00b0C\n\u2022 Humidity: 60-70%\n\u2022 Soil Moisture: 60-80%\n\u2022 Sunlight: Full Sun\n\n\ud83c\udf3e Soil\nWell-drained loamy soil\n\n\ud83d\udca7 Watering\n2-3 times per week\n\n\ud83c\udf3f Nutrient Requirements\n\ud83d\udfe2 Nitrogen: High\n\ud83d\udfe1 Phosphorus: Medium\n\ud83d\udfe3 Potassium: High\n\n\u23f3 Growth Duration\n90-120 days",
+      "rag_metadata": {
+        "similarity": 0.6676,
+        "distance": 0.4978
+      }
+    },
+    "dialog_state_after": {}
+  },
+  {
+    "input": {
+      "user_message": "what is the capital of France?",
+      "location": "",
+      "user_id": 1
+    },
+    "output": {
+      "status": "success",
+      "type": "text",
+      "reply": "\u274c Sorry, I can only help you with queries related to plants, gardening, or the nursery catalog."
+    },
+    "dialog_state_after": {}
+  }
+]

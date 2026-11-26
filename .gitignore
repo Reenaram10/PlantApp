@@ -1,1 +1,7 @@
 .env
+
+echo __pycache__/ >> .gitignore
+echo *.pyc >> .gitignore
+echo temp/ >> .gitignore
+echo uploads/ >> .gitignore
+echo app.zip >> .gitignore
